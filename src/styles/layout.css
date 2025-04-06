@@ -1,0 +1,103 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--border-color);
+    flex-wrap: wrap;
+}
+
+.navbar-left .logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.nav-link {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    color: var(--link-hover);
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--danger);
+}
+
+.nav-user-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border-color);
+}
+
+.hero {
+    background: linear-gradient(135deg, #6c2bd9, #9e43f3);
+    color: white;
+    padding: 3rem 2rem;
+    text-align: center;
+    transition: background 0.3s ease;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+body.dark .hero {
+    background: linear-gradient(135deg, #31175a, #532f87);
+}
+
+.section {
+    margin: 3rem 0;
+}
+
+.section-title {
+    font-size: 1.7rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.section-cta {
+    margin-top: 1rem;
+    text-align: right;
+    font-weight: 500;
+}
+
+.section-cta a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.section-cta a:hover {
+    text-decoration: underline;
+}
