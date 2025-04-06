@@ -8,7 +8,6 @@ import Register from './pages/auth/Register'
 import Login from './pages/auth/Login'
 import VerifyEmail from './pages/auth/VerifyEmail'
 import EditNews from './pages/news/EditNews'
-import './styles/old/news.css'
 import StoreList from "./pages/store/StoreList.tsx";
 import CreateProduct from "./pages/store/CreateProduct.tsx";
 import ProductDetail from "./pages/store/ProductDetail.tsx";
