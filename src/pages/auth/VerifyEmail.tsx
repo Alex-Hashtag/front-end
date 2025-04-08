@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 function useQuery() {
@@ -8,13 +8,16 @@ function useQuery() {
 export default function VerifyEmail() {
     const navigate = useNavigate();
     const query = useQuery();
-    const token = query.get("token"); // Get token from query parameters
+    const token = query.get("token");
     const [message, setMessage] = useState("Verifying your email...");
     const [error, setError] = useState<string | null>(null);
 
+    const hasVerified = useRef(false);
+
     useEffect(() => {
         async function verify() {
-            if (!token) return;
+            if (!token || hasVerified.current) return;
+            hasVerified.current = true;
             try {
                 const res = await fetch(`/api/auth/verify/${token}`);
                 if (!res.ok) {
@@ -23,14 +26,12 @@ export default function VerifyEmail() {
                 }
                 const successMsg = await res.text();
                 setMessage(successMsg);
-                // Optionally, auto-redirect after a delay:
-                // setTimeout(() => navigate('/login'), 2000);
             } catch (err: any) {
                 setError(err.message);
             }
         }
         verify();
-    }, [token, navigate]);
+    }, [token]);
 
     return (
         <div className="container">

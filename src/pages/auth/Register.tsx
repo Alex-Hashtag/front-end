@@ -2,9 +2,8 @@ import {ChangeEvent, FormEvent, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 
 export default function Register() {
-    useNavigate()
+    useNavigate();
 
-    // Form fields
     const [email, setEmail] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -15,14 +14,14 @@ export default function Register() {
 
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState<string | null>(null)
+    const [loading, setLoading] = useState(false) // new state for button disabled
 
     const validatePassword = (pwd: string) => {
         return pwd.length >= 8 && /[A-Z]/.test(pwd) && /\d/.test(pwd)
     }
 
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0)
-        {
+        if (e.target.files && e.target.files.length > 0) {
             setAvatarFile(e.target.files[0])
         }
     }
@@ -32,14 +31,12 @@ export default function Register() {
         setError(null)
         setSuccess(null)
 
-        if (password !== confirmPassword)
-        {
+        if (password !== confirmPassword) {
             setError('Passwords do not match')
             return
         }
 
-        if (!validatePassword(password))
-        {
+        if (!validatePassword(password)) {
             setError('Password must be at least 8 characters long, contain an uppercase letter and a digit.')
             return
         }
@@ -49,30 +46,28 @@ export default function Register() {
         formData.append('firstName', firstName)
         formData.append('lastName', lastName)
         formData.append('password', password)
-        if (avatarFile)
-        {
+        if (avatarFile) {
             formData.append('avatar', avatarFile)
         }
 
-
-        try
-        {
+        setLoading(true) // disable the button
+        try {
             const response = await fetch('/api/auth/register', {
                 method: 'POST',
                 body: formData,
             })
 
-            if (!response.ok)
-            {
+            if (!response.ok) {
                 const msg = await response.text()
                 throw new Error(msg)
             }
 
             const msg = await response.text()
             setSuccess(msg)
-        } catch (err: unknown)
-        {
+        } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'An unknown error occurred')
+        } finally {
+            setLoading(false) // re-enable the button regardless of outcome
         }
     }
 
@@ -135,11 +130,13 @@ export default function Register() {
                         onChange={handleAvatarChange}
                     />
                 </div>
-                <button className="btn" type="submit">Sign Up</button>
+                <button className="btn" type="submit" disabled={loading}>
+                    {loading ? 'Signing Up...' : 'Sign Up'}
+                </button>
                 <div className="extra-link">
-          <span>
-            Already have an account? <a href="/login">Log In</a>
-          </span>
+                    <span>
+                        Already have an account? <a href="/login">Log In</a>
+                    </span>
                 </div>
             </form>
         </div>
