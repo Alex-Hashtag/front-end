@@ -1,17 +1,15 @@
-import {useEffect, useState} from 'react';
-import {useAuth} from '../../context/AuthContext';
-import {useNavigate, useParams} from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate, useParams } from 'react-router-dom';
 
-enum Role
-{
+enum Role {
     USER = 0,
     CLASS_REP = 1,
     STUCO = 2,
     ADMIN = 3
 }
 
-interface UserType
-{
+interface UserType {
     id: number;
     name: string;
     email: string;
@@ -19,36 +17,29 @@ interface UserType
 }
 
 export default function AdminUserDetail() {
-    const {user} = useAuth();          // 'user' is the current logged-in user
+    const { user } = useAuth();
     const navigate = useNavigate();
-    const {id} = useParams();
-
+    const { id } = useParams();
     const [detailUser, setDetailUser] = useState<UserType | null>(null);
     const [loading, setLoading] = useState(true);
+    const [updating, setUpdating] = useState(false);
 
-    // All possible role labels as an array; order matches the enum above
     const allRoles: Role[] = [Role.USER, Role.CLASS_REP, Role.STUCO, Role.ADMIN];
-
-    // A local piece of state for the new role we want to assign:
+    const [editableName, setEditableName] = useState('');
     const [selectedRole, setSelectedRole] = useState<Role | ''>('');
 
     useEffect(() => {
-        // Ensure only Stuco (2) or Admin (3) can access this page at all:
-        if (!user || (user.role !== Role.STUCO && user.role !== Role.ADMIN))
-        {
+        if (!user || (user.role !== 2 && user.role !== 3)) {
             navigate('/');
             return;
         }
         fetchUserDetail();
-        // eslint-disable-next-line
     }, [user, navigate]);
 
-    async function fetchUserDetail()
-    {
+    async function fetchUserDetail() {
         if (!id) return;
         setLoading(true);
-        try
-        {
+        try {
             const token = localStorage.getItem('token');
             const res = await fetch(`/api/users/${id}`, {
                 headers: {
@@ -58,108 +49,105 @@ export default function AdminUserDetail() {
             if (!res.ok) throw new Error('Failed to fetch user detail');
             const data = await res.json();
             setDetailUser(data);
-            // Initialize selectedRole with the user's current role
+            setEditableName(data.name);
             setSelectedRole(data.role);
-        } catch (err)
-        {
+        } catch (err) {
             console.error(err);
-        } finally
-        {
+        } finally {
             setLoading(false);
         }
     }
 
-    function getAvailableRoles(): Role[]
-    {
+    function getAvailableRoles(): Role[] {
         if (!user) return [];
-        if (user.role === Role.ADMIN)
-        {
-            return allRoles;
-        } else if (user.role === Role.STUCO)
-        {
-            return allRoles.filter((r) => r < Role.STUCO);
-        }
+        if (user.role === Role.ADMIN) return allRoles;
+        if (user.role === Role.STUCO) return allRoles.filter((r) => r < Role.STUCO);
         return [];
     }
 
-    function roleToString(r: Role)
-    {
-        switch (r)
-        {
-            case Role.USER:
-                return 'USER';
-            case Role.CLASS_REP:
-                return 'CLASS_REP';
-            case Role.STUCO:
-                return 'STUCO';
-            case Role.ADMIN:
-                return 'ADMIN';
-            default:
-                return 'UNKNOWN_ROLE';
-        }
+    function roleToString(r: Role) {
+        return Role[r];
     }
 
-    async function updateUserRole()
-    {
+    async function saveChanges() {
         if (!id || selectedRole === '') return;
-        try
-        {
+        setUpdating(true);
+        try {
             const token = localStorage.getItem('token');
-            const roleString = roleToString(selectedRole);
-            const res = await fetch(`/api/users/${id}/role?newRole=${encodeURIComponent(roleString)}`, {
-                method: 'PATCH',
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            if (!res.ok) throw new Error('Failed to update user role');
-            const updatedUser = await res.json();
-            setDetailUser(updatedUser);
-            setSelectedRole(updatedUser.role);
-            alert('Role updated successfully!');
-        } catch (err)
-        {
+
+            // Update name if changed
+            if (detailUser?.name !== editableName.trim()) {
+                const res = await fetch(`/api/users/me`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        id: detailUser?.id,
+                        name: editableName.trim(),
+                        email: detailUser?.email,
+                        role: detailUser?.role // not changed here
+                    })
+                });
+                if (!res.ok) throw new Error('Failed to update name');
+                const updated = await res.json();
+                setDetailUser(updated);
+            }
+
+            // Update role if changed
+            if (detailUser?.role !== selectedRole) {
+                const roleStr = roleToString(selectedRole);
+                const res = await fetch(`/api/users/${id}/role?newRole=${roleStr}`, {
+                    method: 'PATCH',
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                if (!res.ok) throw new Error('Failed to update role');
+                const updated = await res.json();
+                setDetailUser(updated);
+                setSelectedRole(updated.role);
+            }
+
+            alert('Changes saved successfully!');
+        } catch (err) {
             console.error(err);
-            alert('An error occurred while updating the role.');
+            alert('An error occurred while saving changes.');
+        } finally {
+            setUpdating(false);
         }
     }
 
-    if (loading)
-    {
-        return <div>Loading user details...</div>;
-    }
-
-    if (!detailUser)
-    {
-        return <div>User not found</div>;
-    }
+    if (loading) return <div>Loading user details...</div>;
+    if (!detailUser) return <div>User not found.</div>;
 
     return (
         <div className="admin-container">
-            <h1>User Detail</h1>
+            <h1>Edit User</h1>
+
             <div className="admin-detail-section">
-                <p>
-                    <strong>ID:</strong> {detailUser.id}
-                </p>
-                <p>
-                    <strong>Name:</strong> {detailUser.name}
-                </p>
-                <p>
-                    <strong>Email:</strong> {detailUser.email}
-                </p>
-                <p>
-                    <strong>Role:</strong> {roleToString(detailUser.role)}
-                </p>
-            </div>
+                <div className="filter-field">
+                    <label>Name:</label>
+                    <input
+                        type="text"
+                        value={editableName}
+                        onChange={(e) => setEditableName(e.target.value)}
+                        placeholder="Full Name"
+                    />
+                </div>
 
+                <div className="filter-field">
+                    <label>Email:</label>
+                    <input type="email" value={detailUser.email} disabled />
+                </div>
 
-            {user && (user.role === Role.STUCO || user.role === Role.ADMIN) && (
-                <div className="admin-detail-section role-selector">
-                    <label htmlFor="roleSelect">Change role:</label>
+                <div className="filter-field">
+                    <label>Role:</label>
                     <select
-                        id="roleSelect"
                         value={selectedRole}
                         onChange={(e) => setSelectedRole(Number(e.target.value) as Role)}
+                        disabled={getAvailableRoles().length === 0}
                     >
                         {getAvailableRoles().map((r) => (
                             <option key={r} value={r}>
@@ -167,15 +155,17 @@ export default function AdminUserDetail() {
                             </option>
                         ))}
                     </select>
-                    <button className="btn btn-primary" onClick={updateUserRole}>
-                        Update Role
+                </div>
+
+                <div className="admin-actions">
+                    <button className="btn btn-primary" onClick={saveChanges} disabled={updating}>
+                        {updating ? 'Saving...' : 'Save Changes'}
+                    </button>
+                    <button className="btn btn-secondary" onClick={() => navigate('/admin/users')}>
+                        Back to Users
                     </button>
                 </div>
-            )}
-
-            <button className="btn btn-secondary" onClick={() => navigate('/admin/users')}>
-                Back to Users
-            </button>
+            </div>
         </div>
     );
 }

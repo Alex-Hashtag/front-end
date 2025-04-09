@@ -29,7 +29,7 @@ export default function Navbar() {
                         {user && user?.role >= 1 && (
                             <Link to="/profile/orders" className="nav-link">Orders</Link>
                         )}
-                        {user && user?.role >= 2 && (
+                        {user && user?.role >= 1 && (
                             <Link to="/admin" className="nav-link">Admin</Link>
                         )}
                         {!user?.emailVerified && (

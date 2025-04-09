@@ -26,25 +26,24 @@ export default function AdminBalance() {
         fetchReps();
     }, [user, navigate]);
 
-    async function fetchReps()
-    {
+    async function fetchReps() {
         setLoading(true);
-        try
-        {
-            const res = await fetch('/api/users/class-reps?page=0&size=50', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+        try {
+            // Updated URL with search parameters
+            const res = await fetch(
+                '/api/users/search?balanceGt=0&page=0&size=50',
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
                 }
-            });
+            );
             if (!res.ok) throw new Error('Failed to load class reps');
             const data = await res.json();
-            // "data.content" contains the array of class reps
             setReps(data.content);
-        } catch (err)
-        {
+        } catch (err) {
             console.error(err);
-        } finally
-        {
+        } finally {
             setLoading(false);
         }
     }

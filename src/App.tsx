@@ -58,17 +58,17 @@ export function App()
 
                 {/* Admin Routes */}
                 <Route path="/admin" element={
-                    <ProtectedRoute requiredRole={2}>
+                    <ProtectedRoute requiredRole={1}>
                         <AdminDashboard/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/admin/users" element={
-                    <ProtectedRoute requiredRole={2}>
+                    <ProtectedRoute requiredRole={1}>
                         <AdminUsers/>
                     </ProtectedRoute>
                 }/>
                 <Route path="/admin/users/:id" element={
-                    <ProtectedRoute requiredRole={2}>
+                    <ProtectedRoute requiredRole={1}>
                         <AdminUserDetail/>
                     </ProtectedRoute>
                 }/>

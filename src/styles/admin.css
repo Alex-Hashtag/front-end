@@ -1,5 +1,6 @@
 
 .admin-container {
+    color: var(--text);
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
@@ -206,4 +207,119 @@
     border: 1px solid var(--border-color);
     border-radius: 4px;
     font-size: 1rem;
+}
+
+/* -------------------------------------------------------- */
+/* Additional styling for search bar and advanced filters   */
+/* -------------------------------------------------------- */
+
+/* Container for the main search bar and the “Search”/”Advanced Filters” buttons */
+.search-bar-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+}
+
+.search-bar {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.advanced-filter-button {
+    white-space: nowrap;
+}
+
+/* Collapsible panel/section containing advanced filters */
+.advanced-filters {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* A single row of advanced filter fields */
+.filter-row {
+    display: flex;
+    gap: 2rem;
+}
+
+/* Wrapper for each individual filter (label + input) */
+.advanced-filters {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.filter-row {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-field label {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.filter-field input[type="text"],
+.filter-field input[type="number"] {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #fff;
+    transition: all 0.2s ease;
+}
+
+
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.checkbox-row {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 1.1em;
+    height: 1.1em;
+    accent-color: var(--primary);
+    cursor: pointer;
 }

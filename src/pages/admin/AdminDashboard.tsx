@@ -15,7 +15,7 @@ export default function AdminDashboard() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!user || (user.role !== 2 && user.role !== 3))
+        if (!user || (user.role !== 1 && user.role !== 2 && user.role !== 3))
         {
             navigate('/');
             return;
@@ -75,10 +75,11 @@ export default function AdminDashboard() {
                 <button className="btn" onClick={() => navigate('/admin/users')}>
                     Manage Users
                 </button>
-                <button className="btn" onClick={() => navigate('/admin/balance')}>
-                    Rep Balances
-                </button>
-                {/* Add more quick links as needed */}
+                {user && user.role > 1 && (
+                    <button className="btn" onClick={() => navigate('/admin/balance')}>
+                        Rep Balances
+                    </button>
+                )}
             </div>
         </div>
     );
