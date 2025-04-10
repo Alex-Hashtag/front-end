@@ -68,6 +68,11 @@ export default function Login() {
             Don’t have an account? <a href="/register">Register here</a>
           </span>
                 </div>
+                <div className="extra-link">
+          <span>
+            Forgot your password? <a href="/forgot-password">Reset it here</a>
+          </span>
+                </div>
             </form>
         </div>
     )

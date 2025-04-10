@@ -7,6 +7,8 @@ import CreateNews from './pages/news/CreateNews'
 import Register from './pages/auth/Register'
 import Login from './pages/auth/Login'
 import VerifyEmail from './pages/auth/VerifyEmail'
+import ForgotPassword from './pages/auth/ForgotPassword'
+import ResetPassword from './pages/auth/ResetPassword'
 import EditNews from './pages/news/EditNews'
 import StoreList from "./pages/store/StoreList.tsx";
 import CreateProduct from "./pages/store/CreateProduct.tsx";
@@ -37,6 +39,8 @@ export function App()
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/verify" element={<VerifyEmail/>}/>
+                <Route path="/forgot-password" element={<ForgotPassword/>}/>
+                <Route path="/reset-password" element={<ResetPassword/>}/>
 
                 {/* News */}
                 <Route path="/news" element={<NewsList/>}/>
