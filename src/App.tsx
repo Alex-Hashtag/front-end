@@ -1,5 +1,6 @@
 import {Route, Routes} from 'react-router-dom'
 import Navbar from './components/layout/Navbar'
+import Footer from './components/layout/Footer'
 import Home from './pages/Home'
 import NewsList from './pages/news/NewsList'
 import NewsDetail from './pages/news/NewsDetail'
@@ -32,58 +33,60 @@ export function App()
     return (
         <>
             <Navbar/>
-            <CartProvider><Routes>
-                <Route path="/" element={<Home/>}/>
+            <CartProvider>
+                <Routes>
+                    <Route path="/" element={<Home/>}/>
 
-                {/* Auth */}
-                <Route path="/login" element={<Login/>}/>
-                <Route path="/register" element={<Register/>}/>
-                <Route path="/verify" element={<VerifyEmail/>}/>
-                <Route path="/forgot-password" element={<ForgotPassword/>}/>
-                <Route path="/reset-password" element={<ResetPassword/>}/>
+                    {/* Auth */}
+                    <Route path="/login" element={<Login/>}/>
+                    <Route path="/register" element={<Register/>}/>
+                    <Route path="/verify" element={<VerifyEmail/>}/>
+                    <Route path="/forgot-password" element={<ForgotPassword/>}/>
+                    <Route path="/reset-password" element={<ResetPassword/>}/>
 
-                {/* News */}
-                <Route path="/news" element={<NewsList/>}/>
-                <Route path="/news/create" element={<CreateNews/>}/>
-                <Route path="/news/:id" element={<NewsDetail/>}/>
-                <Route path="/news/edit/:id" element={<EditNews/>}/>
+                    {/* News */}
+                    <Route path="/news" element={<NewsList/>}/>
+                    <Route path="/news/create" element={<CreateNews/>}/>
+                    <Route path="/news/:id" element={<NewsDetail/>}/>
+                    <Route path="/news/edit/:id" element={<EditNews/>}/>
 
-                {/* Store */}
-                <Route path="/store" element={<StoreList/>}/>
-                <Route path="/store/create" element={<CreateProduct/>}/>
-                <Route path="/store/:id" element={<ProductDetail/>}/>
-                <Route path="/store/edit/:id" element={<EditProduct/>}/>
-                <Route path="/store/cart" element={<Cart/>}/>
-                <Route path="/store/checkout" element={<Checkout/>}/>
-                <Route path="/store/order-confirmation" element={<OrderConfirmation/>}/>
+                    {/* Store */}
+                    <Route path="/store" element={<StoreList/>}/>
+                    <Route path="/store/create" element={<CreateProduct/>}/>
+                    <Route path="/store/:id" element={<ProductDetail/>}/>
+                    <Route path="/store/edit/:id" element={<EditProduct/>}/>
+                    <Route path="/store/cart" element={<Cart/>}/>
+                    <Route path="/store/checkout" element={<Checkout/>}/>
+                    <Route path="/store/order-confirmation" element={<OrderConfirmation/>}/>
 
-                {/* Profile */}
-                <Route path="/profile" element={<Profile/>}/>
-                <Route path="/profile/orders" element={<MyOrders/>}/>
+                    {/* Profile */}
+                    <Route path="/profile" element={<Profile/>}/>
+                    <Route path="/profile/orders" element={<MyOrders/>}/>
 
-                {/* Admin Routes */}
-                <Route path="/admin" element={
-                    <ProtectedRoute requiredRole={1}>
-                        <AdminDashboard/>
-                    </ProtectedRoute>
-                }/>
-                <Route path="/admin/users" element={
-                    <ProtectedRoute requiredRole={1}>
-                        <AdminUsers/>
-                    </ProtectedRoute>
-                }/>
-                <Route path="/admin/users/:id" element={
-                    <ProtectedRoute requiredRole={1}>
-                        <AdminUserDetail/>
-                    </ProtectedRoute>
-                }/>
-                <Route path="/admin/balance" element={
-                    <ProtectedRoute requiredRole={2}>
-                        <AdminBalance/>
-                    </ProtectedRoute>
-                }/>
-            </Routes></CartProvider>
-
+                    {/* Admin Routes */}
+                    <Route path="/admin" element={
+                        <ProtectedRoute requiredRole={1}>
+                            <AdminDashboard/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/admin/users" element={
+                        <ProtectedRoute requiredRole={1}>
+                            <AdminUsers/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/admin/users/:id" element={
+                        <ProtectedRoute requiredRole={1}>
+                            <AdminUserDetail/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path="/admin/balance" element={
+                        <ProtectedRoute requiredRole={2}>
+                            <AdminBalance/>
+                        </ProtectedRoute>
+                    }/>
+                </Routes>
+            </CartProvider>
+            <Footer/>
         </>
     )
 }

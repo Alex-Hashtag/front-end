@@ -10,6 +10,8 @@ export default function ResetPassword() {
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     useEffect(() => {
         // Extract token from URL query parameters
@@ -75,24 +77,52 @@ export default function ResetPassword() {
                 
                 <div className="form-group">
                     <label>New Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        required
-                        minLength={8}
-                        placeholder="At least 8 characters with uppercase & number"
-                    />
+                    <div className="password-input-container">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            required
+                            minLength={8}
+                            placeholder="At least 8 characters with uppercase & number"
+                        />
+                        <button 
+                            type="button" 
+                            className="password-toggle-btn"
+                            onMouseDown={() => setShowPassword(true)}
+                            onMouseUp={() => setShowPassword(false)}
+                            onMouseLeave={() => setShowPassword(false)}
+                            onTouchStart={() => setShowPassword(true)}
+                            onTouchEnd={() => setShowPassword(false)}
+                            onTouchCancel={() => setShowPassword(false)}
+                        >
+                            Show
+                        </button>
+                    </div>
                 </div>
                 
                 <div className="form-group">
                     <label>Confirm Password:</label>
-                    <input
-                        type="password"
-                        value={confirmPassword}
-                        onChange={e => setConfirmPassword(e.target.value)}
-                        required
-                    />
+                    <div className="password-input-container">
+                        <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            value={confirmPassword}
+                            onChange={e => setConfirmPassword(e.target.value)}
+                            required
+                        />
+                        <button 
+                            type="button" 
+                            className="password-toggle-btn"
+                            onMouseDown={() => setShowConfirmPassword(true)}
+                            onMouseUp={() => setShowConfirmPassword(false)}
+                            onMouseLeave={() => setShowConfirmPassword(false)}
+                            onTouchStart={() => setShowConfirmPassword(true)}
+                            onTouchEnd={() => setShowConfirmPassword(false)}
+                            onTouchCancel={() => setShowConfirmPassword(false)}
+                        >
+                            Show
+                        </button>
+                    </div>
                 </div>
                 
                 <button 

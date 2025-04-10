@@ -8,6 +8,7 @@ export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState<string | null>(null)
+    const [showPassword, setShowPassword] = useState(false)
 
     const handleLogin = async (e: FormEvent) => {
         e.preventDefault()
@@ -55,12 +56,26 @@ export default function Login() {
                 </div>
                 <div className="form-group">
                     <label>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        required
-                    />
+                    <div className="password-input-container">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            required
+                        />
+                        <button 
+                            type="button" 
+                            className="password-toggle-btn"
+                            onMouseDown={() => setShowPassword(true)}
+                            onMouseUp={() => setShowPassword(false)}
+                            onMouseLeave={() => setShowPassword(false)}
+                            onTouchStart={() => setShowPassword(true)}
+                            onTouchEnd={() => setShowPassword(false)}
+                            onTouchCancel={() => setShowPassword(false)}
+                        >
+                            Show
+                        </button>
+                    </div>
                 </div>
                 <button className="btn" type="submit">Log In</button>
                 <div className="extra-link">

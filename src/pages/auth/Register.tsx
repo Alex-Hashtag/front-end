@@ -9,6 +9,8 @@ export default function Register() {
     const [lastName, setLastName] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     const [avatarFile, setAvatarFile] = useState<File | null>(null)
 
@@ -109,21 +111,49 @@ export default function Register() {
                 </div>
                 <div className="form-group">
                     <label>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        required
-                    />
+                    <div className="password-input-container">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            required
+                        />
+                        <button 
+                            type="button" 
+                            className="password-toggle-btn"
+                            onMouseDown={() => setShowPassword(true)}
+                            onMouseUp={() => setShowPassword(false)}
+                            onMouseLeave={() => setShowPassword(false)}
+                            onTouchStart={() => setShowPassword(true)}
+                            onTouchEnd={() => setShowPassword(false)}
+                            onTouchCancel={() => setShowPassword(false)}
+                        >
+                            Show
+                        </button>
+                    </div>
                 </div>
                 <div className="form-group">
                     <label>Confirm Password:</label>
-                    <input
-                        type="password"
-                        value={confirmPassword}
-                        onChange={e => setConfirmPassword(e.target.value)}
-                        required
-                    />
+                    <div className="password-input-container">
+                        <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            value={confirmPassword}
+                            onChange={e => setConfirmPassword(e.target.value)}
+                            required
+                        />
+                        <button 
+                            type="button" 
+                            className="password-toggle-btn"
+                            onMouseDown={() => setShowConfirmPassword(true)}
+                            onMouseUp={() => setShowConfirmPassword(false)}
+                            onMouseLeave={() => setShowConfirmPassword(false)}
+                            onTouchStart={() => setShowConfirmPassword(true)}
+                            onTouchEnd={() => setShowConfirmPassword(false)}
+                            onTouchCancel={() => setShowConfirmPassword(false)}
+                        >
+                            Show
+                        </button>
+                    </div>
                 </div>
                 <div className="form-group">
                     <label>Profile Picture (optional):</label>

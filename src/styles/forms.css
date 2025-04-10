@@ -28,6 +28,37 @@ body.dark .auth-form {
     font-weight: 500;
 }
 
+.password-input-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+    user-select: none;
+}
+
+.password-toggle-btn:hover {
+    opacity: 1;
+}
+
+.password-toggle-btn:active {
+    opacity: 1;
+    background-color: var(--link-hover);
+}
+
 .form-group input {
     width: 100%;
     padding: 0.6rem;
@@ -274,4 +305,19 @@ body.dark .auth-form {
 
 .preview-remove-btn:hover {
     background: rgba(255, 0, 0, 0.8);
+}
+
+/* Footer Styles */
+.site-footer {
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 3rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
+}
+
+.footer-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
 }
