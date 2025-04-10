@@ -23,6 +23,7 @@ import ProtectedRoute from "./components/common/ProtectedRouteProps.tsx";
 import AdminUsers from "./pages/admin/AdminUsers.tsx";
 import AdminUserDetail from "./pages/admin/AdminUserDetail.tsx";
 import AdminBalance from "./pages/admin/AdminBalance.tsx";
+import './styles/markdown.css'
 
 export function App()
 {

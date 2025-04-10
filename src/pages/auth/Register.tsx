@@ -41,11 +41,14 @@ export default function Register() {
             return
         }
 
+        const userJson = JSON.stringify({
+            email,
+            firstName,
+            lastName,
+            password,
+        })
         const formData = new FormData()
-        formData.append('email', email)
-        formData.append('firstName', firstName)
-        formData.append('lastName', lastName)
-        formData.append('password', password)
+        formData.append('user', new Blob([userJson], { type: 'application/json' }))
         if (avatarFile) {
             formData.append('avatar', avatarFile)
         }

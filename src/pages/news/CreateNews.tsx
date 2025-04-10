@@ -25,8 +25,7 @@ export default function CreateNews() {
         try
         {
             const formData = new FormData()
-            formData.append('title', title)
-            formData.append('content', content)
+            formData.append('post', new Blob([JSON.stringify({ title, content })], { type: 'application/json' }))
             if (bannerFile)
             {
                 formData.append('banner', bannerFile)

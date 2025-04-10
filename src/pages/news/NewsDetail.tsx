@@ -1,8 +1,10 @@
 import {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
 import {useAuth} from '../../context/AuthContext'
-import ImageCarousel from '../../components/common/ImageCarousel'
-import {marked} from 'marked'
+import {getImageDimensions, getImageLayoutClass} from '../../utils/imageUtils'
+import ImageGallery from '../../components/news/ImageGallery'
+import {markdownConverter} from '../../utils/markdown'
+import '../../styles/news-detail.css'
 
 interface NewsPost
 {
@@ -18,6 +20,7 @@ export default function NewsDetail() {
     const {id} = useParams()
     const [post, setPost] = useState<NewsPost | null>(null)
     const [loading, setLoading] = useState(true)
+    const [bannerLayout, setBannerLayout] = useState<string>('banner-layout')
     const {user} = useAuth()
     const navigate = useNavigate()
 
@@ -27,6 +30,19 @@ export default function NewsDetail() {
             .then((data) => setPost(data))
             .finally(() => setLoading(false))
     }, [id])
+
+    useEffect(() => {
+        if (post?.bannerPhotoUrl) {
+            getImageDimensions(post.bannerPhotoUrl)
+                .then(({width, height}) => {
+                    setBannerLayout(getImageLayoutClass(width, height))
+                })
+                .catch(() => {
+                    // If image fails to load, default to banner layout
+                    setBannerLayout('banner-layout')
+                })
+        }
+    }, [post?.bannerPhotoUrl])
 
     const handleDelete = async () => {
         if (!window.confirm('Are you sure you want to delete this post?')) return
@@ -64,13 +80,12 @@ export default function NewsDetail() {
     let extraImages: string[] = []
     if (post.extraPhotos)
     {
-        extraImages = post.extraPhotos.split(',').map((url) => url.trim())
+        extraImages = post.extraPhotos.split(',').map((url) => url.trim()).filter(Boolean)
     }
 
     const renderMarkdown = (content: string) => {
-        return {__html: marked.parse(content)};
+        return {__html: markdownConverter.makeHtml(content)};
     };
-
 
     return (
         <div className="container news-detail">
@@ -79,21 +94,25 @@ export default function NewsDetail() {
                 <time className="news-detail-date">{date}</time>
             </header>
 
-            {post.bannerPhotoUrl && (
-                <img
-                    src={post.bannerPhotoUrl}
-                    alt="Banner"
-                    className="news-detail-banner"
-                />
-            )}
+            <div className={`news-content-container ${bannerLayout}`}>
+                {post.bannerPhotoUrl && (
+                    <div className="news-banner-container">
+                        <img
+                            src={post.bannerPhotoUrl}
+                            alt="Banner"
+                            className="news-detail-banner"
+                        />
+                    </div>
+                )}
 
-            <article
-                className="news-detail-content"
-                dangerouslySetInnerHTML={renderMarkdown(post.content)}
-            />
+                <article
+                    className="news-detail-content markdown-content"
+                    dangerouslySetInnerHTML={renderMarkdown(post.content)}
+                />
+            </div>
 
             {extraImages.length > 0 && (
-                <ImageCarousel images={extraImages} altPrefix="Extra"/>
+                <ImageGallery images={extraImages} altPrefix="Extra"/>
             )}
 
             {user && user.role >= 2 && (

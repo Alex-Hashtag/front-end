@@ -1,19 +1,19 @@
 import {Link} from 'react-router-dom'
-import showdown from 'showdown'
-import {NewsPost} from "../../types/NewsPost.ts";
+import { markdownConverter } from '../../utils/markdown'
 
+interface NewsPost
+{
+    id: number
+    title: string
+    content: string
+    bannerPhotoUrl?: string
+    createdAt: string
+}
 
 interface Props
 {
     post: NewsPost
 }
-
-const converter = new showdown.Converter({
-    tables: true,
-    simplifiedAutoLink: true,
-    strikethrough: true,
-    tasklists: true,
-})
 
 const SNIPPET_LENGTH = 150
 
@@ -23,7 +23,7 @@ export default function NewsFeedItem({post}: Props) {
             ? post.content.substring(0, SNIPPET_LENGTH) + '...'
             : post.content
 
-    const snippetHtml = converter.makeHtml(snippetText)
+    const snippetHtml = markdownConverter.makeHtml(snippetText)
 
     const formattedDate = new Date(post.createdAt).toLocaleDateString('en-GB', {
         day: 'numeric',
@@ -39,7 +39,12 @@ export default function NewsFeedItem({post}: Props) {
             </header>
 
             {post.bannerPhotoUrl && (
-                <img src={post.bannerPhotoUrl} alt={post.title} className="news-banner"/>
+                <img 
+                    src={post.bannerPhotoUrl} 
+                    alt={post.title} 
+                    className="news-banner"
+                    onClick={() => window.open(post.bannerPhotoUrl, '_blank')}
+                />
             )}
 
             <section className="news-content">
