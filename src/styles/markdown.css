@@ -1,0 +1,51 @@
+.markdown-content {
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+.markdown-content h1, .markdown-content h2, .markdown-content h3 {
+    margin: 1.5rem 0 1rem;
+    font-weight: 600;
+    color: var(--heading-color);
+}
+
+.markdown-content p {
+    margin-bottom: 1rem;
+}
+
+.markdown-content ul, .markdown-content ol {
+    margin: 0.75rem 0;
+    padding-left: 1.5rem;
+}
+
+.markdown-content code {
+    background: var(--code-bg);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-family: var(--font-mono);
+}
+
+.markdown-content pre {
+    background: var(--code-block-bg);
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+.markdown-content a {
+    color: var(--link-color);
+    text-decoration: underline;
+}
+
+.markdown-content a:hover {
+    color: var(--link-hover-color);
+}
+
+@media (max-width: 768px) {
+    .markdown-content table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
