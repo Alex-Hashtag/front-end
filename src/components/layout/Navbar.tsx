@@ -1,8 +1,14 @@
 import {Link} from 'react-router-dom'
 import {useAuth} from '../../context/AuthContext'
+import {useState} from 'react'
 
 export default function Navbar() {
     const {user, logout, isAuthenticated} = useAuth()
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+    const toggleMobileMenu = () => {
+        setMobileMenuOpen(!mobileMenuOpen)
+    }
 
     return (
         <nav className="navbar">
@@ -10,9 +16,17 @@ export default function Navbar() {
                 <Link to="/" className="logo">StuCo</Link>
             </div>
 
-            <div className="navbar-right">
-                <Link to="/news" className="nav-link">News</Link>
-                <Link to="/store" className="nav-link">Store</Link>
+            <button 
+                className="mobile-menu-btn" 
+                onClick={toggleMobileMenu}
+                aria-label="Toggle mobile menu"
+            >
+                {mobileMenuOpen ? '✕' : '☰'}
+            </button>
+
+            <div className={`navbar-right ${mobileMenuOpen ? 'active' : ''}`}>
+                <Link to="/news" className="nav-link" onClick={() => setMobileMenuOpen(false)}>News</Link>
+                <Link to="/store" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Store</Link>
 
                 {isAuthenticated ? (
                     <>
@@ -24,25 +38,28 @@ export default function Navbar() {
                                     className="nav-avatar"
                                 />
                             )}
-                            <Link to="/profile" className="nav-link">My Profile</Link>
+                            <Link to="/profile" className="nav-link" onClick={() => setMobileMenuOpen(false)}>My Profile</Link>
                         </div>
                         {user && user?.role >= 1 && (
-                            <Link to="/profile/orders" className="nav-link">Orders</Link>
+                            <Link to="/profile/orders" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Orders</Link>
                         )}
                         {user && user?.role >= 1 && (
-                            <Link to="/admin" className="nav-link">Admin</Link>
+                            <Link to="/admin" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Admin</Link>
                         )}
                         {!user?.emailVerified && (
-                            <Link to="/verify/resend" className="nav-link">Resend Verification</Link>
+                            <Link to="/verify/resend" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Resend Verification</Link>
                         )}
-                        <button className="btn btn-secondary logout-btn" onClick={logout}>
+                        <button className="btn btn-secondary logout-btn" onClick={() => {
+                            logout();
+                            setMobileMenuOpen(false);
+                        }}>
                             Logout
                         </button>
                     </>
                 ) : (
                     <>
-                        <Link to="/login" className="nav-link">Login</Link>
-                        <Link to="/register" className="nav-link">Register</Link>
+                        <Link to="/login" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Login</Link>
+                        <Link to="/register" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Register</Link>
                     </>
                 )}
             </div>
