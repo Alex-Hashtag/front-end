@@ -23,10 +23,13 @@ export default function AdminUserDetail() {
     const [detailUser, setDetailUser] = useState<UserType | null>(null);
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const allRoles: Role[] = [Role.USER, Role.CLASS_REP, Role.STUCO, Role.ADMIN];
     const [editableName, setEditableName] = useState('');
     const [selectedRole, setSelectedRole] = useState<Role | ''>('');
+    const [hasChanges, setHasChanges] = useState(false);
 
     useEffect(() => {
         if (!user || (user.role !== 2 && user.role !== 3)) {
@@ -36,9 +39,20 @@ export default function AdminUserDetail() {
         fetchUserDetail();
     }, [user, navigate]);
 
+    // Detect if there are changes to save
+    useEffect(() => {
+        if (detailUser) {
+            setHasChanges(
+                editableName.trim() !== detailUser.name || 
+                selectedRole !== detailUser.role
+            );
+        }
+    }, [editableName, selectedRole, detailUser]);
+
     async function fetchUserDetail() {
         if (!id) return;
         setLoading(true);
+        setErrorMessage(null);
         try {
             const token = localStorage.getItem('token');
             const res = await fetch(`/api/users/${id}`, {
@@ -53,6 +67,7 @@ export default function AdminUserDetail() {
             setSelectedRole(data.role);
         } catch (err) {
             console.error(err);
+            setErrorMessage('Failed to load user details. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -69,11 +84,24 @@ export default function AdminUserDetail() {
         return Role[r];
     }
 
+    function getRoleBadgeClass(role: Role): string {
+        switch(role) {
+            case Role.ADMIN: return 'role-badge-admin';
+            case Role.STUCO: return 'role-badge-stuco';
+            case Role.CLASS_REP: return 'role-badge-classrep';
+            default: return 'role-badge-user';
+        }
+    }
+
     async function saveChanges() {
         if (!id || selectedRole === '') return;
         setUpdating(true);
+        setErrorMessage(null);
+        setSuccessMessage(null);
+        
         try {
             const token = localStorage.getItem('token');
+            let updated = false;
 
             // Update name if changed
             if (detailUser?.name !== editableName.trim()) {
@@ -91,8 +119,9 @@ export default function AdminUserDetail() {
                     })
                 });
                 if (!res.ok) throw new Error('Failed to update name');
-                const updated = await res.json();
-                setDetailUser(updated);
+                const updatedData = await res.json();
+                setDetailUser(updatedData);
+                updated = true;
             }
 
             // Update role if changed
@@ -105,64 +134,158 @@ export default function AdminUserDetail() {
                     }
                 });
                 if (!res.ok) throw new Error('Failed to update role');
-                const updated = await res.json();
-                setDetailUser(updated);
-                setSelectedRole(updated.role);
+                const updatedData = await res.json();
+                setDetailUser(updatedData);
+                setSelectedRole(updatedData.role);
+                updated = true;
             }
 
-            alert('Changes saved successfully!');
+            if (updated) {
+                setSuccessMessage('Changes saved successfully!');
+                setHasChanges(false);
+                // Auto-dismiss success message after 3 seconds
+                setTimeout(() => setSuccessMessage(null), 3000);
+            } else {
+                setSuccessMessage('No changes to save.');
+                setTimeout(() => setSuccessMessage(null), 3000);
+            }
         } catch (err) {
             console.error(err);
-            alert('An error occurred while saving changes.');
+            setErrorMessage('An error occurred while saving changes. Please try again.');
         } finally {
             setUpdating(false);
         }
     }
 
-    if (loading) return <div>Loading user details...</div>;
-    if (!detailUser) return <div>User not found.</div>;
+    if (loading) {
+        return (
+            <div className="admin-container">
+                <div className="loading-spinner">
+                    <div className="spinner"></div>
+                    <p>Loading user details...</p>
+                </div>
+            </div>
+        );
+    }
+    
+    if (!detailUser) {
+        return (
+            <div className="admin-container">
+                <div className="error-message">
+                    <h2>User Not Found</h2>
+                    <p>The requested user could not be found.</p>
+                    <button className="btn btn-secondary" onClick={() => navigate('/admin/users')}>
+                        Back to Users
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="admin-container">
-            <h1>Edit User</h1>
+            <div className="admin-header">
+                <h1>Edit User</h1>
+                <button className="btn btn-secondary" onClick={() => navigate('/admin/users')}>
+                    Back to Users
+                </button>
+            </div>
 
-            <div className="admin-detail-section">
-                <div className="filter-field">
-                    <label>Name:</label>
-                    <input
-                        type="text"
-                        value={editableName}
-                        onChange={(e) => setEditableName(e.target.value)}
-                        placeholder="Full Name"
-                    />
+            {errorMessage && (
+                <div className="alert alert-danger">
+                    <p>{errorMessage}</p>
+                    <button className="close-btn" onClick={() => setErrorMessage(null)}>×</button>
+                </div>
+            )}
+
+            {successMessage && (
+                <div className="alert alert-success">
+                    <p>{successMessage}</p>
+                    <button className="close-btn" onClick={() => setSuccessMessage(null)}>×</button>
+                </div>
+            )}
+
+            <div className="user-edit-card">
+                <div className="user-profile-header">
+                    <div className="user-avatar">
+                        {detailUser.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="user-meta">
+                        <h2>{detailUser.name}</h2>
+                        <span className={`role-badge ${getRoleBadgeClass(detailUser.role)}`}>
+                            {roleToString(detailUser.role)}
+                        </span>
+                        <span className="user-id">ID: {detailUser.id}</span>
+                    </div>
                 </div>
 
-                <div className="filter-field">
-                    <label>Email:</label>
-                    <input type="email" value={detailUser.email} disabled />
+                <div className="form-section">
+                    <h3>User Information</h3>
+                    
+                    <div className="form-group">
+                        <label htmlFor="userName">Name:</label>
+                        <input
+                            id="userName"
+                            type="text"
+                            value={editableName}
+                            onChange={(e) => setEditableName(e.target.value)}
+                            placeholder="Full Name"
+                            className="form-control"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="userEmail">Email:</label>
+                        <input 
+                            id="userEmail"
+                            type="email" 
+                            value={detailUser.email} 
+                            disabled 
+                            className="form-control disabled"
+                        />
+                        <small className="form-text">Email addresses cannot be changed</small>
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="userRole">Role:</label>
+                        <select
+                            id="userRole"
+                            value={selectedRole}
+                            onChange={(e) => setSelectedRole(Number(e.target.value) as Role)}
+                            disabled={getAvailableRoles().length === 0}
+                            className="form-control"
+                        >
+                            {getAvailableRoles().map((r) => (
+                                <option key={r} value={r}>
+                                    {roleToString(r)}
+                                </option>
+                            ))}
+                        </select>
+                        {getAvailableRoles().length === 0 && (
+                            <small className="form-text">You don't have permission to change roles</small>
+                        )}
+                    </div>
                 </div>
 
-                <div className="filter-field">
-                    <label>Role:</label>
-                    <select
-                        value={selectedRole}
-                        onChange={(e) => setSelectedRole(Number(e.target.value) as Role)}
-                        disabled={getAvailableRoles().length === 0}
+                <div className="form-actions">
+                    <button 
+                        className="btn btn-primary" 
+                        onClick={saveChanges} 
+                        disabled={updating || !hasChanges}
                     >
-                        {getAvailableRoles().map((r) => (
-                            <option key={r} value={r}>
-                                {roleToString(r)}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className="admin-actions">
-                    <button className="btn btn-primary" onClick={saveChanges} disabled={updating}>
-                        {updating ? 'Saving...' : 'Save Changes'}
+                        {updating ? 'Saving...' : hasChanges ? 'Save Changes' : 'No Changes'}
                     </button>
-                    <button className="btn btn-secondary" onClick={() => navigate('/admin/users')}>
-                        Back to Users
+                    <button 
+                        className="btn btn-outline" 
+                        onClick={() => {
+                            if (detailUser) {
+                                setEditableName(detailUser.name);
+                                setSelectedRole(detailUser.role);
+                            }
+                        }}
+                        disabled={!hasChanges}
+                    >
+                        Reset Changes
                     </button>
                 </div>
             </div>

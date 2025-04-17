@@ -6,13 +6,20 @@ import {Order} from '../../types/Order';
 interface GroupedOrderItem
 {
     productName: string;
+    productPrice: number;
     quantity: number;
 }
 
 interface GroupedOrder
 {
     instructions: string;
+    status: 'PENDING' | 'PAID' | 'DELIVERED' | 'CANCELLED';
     items: GroupedOrderItem[];
+    assignedRep?: {
+        username: string;
+        fullName?: string;
+    };
+    paidAt?: string;
 }
 
 export default function MyOrders() {
@@ -20,7 +27,7 @@ export default function MyOrders() {
     const [loading, setLoading] = useState(true);
     const {user} = useAuth();
     const navigate = useNavigate();
-    const [selectedTab, setSelectedTab] = useState<'PENDING' | 'PAID'>('PENDING');
+    const [selectedTab, setSelectedTab] = useState<'PENDING' | 'PAID' | 'DELIVERED' | 'CANCELLED'>('PENDING');
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -44,10 +51,7 @@ export default function MyOrders() {
                     throw new Error('Failed to load orders');
                 }
                 const data = await res.json();
-                const filtered = data.content.filter(
-                    (o: Order) => o.status !== 'DELIVERED' && o.status !== 'CANCELLED'
-                );
-                setOrders(filtered);
+                setOrders(data.content);
             } catch (error)
             {
                 console.error('Error fetching orders:', error);
@@ -62,37 +66,46 @@ export default function MyOrders() {
 
     const groupOrders = (orders: Order[]): GroupedOrder[] => {
         const filteredOrders = orders.filter(order => order.status === selectedTab);
-        const groups: { [instr: string]: { [productName: string]: number } } = {};
+        const groups: { [key: string]: GroupedOrder } = {};
 
         filteredOrders.forEach(order => {
             const instr = order.instructions && order.instructions.trim() !== ''
                 ? order.instructions.trim()
                 : 'No Instructions';
-            if (!groups[instr])
-            {
-                groups[instr] = {};
+            
+            const groupKey = `${instr}_${order.assignedRep?.id || 'none'}`;
+            
+            if (!groups[groupKey]) {
+                groups[groupKey] = {
+                    instructions: instr,
+                    status: order.status,
+                    items: [],
+                    assignedRep: order.assignedRep,
+                    paidAt: order.paidAt
+                };
             }
-            if (!groups[instr][order.productName])
-            {
-                groups[instr][order.productName] = 0;
-            }
-            groups[instr][order.productName] += order.quantity;
+            
+            groups[groupKey].items.push({
+                productName: order.productName,
+                productPrice: order.productPrice || 0,
+                quantity: order.quantity
+            });
         });
 
-        return Object.entries(groups).map(([instructions, items]) => ({
-            instructions,
-            items: Object.entries(items).map(([productName, quantity]) => ({
-                productName,
-                quantity
-            }))
-        }));
+        return Object.values(groups);
     };
 
     const groupedOrders = groupOrders(orders);
 
+    const formatDate = (dateString?: string) => {
+        if (!dateString) return 'Not paid yet';
+        const date = new Date(dateString);
+        return date.toLocaleString();
+    };
+
     return (
         <div className="my-orders-container">
-            <h2>My Active Orders</h2>
+            <h2>My Orders</h2>
 
             <div className="tabs">
                 <button
@@ -107,6 +120,18 @@ export default function MyOrders() {
                 >
                     Paid
                 </button>
+                <button
+                    className={`tab-btn ${selectedTab === 'DELIVERED' ? 'active' : ''}`}
+                    onClick={() => setSelectedTab('DELIVERED')}
+                >
+                    Delivered
+                </button>
+                <button
+                    className={`tab-btn ${selectedTab === 'CANCELLED' ? 'active' : ''}`}
+                    onClick={() => setSelectedTab('CANCELLED')}
+                >
+                    Cancelled
+                </button>
             </div>
 
             {loading ? (
@@ -115,10 +140,16 @@ export default function MyOrders() {
                 groupedOrders.map((group, index) => (
                     <div key={index} className="order-group">
                         <h3>Instructions: {group.instructions}</h3>
+                        {group.assignedRep && (
+                            <p>Assigned to: {group.assignedRep.fullName || group.assignedRep.username}</p>
+                        )}
+                        {selectedTab === 'PAID' && group.paidAt && (
+                            <p>Paid at: {formatDate(group.paidAt)}</p>
+                        )}
                         <ul>
                             {group.items.map((item, idx) => (
                                 <li key={idx}>
-                                    <strong>{item.productName}</strong> – Quantity: {item.quantity}
+                                    <strong>{item.productName}</strong> – Quantity: {item.quantity} - Price: ${item.productPrice}
                                 </li>
                             ))}
                         </ul>
@@ -126,7 +157,7 @@ export default function MyOrders() {
                     </div>
                 ))
             ) : (
-                <p>No active orders found for {selectedTab} status.</p>
+                <p>No orders found with {selectedTab} status.</p>
             )}
 
             <button className="btn" onClick={() => navigate('/profile')}>

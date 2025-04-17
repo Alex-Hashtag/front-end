@@ -49,7 +49,63 @@
 .admin-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.admin-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    background-color: var(--table-header-bg);
+    color: var(--table-header-text);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    user-select: none;
+}
+
+.admin-table th:hover {
+    background-color: var(--table-header-hover);
+}
+
+.admin-table td {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text);
+}
+
+.admin-table tr:nth-child(even) {
+    background-color: var(--table-row-even);
+}
+
+.admin-table tr:nth-child(odd) {
+    background-color: var(--table-row-odd);
+}
+
+/* Dark mode table adjustments */
+body.dark .admin-table th {
+    background-color: var(--primary-dark);
+    color: #ffffff;
+}
+
+body.dark .admin-table th:hover {
+    background-color: var(--primary);
+}
+
+body.dark .admin-table tr:nth-child(even),
+body.dark .admin-table tr:nth-child(odd) {
+    background-color: #222222;
+}
+
+body.dark .admin-table td {
+    border-top: 1px solid #333333;
+    color: #e0e0e0;
+}
+
+body.dark .admin-table tr:hover {
+    background-color: #2a2a2a;
 }
 
 @media (max-width: 768px) {
@@ -69,10 +125,24 @@
 }
 
 .admin-table th {
-    background: var(--nav-bg);
-    color: #fff;
+    background: var(--primary);
+    color: white;
     text-transform: uppercase;
     font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.admin-table tbody tr:nth-child(even) {
+    background-color: rgba(108, 43, 217, 0.05); /* Light purple tint instead of gray */
+}
+
+.admin-table tbody tr:hover {
+    background-color: rgba(108, 43, 217, 0.1); /* Slightly darker purple on hover */
+}
+
+.admin-table td.text-center, 
+.admin-table th.text-center {
+    text-align: center;
 }
 
 .admin-table-compact th,
@@ -115,7 +185,6 @@
     .admin-list-item-row {
         flex-direction: column;
         align-items: flex-start;
-        gap: 0.75rem;
     }
     
     .admin-list-item-row span {
@@ -214,7 +283,7 @@
 
 .admin-detail-section {
     padding: 1rem;
-    background: #fff;
+    background: var(--card-bg);
     border-radius: 8px;
     border: 1px solid var(--border-color);
     margin-bottom: 1rem;
@@ -247,12 +316,13 @@
     border-radius: 6px;
     padding: 1rem;
     margin-bottom: 1.5rem;
-    background: #fff;
+    background: var(--card-bg);
 }
 
 .instructions-title {
     font-weight: 600;
     margin-bottom: 1rem;
+    color: var(--text);
 }
 
 .role-selector {
@@ -276,6 +346,7 @@
 
 .role-selector label {
     font-weight: 600;
+    color: var(--text);
 }
 
 .role-selector select {
@@ -319,6 +390,8 @@
     border: 1px solid var(--border-color);
     border-radius: 4px;
     font-size: 1rem;
+    background: var(--card-bg);
+    color: var(--text);
 }
 
 .advanced-filter-button {
@@ -327,40 +400,42 @@
 
 /* Collapsible panel/section containing advanced filters */
 .advanced-filters {
-    background: var(--section-bg);
-    padding: 1rem;
-    border-radius: 6px;
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
     margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-@media (max-width: 768px) {
-    .advanced-filters {
-        padding: 0.75rem;
-    }
-    
-    .filter-row {
-        flex-direction: column;
-    }
-    
-    .filter-field {
-        width: 100%;
-        margin-bottom: 0.75rem;
-    }
-    
-    .checkbox-row {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .checkbox-label {
-        margin-bottom: 0.5rem;
-    }
+.filters-heading {
+    font-size: 1.2rem;
+    margin-bottom: 1.25rem;
+    color: var(--primary);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+}
+
+.filter-section {
+    margin-bottom: 1.5rem;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 1rem;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.filter-section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text);
 }
 
 /* A single row of advanced filter fields */
 .filter-row {
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
 }
 
 /* Wrapper for each individual filter (label + input) */
@@ -369,7 +444,7 @@
     flex-direction: column;
     gap: 0.5rem;
     flex: 1;
-    min-width: 200px;
+    min-width: 150px;
 }
 
 .filter-field label {
@@ -386,6 +461,14 @@
     font-size: 1rem;
     background: #fff;
     transition: all 0.2s ease;
+    color: var(--text);
+}
+
+.filter-field input[type="text"]:focus,
+.filter-field input[type="number"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+    outline: none;
 }
 
 .checkbox-group {
@@ -404,19 +487,190 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-weight: 500;
     cursor: pointer;
     user-select: none;
+    color: var(--text);
 }
 
 .checkbox-label input[type="checkbox"] {
-    width: 1.1em;
-    height: 1.1em;
-    accent-color: var(--primary);
+    width: 18px;
+    height: 18px;
     cursor: pointer;
 }
 
-/* Additional Mobile Responsiveness */
+.filter-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    justify-content: flex-end;
+}
+
+/* -------------------------------------------------------- */
+/* Users table styling - better structure                   */
+/* -------------------------------------------------------- */
+
+.users-table-container {
+    margin-bottom: 2rem;
+    overflow-x: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.users-table th {
+    background: var(--primary);
+    color: white;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.users-table th:first-child {
+    border-top-left-radius: 8px;
+}
+
+.users-table th:last-child {
+    border-top-right-radius: 8px;
+}
+
+.users-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+    color: var(--text);
+}
+
+.users-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.users-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 8px;
+}
+
+.users-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 8px;
+}
+
+.users-table tbody tr:hover {
+    background-color: rgba(var(--primary-rgb), 0.05);
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-align: center;
+    color: white;
+    text-transform: capitalize;
+}
+
+.role-badge.admin,
+.role-badge-admin {
+    background-color: #dc3545;
+}
+
+.role-badge.class_rep,
+.role-badge-classrep {
+    background-color: #28a745;
+}
+
+.role-badge.stuco,
+.role-badge-stuco {
+    background-color: #007bff;
+}
+
+.role-badge.user,
+.role-badge-user {
+    background-color: #6c757d;
+}
+
+.balance-amount {
+    font-weight: 600;
+    color: var(--success);
+}
+
+.no-balance {
+    color: #6c757d;
+    font-style: italic;
+}
+
+.row-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+}
+
+.no-results {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text);
+}
+
+@media (max-width: 992px) {
+    .filter-row {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .filter-field {
+        width: 100%;
+    }
+    
+    .users-table th, 
+    .users-table td {
+        padding: 0.5rem;
+    }
+    
+    .users-table {
+        font-size: 0.9rem;
+    }
+    
+    .row-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .advanced-filters {
+        padding: 1rem;
+    }
+    
+    .filter-section {
+        padding: 0.75rem;
+    }
+    
+    .filter-actions {
+        flex-direction: column;
+    }
+    
+    .users-table-container {
+        overflow-x: auto;
+    }
+    
+    .users-table {
+        min-width: 600px;
+    }
+}
+
 @media (max-width: 480px) {
     .admin-actions {
         flex-direction: column;
@@ -439,4 +693,872 @@
         padding: 0.5rem;
         font-size: 0.9rem;
     }
+}
+
+/* -------------------------------------------------------- */
+/* Improved Mobile Responsiveness for all Admin Pages       */
+/* -------------------------------------------------------- */
+
+/* Mobile responsiveness for AdminDashboard */
+@media (max-width: 768px) {
+    .admin-container {
+        padding: 1rem;
+        margin: 0.5rem;
+        width: calc(100% - 1rem);
+        border-radius: 6px;
+    }
+    
+    .admin-container h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .admin-container h2 {
+        font-size: 1.3rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    /* Dashboard stats styling */
+    .stats-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+    
+    .stat-card {
+        padding: 0.75rem;
+        border-radius: 6px;
+    }
+    
+    .admin-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .admin-actions .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+        padding: 0.75rem;
+        text-align: center;
+    }
+}
+
+/* Even smaller screens */
+@media (max-width: 480px) {
+    .admin-container {
+        padding: 0.75rem;
+        margin: 0.25rem;
+        width: calc(100% - 0.5rem);
+    }
+    
+    .admin-container h1 {
+        font-size: 1.3rem;
+    }
+    
+    .admin-table th, 
+    .admin-table td {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.85rem;
+    }
+    
+    .btn, .btn-sm {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+/* Mobile responsiveness for AdminUserDetail page */
+@media (max-width: 768px) {
+    .admin-detail-section {
+        padding: 0.75rem;
+    }
+    
+    .admin-detail-section .filter-field {
+        margin-bottom: 1rem;
+    }
+    
+    .admin-detail-section input,
+    .admin-detail-section select {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+    }
+    
+    .admin-detail-section .admin-actions {
+        margin-top: 1.25rem;
+    }
+}
+
+/* Mobile responsiveness for AdminBalance page */
+@media (max-width: 768px) {
+    .balance-stats {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .admin-table td:nth-child(3) {  /* Email column */
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .admin-table .btn {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Mobile responsiveness for AdminUsers page */
+@media (max-width: 992px) {
+    .search-bar-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-bar {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .filter-section {
+        padding: 0.75rem;
+    }
+    
+    .filter-section-title {
+        font-size: 0.9rem;
+    }
+    
+    .filter-row {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .filter-field {
+        width: 100%;
+    }
+    
+    .checkbox-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+    
+    .filter-actions {
+        flex-direction: column;
+    }
+    
+    .filter-actions .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .users-table-container {
+        overflow-x: auto;
+    }
+    
+    .users-table {
+        min-width: 600px;
+    }
+    
+    .row-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .row-actions .btn {
+        width: 100%;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    .checkbox-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .users-table th, 
+    .users-table td {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.8rem;
+    }
+    
+    .role-badge {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.3rem;
+    }
+}
+
+/* Enhanced Table Responsiveness */
+@media (max-width: 768px) {
+    .admin-table {
+        border-radius: 6px;
+    }
+    
+    /* Make tables horizontally scrollable */
+    .admin-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: 1rem;
+    }
+    
+    /* Ensure buttons adapt properly */
+    .admin-table .btn,
+    .admin-table .btn-sm {
+        padding: 0.35rem 0.5rem;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+    
+    /* Reduce complexity for mobile */
+    .admin-table th {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 120px;
+    }
+}
+
+/* Improved AdminUserDetail page styling */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    position: relative;
+    animation: alertFadeIn 0.3s ease-out;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alert p {
+    margin: 0;
+}
+
+.alert-danger {
+    background-color: #ffebee;
+    border: 1px solid #ffcdd2;
+    color: #c62828;
+}
+
+.alert-success {
+    background-color: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    color: #2e7d32;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.close-btn:hover {
+    opacity: 1;
+}
+
+@keyframes alertFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.error-message {
+    text-align: center;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.error-message h2 {
+    color: var(--danger);
+    margin-bottom: 1rem;
+}
+
+.user-edit-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.user-profile-header {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    background: var(--section-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-right: 1.25rem;
+}
+
+.user-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-meta h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.4rem;
+    color: var(--text);
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.role-badge-admin {
+    background-color: #dc3545;
+    color: white;
+}
+
+.role-badge-stuco {
+    background-color: #007bff;
+    color: white;
+}
+
+.role-badge-classrep {
+    background-color: #28a745;
+    color: white;
+}
+
+.role-badge-user {
+    background-color: #6c757d;
+    color: white;
+}
+
+.user-id {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.form-section {
+    padding: 1.5rem;
+}
+
+.form-section h3 {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    font-size: 1.2rem;
+    color: var(--primary);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background-color: var(--card-bg);
+    color: var(--text);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.2);
+}
+
+.form-control.disabled {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+.form-text {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background-color: var(--section-bg);
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text);
+}
+
+.btn-outline:hover:not(:disabled) {
+    background: #f8f9fa;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Mobile responsiveness for user details page */
+@media (max-width: 768px) {
+    .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .admin-header button {
+        align-self: flex-start;
+    }
+    
+    .user-profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .user-avatar {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions button {
+        width: 100%;
+    }
+}
+
+/* Sortable table headers styling */
+.sortable-header {
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    transition: background-color 0.2s;
+    padding-right: 24px !important; /* Space for sort icon */
+}
+
+.sortable-header:hover {
+    background-color: var(--primary-dark);
+}
+
+.sortable-header:active {
+    background-color: var(--primary-dark);
+}
+
+.admin-table th {
+    position: relative;
+    padding: 10px 15px;
+    font-weight: 600;
+    text-align: left;
+    border-bottom: 2px solid var(--border-color);
+    background-color: var(--primary);
+    color: white;
+}
+
+/* Mobile responsiveness for the admin table headers */
+@media (max-width: 768px) {
+    .sortable-header {
+        padding: 8px 20px 8px 8px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Sort indicator styling */
+.sort-indicator {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+}
+
+.sort-indicator svg {
+    height: 14px;
+    width: 14px;
+}
+
+.sort-indicator path {
+    transition: opacity 0.2s ease;
+    stroke: white;
+}
+
+/* Inactive state - both arrows visible but faded */
+.sort-indicator:not(.active) path {
+    opacity: 0.7;
+}
+
+.sortable-header:hover .sort-indicator:not(.active) {
+    opacity: 1;
+}
+
+/* Active indicator with direction */
+.sort-indicator.active {
+    color: white;
+    opacity: 1;
+}
+
+/* Ascending - top arrow highlighted (pointing up) */
+.sort-indicator.active.asc path:first-child {
+    opacity: 0.3;
+}
+
+.sort-indicator.active.asc path:last-child {
+    opacity: 1;
+    stroke-width: 2.5;
+}
+
+/* Descending - bottom arrow highlighted (pointing down) */
+.sort-indicator.active.desc path:first-child {
+    opacity: 1;
+    stroke-width: 2.5;
+}
+
+.sort-indicator.active.desc path:last-child {
+    opacity: 0.3;
+}
+
+/* Ensure table rows have proper contrast in light mode */
+.admin-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text);
+}
+
+body.dark .admin-table tbody tr:nth-child(even) {
+    background-color: #222222;
+}
+
+body.dark .admin-table tbody tr:nth-child(odd) {
+    background-color: #222222;
+}
+
+body.dark .admin-table tbody tr:hover {
+    background-color: #2a2a2a;
+}
+
+/* No data message should have proper contrast */
+.no-results p {
+    color: var(--text) !important;
+}
+
+/* Ensure buttons have proper contrast */
+.btn-sm {
+    color: white;
+    background-color: var(--primary);
+}
+
+.btn-sm:hover {
+    background-color: var(--primary-dark);
+}
+
+.btn-sm.btn-secondary {
+    background-color: var(--secondary);
+}
+
+.btn-sm.btn-secondary:hover {
+    background-color: var(--secondary-dark);
+}
+
+/* Ensure consistent text contrast for pagination */
+.pagination-controls button {
+    color: var(--text);
+}
+
+.pagination-controls button:disabled {
+    color: var(--text-muted);
+}
+
+/* Fix form field contrast issues in AdminUserDetail */
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background-color: var(--card-bg);
+    color: var(--text);
+}
+
+.form-text {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+/* Improve contrast for admin container elements */
+.admin-container {
+    color: var(--text);
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+.admin-detail-section {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+.admin-detail-section h2,
+.admin-detail-section h3,
+.user-edit-card h3 {
+    color: var(--text);
+}
+
+/* Fix filters contrast */
+.advanced-filters {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+.filter-section-title {
+    color: var(--text);
+}
+
+.filter-field label {
+    color: var(--text);
+}
+
+.checkbox-label {
+    color: var(--text);
+}
+
+/* Improve user profile elements */
+.user-profile-header {
+    background: var(--section-bg);
+}
+
+.user-meta h2 {
+    color: var(--text);
+}
+
+.user-id {
+    color: var(--text-muted);
+}
+
+/* Fix search bar contrast */
+.search-bar {
+    background-color: var(--card-bg);
+    color: var(--text);
+    border: 1px solid var(--border-color);
+}
+
+.search-bar::placeholder {
+    color: var(--text-muted);
+}
+
+/* Fix notifications colors */
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+body.dark .alert-danger {
+    color: #ffb8bd;
+    background-color: rgba(220, 53, 69, 0.2);
+    border-color: rgba(220, 53, 69, 0.5);
+}
+
+body.dark .alert-success {
+    color: #a3ffb0;
+    background-color: rgba(40, 167, 69, 0.2);
+    border-color: rgba(40, 167, 69, 0.5);
+}
+
+/* Fix loading spinner in dark mode */
+body.dark .spinner {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-top-color: var(--primary);
+}
+
+/* Fix instructions group styling */
+.instructions-group h3 {
+    color: var(--text);
+}
+
+/* Fix loading and empty states */
+.loading-spinner p,
+.error-message p,
+.no-results p {
+    color: var(--text);
+}
+
+/* Fix table cells in dark mode */
+body.dark .admin-table {
+    border-color: var(--border-color);
+}
+
+body.dark .admin-table tbody tr {
+    background-color: var(--card-bg);
+}
+
+body.dark .admin-table tbody tr:nth-child(even) {
+    background-color: #222222;
+}
+
+body.dark .admin-table tbody tr:nth-child(odd) {
+    background-color: #222222;
+}
+
+body.dark .admin-table tbody tr:hover {
+    background-color: #2a2a2a;
+}
+
+body.dark .admin-table td {
+    color: var(--text);
+    border-color: var(--border-color);
+}
+
+.admin-content {
+    min-height: calc(100vh - 70px);
+    background-color: var(--bg);
+}
+
+body.dark .admin-content {
+    background-color: var(--bg);
+}
+
+body.dark input:disabled,
+body.dark select:disabled,
+body.dark textarea:disabled {
+    background-color: #333;
+    color: #aaa;
+    border-color: #444;
+}
+
+body.dark .admin-user-detail,
+body.dark .admin-section,
+body.dark .admin-header,
+body.dark .admin-filters,
+body.dark .pagination {
+    background-color: transparent;
+}
+
+/* Override white backgrounds for specific containers */
+body.dark .form-section,
+body.dark .users-table-container,
+body.dark .admin-table.users-table,
+body.dark .user-edit-card {
+    background-color: transparent;
+}
+
+body.dark .form-section {
+    background-color: #222;
+    border-color: #444;
+}
+
+body.dark .form-group {
+    border-color: #444;
+}
+
+/* Ensure form inputs have proper dark mode styling */
+body.dark .form-section input,
+body.dark .form-section select {
+    background-color: #333;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark .form-section input:focus,
+body.dark .form-section select:focus {
+    border-color: var(--primary);
+    outline-color: var(--primary);
+}
+
+body.dark .user-edit-card {
+    background-color: #222;
+    border-color: #444;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }

@@ -22,9 +22,9 @@ export function AddToCartDialog({
 
             {/* Dialog container */}
             <div className="fixed inset-0 flex items-center justify-center p-4">
-                {/* Dialog panel with custom styling */}
+                {/* Dialog panel with improved styling */}
                 <Dialog.Panel className="AddToCartDialog">
-                    <Dialog.Title className="text-lg font-bold mb-4">
+                    <Dialog.Title className="AddToCartDialog-title">
                         Item Added to Cart
                     </Dialog.Title>
                     <div className="AddToCartDialog-actions">
@@ -33,7 +33,7 @@ export function AddToCartDialog({
                                 onContinueShopping()
                                 onClose()
                             }}
-                            className="btn btn-secondary"
+                            className="btn-secondary"
                         >
                             Continue Shopping
                         </button>
@@ -42,7 +42,7 @@ export function AddToCartDialog({
                                 onViewCart()
                                 onClose()
                             }}
-                            className="btn btn-primary"
+                            className="btn-primary"
                         >
                             View Cart
                         </button>

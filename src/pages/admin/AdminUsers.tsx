@@ -1,4 +1,4 @@
-import { useEffect, useState, ChangeEvent } from 'react';
+import {useEffect, useState, ChangeEvent, JSX, KeyboardEvent} from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,9 +16,25 @@ interface OrderType {
     productPrice: number;
     instructions?: string;
     quantity: number;
-    status: string;
+    status: 'PENDING' | 'PAID' | 'DELIVERED' | 'CANCELLED';
+    paymentType: 'CASH' | 'PREPAID';
+    createdAt: string;
+    paidAt?: string;
+    totalPrice: number;
     buyer: {
         id: number;
+        username?: string;
+        fullName?: string;
+    };
+    assignedRep?: {
+        id: number;
+        username?: string;
+        fullName?: string;
+    };
+    product?: {
+        id: number;
+        name: string;
+        price: number;
     };
 }
 
@@ -38,6 +54,12 @@ type FilterSettings = {
     activeOrders?: boolean;     // new boolean filter
 };
 
+// Sort settings type
+type SortConfig = {
+    key: keyof UserType | '';
+    direction: 'asc' | 'desc';
+};
+
 export default function AdminUsers() {
     const { user } = useAuth();
     const navigate = useNavigate();
@@ -51,6 +73,12 @@ export default function AdminUsers() {
     const [filters, setFilters] = useState<FilterSettings>({
         searchTerm: '',
         selectedRoles: [],
+    });
+
+    // Sort configuration state
+    const [sortConfig, setSortConfig] = useState<SortConfig>({
+        key: '',
+        direction: 'asc'
     });
 
     // Whether we’re showing/hiding the advanced filter section
@@ -120,7 +148,7 @@ export default function AdminUsers() {
         }
     }
 
-    async function updateOrderStatus(orderId: number, newStatus: string) {
+    async function updateOrderStatus(orderId: number, newStatus: 'PENDING' | 'PAID' | 'DELIVERED' | 'CANCELLED') {
         try {
             const res = await fetch(`/api/orders/${orderId}/status?status=${newStatus}`, {
                 method: 'PATCH',
@@ -128,12 +156,16 @@ export default function AdminUsers() {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-            if (!res.ok) throw new Error('Failed to update order status');
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.message || 'Failed to update order status');
+            }
             if (selectedUser) {
                 fetchUserOrders(selectedUser);
             }
         } catch (err) {
             console.error(err);
+            alert(err instanceof Error ? err.message : 'Failed to update order status');
         }
     }
 
@@ -157,6 +189,69 @@ export default function AdminUsers() {
     }
 
     const groupedUserOrders = groupOrdersByInstructions(userOrders);
+
+    // --------------------- SORTING FUNCTIONALITY ---------------------
+    function sortUsers(users: UserType[], sortKey: keyof UserType | '', sortDirection: 'asc' | 'desc'): UserType[] {
+        if (!sortKey) return users;
+        
+        return [...users].sort((a, b) => {
+            const aValue = a[sortKey];
+            const bValue = b[sortKey];
+            
+            // Handle null/undefined values
+            if (aValue === undefined && bValue === undefined) return 0;
+            if (aValue === undefined) return sortDirection === 'asc' ? 1 : -1;
+            if (bValue === undefined) return sortDirection === 'asc' ? -1 : 1;
+            
+            // Compare values based on their types
+            if (typeof aValue === 'string' && typeof bValue === 'string') {
+                return sortDirection === 'asc' 
+                    ? aValue.localeCompare(bValue)
+                    : bValue.localeCompare(aValue);
+            }
+            
+            if (typeof aValue === 'number' && typeof bValue === 'number') {
+                return sortDirection === 'asc' 
+                    ? aValue - bValue 
+                    : bValue - aValue;
+            }
+            
+            // Default comparison for other types as strings
+            return sortDirection === 'asc'
+                ? String(aValue).localeCompare(String(bValue))
+                : String(bValue).localeCompare(String(aValue));
+        });
+    }
+    
+    function requestSort(key: keyof UserType) {
+        let direction: 'asc' | 'desc' = 'asc';
+        
+        // If already sorting by this key, toggle direction
+        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        
+        setSortConfig({ key, direction });
+        
+        // Apply sorting to filtered users
+        const sortedUsers = sortUsers(filteredUsers, key, direction);
+        setFilteredUsers(sortedUsers);
+    }
+    
+    // Get sort indicator JSX element for column header
+    function getSortIndicator(key: keyof UserType): JSX.Element {
+        const isActive = sortConfig.key === key;
+        const direction = sortConfig.direction;
+        
+        return (
+            <span className={`sort-indicator ${isActive ? 'active' : ''} ${isActive ? direction : ''}`}>
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none">
+                    <path d="M7 9l5-5 5 5"></path>  {/* Up arrow */}
+                    <path d="M7 15l5 5 5-5"></path> {/* Down arrow */}
+                </svg>
+            </span>
+        );
+    }
 
     // --------------------- LOCAL FILTERING LOGIC ---------------------
     function applyLocalFilters(all: UserType[], fs: FilterSettings): UserType[] {
@@ -213,8 +308,21 @@ export default function AdminUsers() {
         // ❓ activeOrders => Local filtering is tricky because we’d need all orders.
         // We skip local filtering here and rely on server side if activeOrders is set.
 
+        // Apply current sort if one exists
+        if (sortConfig.key) {
+            return sortUsers(result, sortConfig.key, sortConfig.direction);
+        }
+        
         return result;
     }
+
+    // Apply sortConfig to filtered results whenever we update filteredUsers
+    useEffect(() => {
+        if (sortConfig.key) {
+            const sortedUsers = sortUsers(filteredUsers, sortConfig.key, sortConfig.direction);
+            setFilteredUsers(sortedUsers);
+        }
+    }, [allUsers]);
 
     // --------------------- HANDLERS FOR FILTER INPUTS ---------------------
 
@@ -241,6 +349,14 @@ export default function AdminUsers() {
             }
             return { ...prev, selectedRoles: Array.from(current) };
         });
+    }
+
+    // Handle key down events for search input
+    function handleSearchKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            onApplyFilter();
+        }
     }
 
     // --------------------- APPLY FILTERS BUTTON ---------------------
@@ -272,8 +388,9 @@ export default function AdminUsers() {
             const eqValues = filters.balanceEqCSV
                 .split(',')
                 .map((val) => val.trim())
-                .filter((v) => v !== '');
-            eqValues.forEach((val) => params.append('balanceEq', val));
+                .filter((v) => v !== '')
+                .map((v) => parseFloat(v));
+            eqValues.forEach((val) => params.append('balanceEq', val.toString()));
         }
 
         // balanceGt, balanceLt
@@ -316,6 +433,7 @@ export default function AdminUsers() {
                             searchTerm: e.target.value,
                         }))
                     }
+                    onKeyDown={handleSearchKeyDown}
                 />
 
                 <button className="btn" onClick={onApplyFilter} title="Click to search locally & fetch from server">
@@ -334,158 +452,184 @@ export default function AdminUsers() {
             {/* ------------- Advanced Filters Section ------------- */}
             {showAdvancedFilter && (
                 <div className="advanced-filters">
-                    <div className="filter-row">
-                        <div className="filter-field checkbox-group">
-                            <label>Roles:</label>
-                            <div className="checkbox-row">
-                                <label className="checkbox-label">
-                                    <input
-                                        type="checkbox"
-                                        value="USER"
-                                        checked={filters.selectedRoles.includes('USER')}
-                                        onChange={handleRoleCheckboxChange}
-                                        title="Include USER role"
-                                    />
-                                    USER
+                    <h3 className="filters-heading">Advanced Filters</h3>
+                    
+                    <div className="filter-section">
+                        <h4 className="filter-section-title">User Criteria</h4>
+                        <div className="filter-row">
+                            <div className="filter-field checkbox-group">
+                                <label>Roles:</label>
+                                <div className="checkbox-row">
+                                    {['USER', 'CLASS_REP', 'STUCO', 'ADMIN'].map(role => (
+                                        <label key={role} className="checkbox-label">
+                                            <input
+                                                type="checkbox"
+                                                value={role}
+                                                checked={filters.selectedRoles.includes(role)}
+                                                onChange={handleRoleCheckboxChange}
+                                                title={`Include ${role} role`}
+                                            />
+                                            {role}
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="filter-field">
+                                <label title="The last 2 digits in the user's email, e.g. someone.smith25@acsbg.org => 25">
+                                    Graduation Year:
                                 </label>
-                                <label className="checkbox-label">
-                                    <input
-                                        type="checkbox"
-                                        value="CLASS_REP"
-                                        checked={filters.selectedRoles.includes('CLASS_REP')}
-                                        onChange={handleRoleCheckboxChange}
-                                        title="Include CLASS_REP role"
-                                    />
-                                    CLASS_REP
-                                </label>
-                                <label className="checkbox-label">
-                                    <input
-                                        type="checkbox"
-                                        value="STUCO"
-                                        checked={filters.selectedRoles.includes('STUCO')}
-                                        onChange={handleRoleCheckboxChange}
-                                        title="Include STUCO role"
-                                    />
-                                    STUCO
-                                </label>
-                                <label className="checkbox-label">
-                                    <input
-                                        type="checkbox"
-                                        value="ADMIN"
-                                        checked={filters.selectedRoles.includes('ADMIN')}
-                                        onChange={handleRoleCheckboxChange}
-                                        title="Include ADMIN role"
-                                    />
-                                    ADMIN
-                                </label>
+                                <input
+                                    type="number"
+                                    placeholder="e.g. 24"
+                                    value={filters.graduationYear ?? ''}
+                                    onChange={(e) => handleChange(e, 'graduationYear')}
+                                    title="Enter 2 digits"
+                                />
                             </div>
                         </div>
-
-                        <div className="filter-field">
-                            <label title="The last 2 digits in the user’s email, e.g. someone.smith25@acsbg.org => 25">
-                                Graduation Year:
-                            </label>
-                            <input
-                                type="number"
-                                placeholder="e.g. 24"
-                                value={filters.graduationYear ?? ''}
-                                onChange={(e) => handleChange(e, 'graduationYear')}
-                                title="Enter 2 digits"
-                            />
-                        </div>
                     </div>
-
-                    <div className="filter-row">
-                        <div className="filter-field">
-                            <label title="Exact balance matches, comma separated. e.g. 5,10.50">
-                                Balance =
-                            </label>
-                            <input
-                                type="text"
-                                placeholder="e.g. 5,10.00"
-                                value={filters.balanceEqCSV ?? ''}
-                                onChange={(e) => handleChange(e, 'balanceEqCSV')}
-                                title="Comma separated list of exact balances"
-                            />
-                        </div>
-                        <div className="filter-field">
-                            <label title="Filter by balance greater than...">
-                                Balance &gt;
-                            </label>
-                            <input
-                                type="number"
-                                step="0.01"
-                                placeholder="e.g. 5.00"
-                                value={filters.balanceGt || ''}
-                                onChange={(e) => handleChange(e, 'balanceGt')}
-                            />
-                        </div>
-                        <div className="filter-field">
-                            <label title="Filter by balance less than...">
-                                Balance &lt;
-                            </label>
-                            <input
-                                type="number"
-                                step="0.01"
-                                placeholder="e.g. 20.00"
-                                value={filters.balanceLt || ''}
-                                onChange={(e) => handleChange(e, 'balanceLt')}
-                            />
-                        </div>
-                    </div>
-
-                    {/* 🆕 Active Orders checkbox */}
-                    <div className="filter-row">
-                        <div className="filter-field checkbox-group">
-                            <label>Additional Filters:</label>
-                            <div className="checkbox-row">
-                                <label className="checkbox-label" title="Only fetch users who have at least one active/pending order">
-                                    <input
-                                        type="checkbox"
-                                        checked={!!filters.activeOrders}
-                                        onChange={(e) => handleChange(e, 'activeOrders')}
-                                    />
-                                    Has Active Orders
+                    
+                    <div className="filter-section">
+                        <h4 className="filter-section-title">Balance Filters</h4>
+                        <div className="filter-row">
+                            <div className="filter-field">
+                                <label title="Exact balance matches, comma separated. e.g. 5,10.50">
+                                    Balance Exact Match
                                 </label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. 5,10.00"
+                                    value={filters.balanceEqCSV ?? ''}
+                                    onChange={(e) => handleChange(e, 'balanceEqCSV')}
+                                    title="Comma separated list of exact balances"
+                                />
+                            </div>
+                            <div className="filter-field">
+                                <label title="Filter by balance greater than...">
+                                    Balance Greater Than
+                                </label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    placeholder="e.g. 5.00"
+                                    value={filters.balanceGt || ''}
+                                    onChange={(e) => handleChange(e, 'balanceGt')}
+                                />
+                            </div>
+                            <div className="filter-field">
+                                <label title="Filter by balance less than...">
+                                    Balance Less Than
+                                </label>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    placeholder="e.g. 20.00"
+                                    value={filters.balanceLt || ''}
+                                    onChange={(e) => handleChange(e, 'balanceLt')}
+                                />
                             </div>
                         </div>
                     </div>
 
-                    <button className="btn btn-primary" onClick={onApplyFilter} title="Apply all filters">
-                        Apply Filter
-                    </button>
+                    <div className="filter-section">
+                        <h4 className="filter-section-title">Additional Options</h4>
+                        <div className="filter-row">
+                            <div className="filter-field checkbox-group">
+                                <div className="checkbox-row">
+                                    <label className="checkbox-label" title="Only fetch users who have at least one active/pending order">
+                                        <input
+                                            type="checkbox"
+                                            checked={!!filters.activeOrders}
+                                            onChange={(e) => handleChange(e, 'activeOrders')}
+                                        />
+                                        Has Active Orders
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="filter-actions">
+                        <button className="btn btn-primary" onClick={onApplyFilter} title="Apply all filters">
+                            Apply Filters
+                        </button>
+                        <button 
+                            className="btn btn-secondary" 
+                            onClick={() => {
+                                setFilters({
+                                    searchTerm: '',
+                                    selectedRoles: [],
+                                });
+                                setFilteredUsers(allUsers);
+                            }} 
+                            title="Clear all filters"
+                        >
+                            Clear Filters
+                        </button>
+                    </div>
                 </div>
             )}
 
             {/* ------------- Users List ------------- */}
-            <ul className="admin-list">
-                {filteredUsers.map((u) => (
-                    <li className="admin-list-item" key={u.id}>
-                        <div className="admin-list-item-row">
-              <span>
-                {u.name} ({u.email}) [role={u.role}]
-                  {u.collectedBalance !== undefined && (
-                      <> — Balance: {u.collectedBalance.toFixed(2)}</>
-                  )}
-              </span>
-                            <div className="admin-actions">
-                                <button className="btn" onClick={() => fetchUserOrders(u)}>
-                                    View Orders
-                                </button>
-                                {/* if user has role 2=CLASS_REP or 3=STUCO, show an Edit button */}
-                                {user && (user.role === 2 || user.role === 3) && (
-                                    <button
-                                        className="btn btn-primary"
-                                        onClick={() => navigate(`/admin/users/${u.id}`)}
-                                    >
-                                        Edit
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    </li>
-                ))}
-            </ul>
+            <div className="users-table-container">
+                <table className="admin-table users-table">
+                    <thead>
+                        <tr>
+                            <th className="sortable-header" onClick={() => requestSort('name')}>
+                                Name {getSortIndicator('name')}
+                            </th>
+                            <th className="sortable-header" onClick={() => requestSort('email')}>
+                                Email {getSortIndicator('email')}
+                            </th>
+                            <th className="sortable-header" onClick={() => requestSort('role')}>
+                                Role {getSortIndicator('role')}
+                            </th>
+                            <th className="sortable-header" onClick={() => requestSort('collectedBalance')}>
+                                Balance {getSortIndicator('collectedBalance')}
+                            </th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredUsers.map((u) => (
+                            <tr key={u.id} className="user-row">
+                                <td>{u.name}</td>
+                                <td>{u.email}</td>
+                                <td><span className={`role-badge ${u.role.toLowerCase()}`}>{u.role}</span></td>
+                                <td>
+                                    {u.collectedBalance !== undefined ? (
+                                        <span className="balance-amount">{u.collectedBalance.toFixed(2)}</span>
+                                    ) : (
+                                        <span className="no-balance">N/A</span>
+                                    )}
+                                </td>
+                                <td>
+                                    <div className="row-actions">
+                                        <button className="btn btn-sm" onClick={() => fetchUserOrders(u)}>
+                                            View Orders
+                                        </button>
+                                        {/* if user has role 2=CLASS_REP or 3=STUCO, show an Edit button */}
+                                        {user && (user.role === 2 || user.role === 3) && (
+                                            <button
+                                                className="btn btn-sm btn-primary"
+                                                onClick={() => navigate(`/admin/users/${u.id}`)}
+                                            >
+                                                Edit
+                                            </button>
+                                        )}
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                {filteredUsers.length === 0 && !loading && (
+                    <div className="no-results">
+                        <p>No users found matching the current filters.</p>
+                    </div>
+                )}
+            </div>
 
             {/* ------------- Selected User’s Orders ------------- */}
             {selectedUser && (
@@ -506,6 +650,7 @@ export default function AdminUsers() {
                                             <th>Quantity</th>
                                             <th>Price</th>
                                             <th>Status</th>
+                                            <th>Assigned To</th>
                                             <th>Actions</th>
                                         </tr>
                                         </thead>
@@ -520,18 +665,37 @@ export default function AdminUsers() {
                                                     <td className="text-center">{totalPrice.toFixed(2)}</td>
                                                     <td className="text-center">{order.status}</td>
                                                     <td className="text-center">
-                                                        <button
-                                                            className="btn btn-success"
-                                                            onClick={() => updateOrderStatus(order.id, 'PAID')}
-                                                        >
-                                                            Mark Paid
-                                                        </button>{' '}
-                                                        <button
-                                                            className="btn btn-secondary"
-                                                            onClick={() => updateOrderStatus(order.id, 'DELIVERED')}
-                                                        >
-                                                            Mark Delivered
-                                                        </button>
+                                                        {order.assignedRep ? 
+                                                            (order.assignedRep.fullName || order.assignedRep.username) : 
+                                                            'Not assigned'}
+                                                    </td>
+                                                    <td className="text-center">
+                                                        {order.status === 'PENDING' && (
+                                                            <button
+                                                                className="btn btn-success"
+                                                                onClick={() => updateOrderStatus(order.id, 'PAID')}
+                                                            >
+                                                                Mark Paid
+                                                            </button>
+                                                        )}
+                                                        {' '}
+                                                        {order.status === 'PAID' && (
+                                                            <button
+                                                                className="btn btn-secondary"
+                                                                onClick={() => updateOrderStatus(order.id, 'DELIVERED')}
+                                                            >
+                                                                Mark Delivered
+                                                            </button>
+                                                        )}
+                                                        {' '}
+                                                        {order.status !== 'CANCELLED' && order.status !== 'DELIVERED' && (
+                                                            <button
+                                                                className="btn btn-danger"
+                                                                onClick={() => updateOrderStatus(order.id, 'CANCELLED')}
+                                                            >
+                                                                Cancel
+                                                            </button>
+                                                        )}
                                                     </td>
                                                 </tr>
                                             );

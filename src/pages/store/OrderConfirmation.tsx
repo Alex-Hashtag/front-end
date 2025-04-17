@@ -19,7 +19,7 @@ export default function OrderConfirmation() {
                                 <p>Order ID: #{order.id}</p>
                                 <p>Product: {order.productName}</p>
                                 <p>Quantity: {order.quantity}</p>
-                                <p>Total: ${order.totalPrice.toFixed(2)}</p>
+                                <p>Total: {order.totalPrice.toFixed(2)} BGN</p>
                                 <p>Status: {order.status}</p>
                                 {order.instructions && (
                                     <p>Instructions: {order.instructions}</p>

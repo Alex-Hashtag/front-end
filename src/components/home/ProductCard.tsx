@@ -13,7 +13,7 @@ export default function ProductCard({product}: Props) {
             <div className="card-body">
                 <h3 className="card-title">{product.name}</h3>
                 <p className="card-desc">{product.description}</p>
-                <p className="card-price">${product.price.toFixed(2)}</p>
+                <p className="card-price">{product.price.toFixed(2)} BGN</p>
             </div>
         </Link>
     )

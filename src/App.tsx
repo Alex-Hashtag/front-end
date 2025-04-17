@@ -27,11 +27,12 @@ import AdminUsers from "./pages/admin/AdminUsers.tsx";
 import AdminUserDetail from "./pages/admin/AdminUserDetail.tsx";
 import AdminBalance from "./pages/admin/AdminBalance.tsx";
 import './styles/markdown.css'
+import { ThemeProvider } from './context/ThemeContext.tsx'
 
 export function App()
 {
     return (
-        <>
+        <ThemeProvider>
             <Navbar/>
             <CartProvider>
                 <Routes>
@@ -87,6 +88,6 @@ export function App()
                 </Routes>
             </CartProvider>
             <Footer/>
-        </>
+        </ThemeProvider>
     )
 }

@@ -57,7 +57,7 @@ export default function ProductCard({product}: ProductCardProps) {
             )}
             <div className="product-content">
                 <h3 className="product-title">{product.name}</h3>
-                <p className="product-price">${product.price.toFixed(2)}</p>
+                <p className="product-price">{product.price.toFixed(2)} BGN</p>
                 <p className="stock-status">{stockStatus}</p>
 
                 <div

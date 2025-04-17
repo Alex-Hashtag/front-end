@@ -87,7 +87,7 @@ export default function ProductDetail() {
 
                 <div className="product-detail-info">
                     <h1 className="product-detail-title">{product.name}</h1>
-                    <p className="product-detail-price">${product.price.toFixed(2)}</p>
+                    <p className="product-detail-price">{product.price.toFixed(2)} BGN</p>
 
                     <article
                         className="product-detail-description"

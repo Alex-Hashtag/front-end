@@ -27,7 +27,7 @@ export default function Cart() {
                 </div>
             ))}
 
-            <div className="cart-total">Total: ${total.toFixed(2)}</div>
+            <div className="cart-total">Total: {total.toFixed(2)} BGN</div>
 
             {/* Added btn and proceed-btn classes */}
             <button
