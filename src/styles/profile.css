@@ -146,3 +146,75 @@ hr {
 .order-group li:last-child {
     border-bottom: none;
 }
+
+/* Dark mode fixes for profile and orders pages */
+body.dark .profile-container,
+body.dark .my-orders-container,
+body.dark .assigned-orders-container {
+    background-color: #222;
+    border-color: #444;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .tab-btn {
+    background-color: #333;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark .tab-btn.active {
+    background-color: var(--primary-dark);
+    color: #fff;
+}
+
+body.dark .order-group {
+    background-color: #222;
+    border-color: #444;
+}
+
+body.dark .order-group li {
+    border-bottom-color: #333;
+}
+
+body.dark .profile-info input[type="text"],
+body.dark .profile-info input[type="email"],
+body.dark .profile-info input[type="file"] {
+    background-color: #333;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark .profile-info img {
+    border-color: #444;
+}
+
+/* Additional dark mode fixes for order status and actions */
+body.dark .order-status {
+    color: #e0e0e0;
+    background-color: #333;
+    border-color: #444;
+}
+
+body.dark .order-actions button {
+    background-color: #333;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark .order-actions button:hover {
+    background-color: #444;
+}
+
+body.dark .order-actions button.primary {
+    background-color: var(--primary);
+    color: white;
+}
+
+body.dark .order-actions button.primary:hover {
+    background-color: var(--primary-dark);
+}
+
+body.dark .order-instructions {
+    background-color: #333;
+    border-color: #444;
+}
