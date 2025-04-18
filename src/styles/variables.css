@@ -1,52 +1,141 @@
 :root {
+    /* Base Colors */
     --bg: #fdfdfd;
     --text: #111;
+    --text-muted: #999;
 
+    /* UI Elements */
     --card-bg: #fff;
     --nav-bg: #f7f7f7;
     --section-bg: #f9f9f9;
     --border-color: #ccc;
+    --input-bg: #fff;
+    --input-border: #ddd;
+    --input-focus-border: #9e43f3;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --overlay-bg: rgba(0, 0, 0, 0.5);
 
+    /* Primary Brand Colors */
     --primary: #6c2bd9;
     --primary-dark: #5721b2;
+    --primary-light: #9e43f3; 
+    --primary-ultra-light: rgba(108, 43, 217, 0.1);
     --accent: #b68eff;
 
+    /* Secondary Colors */
     --secondary: #6c757d;
     --secondary-dark: #5a6268;
+    --secondary-light: #adb5bd;
+
+    /* Feedback Colors */
     --success: #28a745;
     --success-dark: #218838;
+    --success-light: #48c765;
+    --success-ultra-light: rgba(40, 167, 69, 0.1);
+    
+    --warning: #ffc107;
+    --warning-dark: #e0a800;
+    --warning-light: #ffce3a;
+    --warning-ultra-light: rgba(255, 193, 7, 0.1);
+    
     --danger: #e74c3c;
     --danger-dark: #c0392b;
+    --danger-light: #f55a4e;
+    --danger-ultra-light: rgba(231, 76, 60, 0.1);
+    
+    --info: #17a2b8;
+    --info-dark: #138496;
+    --info-light: #3ab7cc;
+    --info-ultra-light: rgba(23, 162, 184, 0.1);
 
+    /* Links */
     --link-color: #6c2bd9;
     --link-hover: #9e43f3;
-    --text-muted: #999;
+    
+    /* Tables */
+    --table-header-bg: #f1f1f1;
+    --table-header-text: #333;
+    --table-header-hover: #e4e4e4;
+    --table-row-odd: #fff;
+    --table-row-even: #f9f9f9;
+    --table-row-hover: #f1f1f1;
+    
+    /* Code */
     --code-bg: #2d2d2d;
+    --code-text: #f8f8f2;
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-medium: 0.25s ease;
+    --transition-slow: 0.4s ease;
+    --transition-ultra-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.dark {
+    /* Base Colors */
     --bg: #121212;
     --text: #eee;
+    --text-muted: #aaa;
 
+    /* UI Elements */
     --card-bg: #1e1e1e;
     --nav-bg: #1a1a1a;
     --section-bg: #222;
     --border-color: #333;
+    --input-bg: #333;
+    --input-border: #444;
+    --input-focus-border: #9e43f3;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --overlay-bg: rgba(0, 0, 0, 0.7);
 
+    /* Primary Brand Colors */
     --primary: #6c2bd9;
     --primary-dark: #5721b2;
+    --primary-light: #9e43f3;
+    --primary-ultra-light: rgba(108, 43, 217, 0.2);
     --accent: #bb86fc;
 
-    --link-color: #ccc;
-    --link-hover: #bb86fc;
-
+    /* Secondary Colors */
     --secondary: #6c757d;
     --secondary-dark: #5a6268;
+    --secondary-light: #adb5bd;
+
+    /* Feedback Colors */
     --success: #28a745;
     --success-dark: #218838;
+    --success-light: #48c765;
+    --success-ultra-light: rgba(40, 167, 69, 0.2);
+    
+    --warning: #ffc107;
+    --warning-dark: #e0a800;
+    --warning-light: #ffce3a;
+    --warning-ultra-light: rgba(255, 193, 7, 0.2);
+    
     --danger: #e74c3c;
     --danger-dark: #c0392b;
+    --danger-light: #f55a4e;
+    --danger-ultra-light: rgba(231, 76, 60, 0.2);
+    
+    --info: #17a2b8;
+    --info-dark: #138496;
+    --info-light: #3ab7cc;
+    --info-ultra-light: rgba(23, 162, 184, 0.2);
 
-    --text-muted: #aaa;
+    /* Links */
+    --link-color: #bb86fc;
+    --link-hover: #d2a8ff;
+    
+    /* Tables */
+    --table-header-bg: var(--primary-dark);
+    --table-header-text: #fff;
+    --table-header-hover: var(--primary);
+    --table-row-odd: #222;
+    --table-row-even: #222;
+    --table-row-hover: #2a2a2a;
+    
+    /* Code */
     --code-bg: #2d2d2d;
+    --code-text: #f8f8f2;
+    
+    /* Transitions are inherited from root */
 }

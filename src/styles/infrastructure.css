@@ -1,0 +1,159 @@
+/* Infrastructure Pages Styling */
+.infrastructure-container {
+    min-height: calc(100vh - 140px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: var(--bg);
+}
+
+.infrastructure-content {
+    max-width: 600px;
+    text-align: center;
+    padding: 3rem 2rem;
+    border-radius: 12px;
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.infrastructure-content h1 {
+    font-size: 5rem;
+    margin: 0;
+    color: var(--primary);
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+.infrastructure-content h2 {
+    font-size: 1.8rem;
+    margin: 0.5rem 0 1.5rem;
+    color: var(--text);
+}
+
+.infrastructure-content p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.infrastructure-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.infrastructure-actions .btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.infrastructure-actions .btn-primary {
+    background-color: var(--primary);
+    color: white;
+}
+
+.infrastructure-actions .btn-primary:hover {
+    background-color: var(--primary-dark);
+}
+
+.infrastructure-actions .btn-secondary {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--text);
+}
+
+.infrastructure-actions .btn-secondary:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.illustration {
+    margin-top: 3rem;
+}
+
+.illustration svg {
+    color: var(--primary);
+    opacity: 0.6;
+}
+
+.countdown {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.estimated-time {
+    font-size: 1rem;
+    margin-top: -0.5rem;
+    color: var(--text);
+}
+
+/* Page-specific styles */
+.not-found .illustration svg {
+    color: var(--primary);
+}
+
+.error-page .illustration svg {
+    color: var(--danger);
+}
+
+.forbidden .illustration svg {
+    color: var(--warning);
+}
+
+.maintenance .illustration svg {
+    color: var(--info);
+}
+
+/* Dark mode adjustments */
+body.dark .infrastructure-content {
+    background-color: #222;
+    border-color: #444;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .infrastructure-actions .btn-secondary {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .infrastructure-actions .btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Responsive design */
+@media (max-width: 576px) {
+    .infrastructure-content {
+        padding: 2rem 1.5rem;
+    }
+    
+    .infrastructure-content h1 {
+        font-size: 4rem;
+    }
+    
+    .infrastructure-content h2 {
+        font-size: 1.5rem;
+    }
+    
+    .infrastructure-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .illustration svg {
+        width: 120px;
+        height: 120px;
+    }
+}

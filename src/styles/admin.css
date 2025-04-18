@@ -7,6 +7,7 @@
     border: 1px solid var(--border-color);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: background-color var(--transition-medium), box-shadow var(--transition-medium);
 }
 
 @media (max-width: 768px) {
@@ -15,6 +16,7 @@
         margin: 0.5rem;
         width: calc(100% - 1rem);
         max-width: 100%;
+        border-radius: 6px;
     }
     
     .admin-container h1 {
@@ -24,6 +26,7 @@
     
     .admin-container h2 {
         font-size: 1.3rem;
+        margin-bottom: 0.75rem;
     }
 }
 
@@ -31,6 +34,7 @@
     margin-bottom: 1.5rem;
     font-size: 2rem;
     color: var(--primary);
+    transition: color var(--transition-medium);
 }
 
 .admin-container h2 {
@@ -50,9 +54,10 @@
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 2rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px var(--shadow-color);
     border-radius: 8px;
     overflow: hidden;
+    transition: box-shadow var(--transition-medium);
 }
 
 .admin-table th {
@@ -62,7 +67,7 @@
     color: var(--table-header-text);
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color var(--transition-fast);
     user-select: none;
 }
 
@@ -157,6 +162,7 @@ body.dark .admin-table tr:hover {
     border: 1px solid var(--border-color);
     border-radius: 8px;
     background: #fff;
+    transition: background-color var(--transition-medium), border-color var(--transition-medium);
 }
 
 .admin-list-item {
@@ -203,6 +209,7 @@ body.dark .admin-table tr:hover {
     align-items: center;
     gap: 1rem;
     margin-bottom: 1.5rem;
+    transition: background-color var(--transition-medium);
 }
 
 @media (max-width: 768px) {
@@ -228,6 +235,7 @@ body.dark .admin-table tr:hover {
     font-size: 1rem;
     background: var(--card-bg);
     color: var(--text);
+    transition: background-color var(--transition-medium), border-color var(--transition-medium);
 }
 
 .btn {
@@ -239,12 +247,15 @@ body.dark .admin-table tr:hover {
     border-radius: 4px;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s ease;
-    text-decoration: none;
+    transition: background-color var(--transition-fast), 
+                color var(--transition-fast), 
+                transform var(--transition-fast),
+                box-shadow var(--transition-fast);
 }
 
 .btn:hover {
-    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
 }
 
 .btn-danger {
@@ -275,6 +286,7 @@ body.dark .admin-table tr:hover {
     display: flex;
     gap: 0.5rem;
     margin-top: 1rem;
+    transition: background-color var(--transition-medium);
 }
 
 .admin-actions .btn {
@@ -287,6 +299,7 @@ body.dark .admin-table tr:hover {
     border-radius: 8px;
     border: 1px solid var(--border-color);
     margin-bottom: 1rem;
+    transition: background-color var(--transition-medium), border-color var(--transition-medium);
 }
 
 @media (max-width: 768px) {
@@ -317,6 +330,7 @@ body.dark .admin-table tr:hover {
     padding: 1rem;
     margin-bottom: 1.5rem;
     background: var(--card-bg);
+    transition: background-color var(--transition-medium), border-color var(--transition-medium);
 }
 
 .instructions-title {
@@ -330,6 +344,7 @@ body.dark .admin-table tr:hover {
     align-items: center;
     gap: 1rem;
     margin-top: 1rem;
+    transition: background-color var(--transition-medium);
 }
 
 @media (max-width: 768px) {
@@ -354,6 +369,9 @@ body.dark .admin-table tr:hover {
     border: 1px solid var(--border-color);
     border-radius: 4px;
     font-size: 1rem;
+    background: var(--card-bg);
+    color: var(--text);
+    transition: background-color var(--transition-medium), border-color var(--transition-medium);
 }
 
 /* -------------------------------------------------------- */
@@ -366,6 +384,7 @@ body.dark .admin-table tr:hover {
     gap: 0.5rem;
     margin-bottom: 1rem;
     align-items: center;
+    transition: background-color var(--transition-medium);
 }
 
 @media (max-width: 768px) {
@@ -392,6 +411,7 @@ body.dark .admin-table tr:hover {
     font-size: 1rem;
     background: var(--card-bg);
     color: var(--text);
+    transition: background-color var(--transition-medium), border-color var(--transition-medium);
 }
 
 .advanced-filter-button {
@@ -405,7 +425,8 @@ body.dark .admin-table tr:hover {
     border-radius: 8px;
     margin-bottom: 1.5rem;
     border: 1px solid var(--border-color);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px var(--shadow-color);
+    transition: background-color var(--transition-medium), border-color var(--transition-medium);
 }
 
 .filters-heading {
@@ -422,6 +443,7 @@ body.dark .admin-table tr:hover {
     padding: 1rem;
     border-radius: 6px;
     border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: background-color var(--transition-medium), border-color var(--transition-medium);
 }
 
 .filter-section-title {
@@ -436,6 +458,7 @@ body.dark .admin-table tr:hover {
     display: flex;
     gap: 1.5rem;
     flex-wrap: wrap;
+    transition: background-color var(--transition-medium);
 }
 
 /* Wrapper for each individual filter (label + input) */
@@ -445,6 +468,7 @@ body.dark .admin-table tr:hover {
     gap: 0.5rem;
     flex: 1;
     min-width: 150px;
+    transition: background-color var(--transition-medium);
 }
 
 .filter-field label {
@@ -462,6 +486,7 @@ body.dark .admin-table tr:hover {
     background: #fff;
     transition: all 0.2s ease;
     color: var(--text);
+    transition: background-color var(--transition-medium), border-color var(--transition-medium);
 }
 
 .filter-field input[type="text"]:focus,
@@ -475,12 +500,14 @@ body.dark .admin-table tr:hover {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    transition: background-color var(--transition-medium);
 }
 
 .checkbox-row {
     display: flex;
     gap: 1.5rem;
     flex-wrap: wrap;
+    transition: background-color var(--transition-medium);
 }
 
 .checkbox-label {
@@ -503,6 +530,7 @@ body.dark .admin-table tr:hover {
     gap: 1rem;
     margin-top: 1rem;
     justify-content: flex-end;
+    transition: background-color var(--transition-medium);
 }
 
 /* -------------------------------------------------------- */
@@ -514,7 +542,8 @@ body.dark .admin-table tr:hover {
     overflow-x: auto;
     background: white;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px var(--shadow-color);
+    transition: background-color var(--transition-medium), box-shadow var(--transition-medium);
 }
 
 .users-table {
@@ -523,6 +552,7 @@ body.dark .admin-table tr:hover {
     border-spacing: 0;
     border: 1px solid var(--border-color);
     border-radius: 8px;
+    transition: background-color var(--transition-medium), border-color var(--transition-medium);
 }
 
 .users-table th {
@@ -534,6 +564,7 @@ body.dark .admin-table tr:hover {
     font-size: 0.9rem;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+    transition: background-color var(--transition-fast);
 }
 
 .users-table th:first-child {
@@ -549,6 +580,7 @@ body.dark .admin-table tr:hover {
     border-bottom: 1px solid var(--border-color);
     vertical-align: middle;
     color: var(--text);
+    transition: background-color var(--transition-medium), border-color var(--transition-medium);
 }
 
 .users-table tbody tr:last-child td {
@@ -576,6 +608,7 @@ body.dark .admin-table tr:hover {
     text-align: center;
     color: white;
     text-transform: capitalize;
+    transition: background-color var(--transition-medium);
 }
 
 .role-badge.admin,
@@ -611,17 +644,23 @@ body.dark .admin-table tr:hover {
 .row-actions {
     display: flex;
     gap: 0.5rem;
+    transition: background-color var(--transition-medium);
 }
 
 .btn-sm {
     padding: 0.25rem 0.5rem;
     font-size: 0.85rem;
+    transition: background-color var(--transition-fast), 
+                color var(--transition-fast), 
+                transform var(--transition-fast),
+                box-shadow var(--transition-fast);
 }
 
 .no-results {
     padding: 2rem;
     text-align: center;
     color: var(--text);
+    transition: background-color var(--transition-medium);
 }
 
 @media (max-width: 992px) {
@@ -927,6 +966,7 @@ body.dark .admin-table tr:hover {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
+    transition: background-color var(--transition-medium);
 }
 
 .alert {
@@ -938,6 +978,7 @@ body.dark .admin-table tr:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: background-color var(--transition-medium);
 }
 
 .alert p {
@@ -988,6 +1029,7 @@ body.dark .admin-table tr:hover {
     align-items: center;
     justify-content: center;
     min-height: 200px;
+    transition: background-color var(--transition-medium);
 }
 
 .spinner {
@@ -998,6 +1040,7 @@ body.dark .admin-table tr:hover {
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 1rem;
+    transition: border-color var(--transition-fast);
 }
 
 @keyframes spin {
@@ -1012,6 +1055,7 @@ body.dark .admin-table tr:hover {
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: background-color var(--transition-medium);
 }
 
 .error-message h2 {
@@ -1024,6 +1068,7 @@ body.dark .admin-table tr:hover {
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    transition: background-color var(--transition-medium), box-shadow var(--transition-medium);
 }
 
 .user-profile-header {
@@ -1032,6 +1077,7 @@ body.dark .admin-table tr:hover {
     padding: 1.5rem;
     background: var(--section-bg);
     border-bottom: 1px solid var(--border-color);
+    transition: background-color var(--transition-medium), border-color var(--transition-medium);
 }
 
 .user-avatar {
@@ -1046,6 +1092,7 @@ body.dark .admin-table tr:hover {
     font-size: 1.8rem;
     font-weight: 600;
     margin-right: 1.25rem;
+    transition: background-color var(--transition-fast);
 }
 
 .user-meta {
@@ -1066,6 +1113,7 @@ body.dark .admin-table tr:hover {
     font-size: 0.8rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
+    transition: background-color var(--transition-medium);
 }
 
 .role-badge-admin {
@@ -1095,6 +1143,7 @@ body.dark .admin-table tr:hover {
 
 .form-section {
     padding: 1.5rem;
+    transition: background-color var(--transition-medium);
 }
 
 .form-section h3 {
@@ -1126,6 +1175,7 @@ body.dark .admin-table tr:hover {
     transition: border-color 0.2s, box-shadow 0.2s;
     background-color: var(--card-bg);
     color: var(--text);
+    transition: background-color var(--transition-medium), border-color var(--transition-medium);
 }
 
 .form-control:focus {
@@ -1153,12 +1203,17 @@ body.dark .admin-table tr:hover {
     padding: 1rem 1.5rem;
     background-color: var(--section-bg);
     border-top: 1px solid var(--border-color);
+    transition: background-color var(--transition-medium), border-color var(--transition-medium);
 }
 
 .btn-outline {
     background: transparent;
     border: 1px solid var(--border-color);
     color: var(--text);
+    transition: background-color var(--transition-fast), 
+                color var(--transition-fast), 
+                transform var(--transition-fast),
+                box-shadow var(--transition-fast);
 }
 
 .btn-outline:hover:not(:disabled) {
@@ -1226,6 +1281,7 @@ body.dark .admin-table tr:hover {
     border-bottom: 2px solid var(--border-color);
     background-color: var(--primary);
     color: white;
+    transition: background-color var(--transition-fast);
 }
 
 /* Mobile responsiveness for the admin table headers */

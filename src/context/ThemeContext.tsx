@@ -35,8 +35,19 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 
   // Apply theme class to body
   useEffect(() => {
-    document.body.className = theme;
+    // Add transition class before changing theme
+    document.body.classList.add('theme-transition');
+    
+    // Set the theme class
+    document.body.className = `${theme} theme-transition`;
     localStorage.setItem('theme', theme);
+    
+    // Remove transition class after animation completes to prevent transition on page load
+    const transitionEndTimer = setTimeout(() => {
+      document.body.classList.remove('theme-transition');
+    }, 1000);
+    
+    return () => clearTimeout(transitionEndTimer);
   }, [theme]);
 
   const toggleTheme = () => {

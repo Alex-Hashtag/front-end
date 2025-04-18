@@ -2,16 +2,9 @@ import {useEffect, useState} from 'react';
 import {useAuth} from '../../context/AuthContext';
 import {useNavigate} from 'react-router-dom';
 
-interface OrderStats
-{
-    status: string;
-    count: number;
-}
-
 export default function AdminDashboard() {
     const {user} = useAuth();
     const navigate = useNavigate();
-    const [stats, setStats] = useState<OrderStats[] | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -33,8 +26,6 @@ export default function AdminDashboard() {
                 {
                     throw new Error('Failed to fetch order stats');
                 }
-                const data = await res.json();
-                setStats(data);
             } catch (error)
             {
                 console.error(error);
@@ -55,21 +46,6 @@ export default function AdminDashboard() {
     return (
         <div className="admin-container">
             <h1>Admin Overview</h1>
-
-            {stats ? (
-                <div>
-                    <h2>Order Stats</h2>
-                    <ul>
-                        {stats.map((item, index) => (
-                            <li key={index}>
-                                {item.status}: {item.count}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            ) : (
-                <p>No stats available</p>
-            )}
 
             <div className="admin-actions">
                 <button className="btn" onClick={() => navigate('/admin/users')}>

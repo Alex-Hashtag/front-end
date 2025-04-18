@@ -26,68 +26,85 @@ import ProtectedRoute from "./components/common/ProtectedRouteProps.tsx";
 import AdminUsers from "./pages/admin/AdminUsers.tsx";
 import AdminUserDetail from "./pages/admin/AdminUserDetail.tsx";
 import AdminBalance from "./pages/admin/AdminBalance.tsx";
+import NotFound from "./pages/infrastructure/NotFound.tsx";
+import ErrorPage from "./pages/infrastructure/ErrorPage.tsx";
+import Forbidden from "./pages/infrastructure/Forbidden.tsx";
+import Maintenance from "./pages/infrastructure/Maintenance.tsx";
+import ErrorBoundary from "./components/common/ErrorBoundary.tsx";
 import './styles/markdown.css'
+import './styles/infrastructure.css'
+import './styles/transitions.css'
 import { ThemeProvider } from './context/ThemeContext.tsx'
 
 export function App()
 {
     return (
         <ThemeProvider>
-            <Navbar/>
-            <CartProvider>
-                <Routes>
-                    <Route path="/" element={<Home/>}/>
+            <ErrorBoundary>
+                <Navbar/>
+                <CartProvider>
+                    <Routes>
+                        <Route path="/" element={<Home/>}/>
 
-                    {/* Auth */}
-                    <Route path="/login" element={<Login/>}/>
-                    <Route path="/register" element={<Register/>}/>
-                    <Route path="/verify" element={<VerifyEmail/>}/>
-                    <Route path="/forgot-password" element={<ForgotPassword/>}/>
-                    <Route path="/reset-password" element={<ResetPassword/>}/>
+                        {/* Auth */}
+                        <Route path="/login" element={<Login/>}/>
+                        <Route path="/register" element={<Register/>}/>
+                        <Route path="/verify" element={<VerifyEmail/>}/>
+                        <Route path="/forgot-password" element={<ForgotPassword/>}/>
+                        <Route path="/reset-password" element={<ResetPassword/>}/>
 
-                    {/* News */}
-                    <Route path="/news" element={<NewsList/>}/>
-                    <Route path="/news/create" element={<CreateNews/>}/>
-                    <Route path="/news/:id" element={<NewsDetail/>}/>
-                    <Route path="/news/edit/:id" element={<EditNews/>}/>
+                        {/* News */}
+                        <Route path="/news" element={<NewsList/>}/>
+                        <Route path="/news/create" element={<CreateNews/>}/>
+                        <Route path="/news/:id" element={<NewsDetail/>}/>
+                        <Route path="/news/edit/:id" element={<EditNews/>}/>
 
-                    {/* Store */}
-                    <Route path="/store" element={<StoreList/>}/>
-                    <Route path="/store/create" element={<CreateProduct/>}/>
-                    <Route path="/store/:id" element={<ProductDetail/>}/>
-                    <Route path="/store/edit/:id" element={<EditProduct/>}/>
-                    <Route path="/store/cart" element={<Cart/>}/>
-                    <Route path="/store/checkout" element={<Checkout/>}/>
-                    <Route path="/store/order-confirmation" element={<OrderConfirmation/>}/>
+                        {/* Store */}
+                        <Route path="/store" element={<StoreList/>}/>
+                        <Route path="/store/create" element={<CreateProduct/>}/>
+                        <Route path="/store/:id" element={<ProductDetail/>}/>
+                        <Route path="/store/edit/:id" element={<EditProduct/>}/>
+                        <Route path="/store/cart" element={<Cart/>}/>
+                        <Route path="/store/checkout" element={<Checkout/>}/>
+                        <Route path="/store/order-confirmation" element={<OrderConfirmation/>}/>
 
-                    {/* Profile */}
-                    <Route path="/profile" element={<Profile/>}/>
-                    <Route path="/profile/orders" element={<MyOrders/>}/>
+                        {/* Profile */}
+                        <Route path="/profile" element={<Profile/>}/>
+                        <Route path="/profile/orders" element={<MyOrders/>}/>
 
-                    {/* Admin Routes */}
-                    <Route path="/admin" element={
-                        <ProtectedRoute requiredRole={1}>
-                            <AdminDashboard/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/admin/users" element={
-                        <ProtectedRoute requiredRole={1}>
-                            <AdminUsers/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/admin/users/:id" element={
-                        <ProtectedRoute requiredRole={1}>
-                            <AdminUserDetail/>
-                        </ProtectedRoute>
-                    }/>
-                    <Route path="/admin/balance" element={
-                        <ProtectedRoute requiredRole={2}>
-                            <AdminBalance/>
-                        </ProtectedRoute>
-                    }/>
-                </Routes>
-            </CartProvider>
-            <Footer/>
+                        {/* Admin Routes */}
+                        <Route path="/admin" element={
+                            <ProtectedRoute requiredRole={1}>
+                                <AdminDashboard/>
+                            </ProtectedRoute>
+                        }/>
+                        <Route path="/admin/users" element={
+                            <ProtectedRoute requiredRole={1}>
+                                <AdminUsers/>
+                            </ProtectedRoute>
+                        }/>
+                        <Route path="/admin/users/:id" element={
+                            <ProtectedRoute requiredRole={1}>
+                                <AdminUserDetail/>
+                            </ProtectedRoute>
+                        }/>
+                        <Route path="/admin/balance" element={
+                            <ProtectedRoute requiredRole={2}>
+                                <AdminBalance/>
+                            </ProtectedRoute>
+                        }/>
+                        
+                        {/* Infrastructure Pages */}
+                        <Route path="/error" element={<ErrorPage />} />
+                        <Route path="/forbidden" element={<Forbidden />} />
+                        <Route path="/maintenance" element={<Maintenance />} />
+                        
+                        {/* 404 - This must be the last route */}
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </CartProvider>
+                <Footer/>
+            </ErrorBoundary>
         </ThemeProvider>
     )
 }
