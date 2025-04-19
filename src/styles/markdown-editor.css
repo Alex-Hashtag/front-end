@@ -1,0 +1,563 @@
+/* Markdown Editor Styling */
+.markdown-editor-wrapper {
+    margin-bottom: 1.5rem;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: all var(--transition-medium);
+}
+
+/* Fix excessive top padding */
+.rc-md-editor {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    transition: all var(--transition-medium);
+}
+
+.rc-md-editor .rc-md-navigation {
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.5rem;
+    transition: all var(--transition-medium);
+}
+
+.rc-md-editor .rc-md-navigation .button-wrap .button {
+    color: var(--text);
+    transition: all var(--transition-fast);
+}
+
+.rc-md-editor .rc-md-navigation .button-wrap .button:hover {
+    color: var(--primary);
+    background-color: var(--hover-bg);
+}
+
+.rc-md-editor .rc-md-navigation .button-wrap .button.active {
+    color: var(--primary);
+}
+
+/* Editor area - fix dark mode text color */
+.rc-md-editor .editor-container {
+    background-color: var(--card-bg);
+    transition: all var(--transition-medium);
+}
+
+.rc-md-editor .editor-container .sec-md .input {
+    background-color: var(--card-bg);
+    color: var(--text);
+    transition: all var(--transition-medium);
+}
+
+/* Force dark mode text color to be white */
+body.dark .rc-md-editor .editor-container .sec-md .input {
+    background-color: var(--input-bg);
+    color: #f8f9fa !important; /* Force white text */
+}
+
+/* Preview area */
+.rc-md-editor .editor-container .sec-html {
+    background-color: var(--card-bg);
+    color: var(--text);
+    border-left: 1px solid var(--border-color);
+    transition: all var(--transition-medium);
+}
+
+.rc-md-editor .editor-container .sec-html .html-wrap {
+    background-color: var(--card-bg);
+    color: var(--text);
+    transition: all var(--transition-medium);
+    padding: 1rem;
+    line-height: 1.6;
+}
+
+/* Force dark mode preview text to be light */
+body.dark .rc-md-editor .editor-container .sec-html .html-wrap {
+    color: #f8f9fa !important; /* Force light text */
+}
+
+/* Dark mode specific overrides */
+body.dark .rc-md-editor {
+    border-color: var(--border-color);
+}
+
+body.dark .rc-md-editor .rc-md-navigation {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+}
+
+body.dark .rc-md-editor .editor-container .sec-md textarea {
+    background-color: var(--input-bg);
+    color: #fff;
+}
+
+body.dark .rc-md-editor .editor-container .sec-html {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+}
+
+/* Custom toolbar button styles */
+.rc-md-editor .custom-toolbar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin: 0 4px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all var(--transition-fast);
+}
+
+.rc-md-editor .custom-toolbar-btn:hover {
+    background-color: var(--hover-bg);
+    color: var(--primary);
+}
+
+.rc-md-editor .custom-toolbar-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Divider for toolbar sections */
+.rc-md-editor .toolbar-divider {
+    display: inline-block;
+    width: 1px;
+    height: 24px;
+    margin: 0 6px;
+    background-color: var(--border-color);
+    vertical-align: middle;
+}
+
+/* Dropdown menu styling */
+.rc-md-editor .dropdown-wrap {
+    position: relative;
+}
+
+.rc-md-editor .dropdown-wrap .dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 100;
+    min-width: 120px;
+    padding: 4px 0;
+    margin-top: 4px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    transition: all var(--transition-fast);
+}
+
+.rc-md-editor .dropdown-wrap .dropdown .dropdown-item {
+    display: block;
+    padding: 6px 12px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.rc-md-editor .dropdown-wrap .dropdown .dropdown-item:hover {
+    background-color: var(--hover-bg);
+    color: var(--primary);
+}
+
+/* Placeholder text */
+.rc-md-editor .editor-container .sec-md .input::placeholder {
+    color: var(--text-muted);
+}
+
+body.dark .rc-md-editor .editor-container .sec-md .input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Focus states */
+.rc-md-editor:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-ultra-light);
+}
+
+/* Table styling in preview */
+.rc-md-editor .html-wrap table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.rc-md-editor .html-wrap table th,
+.rc-md-editor .html-wrap table td {
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    text-align: left;
+}
+
+.rc-md-editor .html-wrap table th {
+    background-color: var(--section-bg);
+}
+
+body.dark .rc-md-editor .html-wrap table th {
+    background-color: var(--section-bg-dark);
+}
+
+/* Code blocks in preview - improved styling */
+.rc-md-editor .custom-html-style pre.code-block {
+    display: block;
+    padding: 1rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+    border-radius: 4px;
+    background-color: #f5f7fa;
+    border: 1px solid #e5e9f2;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
+.rc-md-editor .custom-html-style code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.875rem;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    background-color: rgba(175, 184, 193, 0.2);
+    color: inherit;
+}
+
+.rc-md-editor .custom-html-style pre.code-block code {
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
+    white-space: pre;
+}
+
+/* Dark mode for code blocks */
+body.dark .rc-md-editor .custom-html-style pre.code-block {
+    background-color: #2d333b;
+    border-color: #444c56;
+    color: #e6edf3;
+}
+
+body.dark .rc-md-editor .custom-html-style code {
+    background-color: rgba(110, 118, 129, 0.4);
+    color: #e6edf3;
+}
+
+body.dark .rc-md-editor .custom-html-style pre.code-block code {
+    background-color: transparent;
+}
+
+/* Language-specific styling */
+.rc-md-editor .custom-html-style pre.code-block.language-js,
+.rc-md-editor .custom-html-style pre.code-block.language-javascript,
+.rc-md-editor .custom-html-style pre.code-block.language-jsx,
+.rc-md-editor .custom-html-style pre.code-block.language-ts,
+.rc-md-editor .custom-html-style pre.code-block.language-typescript,
+.rc-md-editor .custom-html-style pre.code-block.language-tsx {
+    border-left: 3px solid #f0db4f; /* JavaScript yellow */
+}
+
+.rc-md-editor .custom-html-style pre.code-block.language-html,
+.rc-md-editor .custom-html-style pre.code-block.language-xml {
+    border-left: 3px solid #e44d26; /* HTML orange */
+}
+
+.rc-md-editor .custom-html-style pre.code-block.language-css {
+    border-left: 3px solid #264de4; /* CSS blue */
+}
+
+.rc-md-editor .custom-html-style pre.code-block.language-py,
+.rc-md-editor .custom-html-style pre.code-block.language-python {
+    border-left: 3px solid #3572A5; /* Python blue */
+}
+
+.rc-md-editor .custom-html-style pre.code-block.language-json {
+    border-left: 3px solid #8bc34a; /* JSON green */
+}
+
+.rc-md-editor .custom-html-style pre.code-block.language-bash,
+.rc-md-editor .custom-html-style pre.code-block.language-shell {
+    border-left: 3px solid #4eaa25; /* Shell green */
+}
+
+/* Improved heading styles in preview */
+.rc-md-editor .custom-html-style h1,
+.rc-md-editor .custom-html-style h2,
+.rc-md-editor .custom-html-style h3,
+.rc-md-editor .custom-html-style h4,
+.rc-md-editor .custom-html-style h5,
+.rc-md-editor .custom-html-style h6 {
+    color: var(--text);
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.rc-md-editor .custom-html-style h1 {
+    font-size: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.3rem;
+}
+
+.rc-md-editor .custom-html-style h2 {
+    font-size: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.3rem;
+}
+
+.rc-md-editor .custom-html-style h3 {
+    font-size: 1.25rem;
+}
+
+.rc-md-editor .custom-html-style h4 {
+    font-size: 1rem;
+}
+
+.rc-md-editor .custom-html-style h5,
+.rc-md-editor .custom-html-style h6 {
+    font-size: 0.875rem;
+}
+
+/* Improved list styles */
+.rc-md-editor .custom-html-style ul,
+.rc-md-editor .custom-html-style ol {
+    padding-left: 2rem;
+    margin: 1rem 0;
+}
+
+.rc-md-editor .custom-html-style li + li {
+    margin-top: 0.25rem;
+}
+
+/* Blockquote styling */
+.rc-md-editor .custom-html-style blockquote {
+    margin: 1rem 0;
+    padding: 0.5rem 1rem;
+    color: var(--text-muted);
+    border-left: 4px solid var(--primary);
+    background-color: var(--section-bg);
+}
+
+body.dark .rc-md-editor .custom-html-style blockquote {
+    background-color: var(--section-bg-dark);
+    color: #e6edf3;
+}
+
+/* Horizontal rule */
+.rc-md-editor .custom-html-style hr {
+    height: 1px;
+    margin: 1.5rem 0;
+    background-color: var(--border-color);
+    border: none;
+}
+
+/* Links */
+.rc-md-editor .custom-html-style a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.rc-md-editor .custom-html-style a:hover {
+    text-decoration: underline;
+}
+
+/* Images */
+.rc-md-editor .custom-html-style img {
+    max-width: 100%;
+    border-radius: 4px;
+    margin: 1rem 0;
+}
+
+/* Custom class for the markdown editor in dark mode */
+.markdown-editor.dark-theme .editor-container {
+    background-color: var(--card-bg);
+}
+
+.markdown-editor.dark-theme .custom-html-style {
+    color: #f8f9fa;
+}
+
+/* Ensure proper dark mode colors for headings */
+body.dark .rc-md-editor .custom-html-style h1,
+body.dark .rc-md-editor .custom-html-style h2,
+body.dark .rc-md-editor .custom-html-style h3,
+body.dark .rc-md-editor .custom-html-style h4,
+body.dark .rc-md-editor .custom-html-style h5,
+body.dark .rc-md-editor .custom-html-style h6 {
+    color: #f8f9fa;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .rc-md-editor .rc-md-navigation {
+        padding: 0.25rem;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .rc-md-editor .rc-md-navigation .button-wrap {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 0.5rem;
+    }
+    
+    .rc-md-editor .rc-md-navigation .button-wrap .button {
+        min-width: 28px;
+        margin: 0 2px;
+    }
+    
+    .rc-md-editor .rc-md-navigation .navigation-nav {
+        font-size: 12px;
+    }
+    
+    .rc-md-editor .editor-container .sec-html .html-wrap {
+        padding: 0.5rem;
+    }
+    
+    .rc-md-editor .editor-container .sec-md .input,
+    .rc-md-editor .editor-container .sec-html .html-wrap {
+        font-size: 14px;
+    }
+    
+    /* Improve code blocks on mobile */
+    .rc-md-editor .custom-html-style pre.code-block {
+        padding: 0.75rem;
+        font-size: 0.8125rem;
+    }
+    
+    /* Adjust heading sizes for mobile */
+    .rc-md-editor .custom-html-style h1 {
+        font-size: 1.5rem;
+    }
+    
+    .rc-md-editor .custom-html-style h2 {
+        font-size: 1.25rem;
+    }
+    
+    .rc-md-editor .custom-html-style h3 {
+        font-size: 1.125rem;
+    }
+}
+
+/* Mobile phone specific adjustments (extra small screens) */
+@media (max-width: 480px) {
+    /* Stack editor and preview in vertical layout on phones */
+    .rc-md-editor .editor-container {
+        flex-direction: column;
+    }
+    
+    .rc-md-editor .editor-container > .section {
+        flex: 1 1 auto;
+        min-height: 200px;  /* Set a minimum height */
+    }
+    
+    /* Remove right border and add bottom border for editor section */
+    .rc-md-editor .editor-container > .section {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    /* Make sure the last section doesn't have a border */
+    .rc-md-editor .editor-container > .section:last-child {
+        border-bottom: none;
+    }
+    
+    /* Reduce padding further */
+    .rc-md-editor .editor-container .sec-html .html-wrap {
+        padding: 0.5rem;
+    }
+    
+    /* Even smaller font size for very small screens */
+    .rc-md-editor .editor-container .sec-md .input,
+    .rc-md-editor .editor-container .sec-html .html-wrap {
+        font-size: 13px;
+    }
+    
+    /* Condense the toolbar */
+    .rc-md-editor .rc-md-navigation .button-wrap .button {
+        min-width: 24px;
+        height: 24px;
+        line-height: 24px;
+        margin: 0 1px;
+    }
+    
+    .rc-md-editor .rc-md-navigation .rmel-iconfont {
+        font-size: 16px;
+    }
+    
+    /* Full-width dropdowns */
+    .rc-md-editor .dropdown-wrap .dropdown {
+        width: calc(100% - 20px);
+        left: 10px;
+        right: 10px;
+        max-width: none;
+    }
+    
+    /* Simplify table display */
+    .rc-md-editor .html-wrap table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    /* Adjust code block padding */
+    .rc-md-editor .custom-html-style pre.code-block {
+        padding: 0.5rem;
+    }
+    
+    /* Add toggle buttons for preview/edit mode */
+    .rc-md-editor .mobile-toggle-view {
+        display: flex;
+        justify-content: center;
+        padding: 0.25rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .rc-md-editor .mobile-toggle-view button {
+        padding: 0.25rem 0.5rem;
+        margin: 0 0.25rem;
+        border: none;
+        background-color: var(--section-bg);
+        color: var(--text);
+        border-radius: 4px;
+        font-size: 12px;
+    }
+    
+    .rc-md-editor .mobile-toggle-view button.active {
+        background-color: var(--primary);
+        color: white;
+    }
+}
+
+/* Add CSS for focus indicators for better accessibility */
+.rc-md-editor .rc-md-navigation .button-wrap .button:focus,
+.rc-md-editor .dropdown-wrap .dropdown .dropdown-item:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) {
+    .rc-md-editor .rc-md-navigation .button-wrap .button {
+        padding: 0.25rem;
+    }
+    
+    /* Larger touch targets */
+    .rc-md-editor .dropdown-wrap .dropdown .dropdown-item {
+        padding: 10px 12px;
+    }
+}
+
+/* Hide scrollbars in navigation on mobile while keeping functionality */
+@media (max-width: 768px) {
+    .rc-md-editor .rc-md-navigation .button-wrap::-webkit-scrollbar {
+        height: 2px;
+    }
+    
+    .rc-md-editor .rc-md-navigation .button-wrap::-webkit-scrollbar-thumb {
+        background-color: var(--border-color);
+    }
+}

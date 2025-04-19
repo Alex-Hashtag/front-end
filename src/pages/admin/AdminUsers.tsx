@@ -460,7 +460,7 @@ export default function AdminUsers() {
                             <div className="filter-field checkbox-group">
                                 <label>Roles:</label>
                                 <div className="checkbox-row">
-                                    {['USER', 'CLASS_REP', 'STUCO', 'ADMIN'].map(role => (
+                                    {['USER', 'REP', 'STUCO', 'ADMIN'].map(role => (
                                         <label key={role} className="checkbox-label">
                                             <input
                                                 type="checkbox"
@@ -609,8 +609,8 @@ export default function AdminUsers() {
                                         <button className="btn btn-sm" onClick={() => fetchUserOrders(u)}>
                                             View Orders
                                         </button>
-                                        {/* if user has role 2=CLASS_REP or 3=STUCO, show an Edit button */}
-                                        {user && (user.role === 2 || user.role === 3) && (
+                                        {/* if user has role 1=REP or 2=STUCO, show an Edit button */}
+                                        {user && (user.role === 1 || user.role === 2 || user.role === 3) && (
                                             <button
                                                 className="btn btn-sm btn-primary"
                                                 onClick={() => navigate(`/admin/users/${u.id}`)}
