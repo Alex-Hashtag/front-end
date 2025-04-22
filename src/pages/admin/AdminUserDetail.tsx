@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useNavigate, useParams } from 'react-router-dom';
+import {useEffect, useState} from 'react';
+import {useAuth} from '../../context/AuthContext';
+import {useNavigate, useParams} from 'react-router-dom';
 
-enum Role {
+enum Role
+{
     USER = 0,
     CLASS_REP = 1,
     STUCO = 2,
     ADMIN = 3
 }
 
-interface UserType {
+interface UserType
+{
     id: number;
     name: string;
     email: string;
@@ -17,9 +19,9 @@ interface UserType {
 }
 
 export default function AdminUserDetail() {
-    const { user } = useAuth();
+    const {user} = useAuth();
     const navigate = useNavigate();
-    const { id } = useParams();
+    const {id} = useParams();
     const [detailUser, setDetailUser] = useState<UserType | null>(null);
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
@@ -32,7 +34,8 @@ export default function AdminUserDetail() {
     const [hasChanges, setHasChanges] = useState(false);
 
     useEffect(() => {
-        if (!user || (user.role !== 2 && user.role !== 3)) {
+        if (!user || (user.role !== 2 && user.role !== 3))
+        {
             navigate('/');
             return;
         }
@@ -41,19 +44,22 @@ export default function AdminUserDetail() {
 
     // Detect if there are changes to save
     useEffect(() => {
-        if (detailUser) {
+        if (detailUser)
+        {
             setHasChanges(
-                editableName.trim() !== detailUser.name || 
+                editableName.trim() !== detailUser.name ||
                 selectedRole !== detailUser.role
             );
         }
     }, [editableName, selectedRole, detailUser]);
 
-    async function fetchUserDetail() {
+    async function fetchUserDetail()
+    {
         if (!id) return;
         setLoading(true);
         setErrorMessage(null);
-        try {
+        try
+        {
             const token = localStorage.getItem('token');
             const res = await fetch(`/api/users/${id}`, {
                 headers: {
@@ -65,46 +71,59 @@ export default function AdminUserDetail() {
             setDetailUser(data);
             setEditableName(data.name);
             setSelectedRole(data.role);
-        } catch (err) {
+        } catch (err)
+        {
             console.error(err);
             setErrorMessage('Failed to load user details. Please try again.');
-        } finally {
+        } finally
+        {
             setLoading(false);
         }
     }
 
-    function getAvailableRoles(): Role[] {
+    function getAvailableRoles(): Role[]
+    {
         if (!user) return [];
         if (user.role === Role.ADMIN) return allRoles;
         if (user.role === Role.STUCO) return allRoles.filter((r) => r < Role.STUCO);
         return [];
     }
 
-    function roleToString(r: Role) {
+    function roleToString(r: Role)
+    {
         return Role[r];
     }
 
-    function getRoleBadgeClass(role: Role): string {
-        switch(role) {
-            case Role.ADMIN: return 'role-badge-admin';
-            case Role.STUCO: return 'role-badge-stuco';
-            case Role.CLASS_REP: return 'role-badge-classrep';
-            default: return 'role-badge-user';
+    function getRoleBadgeClass(role: Role): string
+    {
+        switch (role)
+        {
+            case Role.ADMIN:
+                return 'role-badge-admin';
+            case Role.STUCO:
+                return 'role-badge-stuco';
+            case Role.CLASS_REP:
+                return 'role-badge-classrep';
+            default:
+                return 'role-badge-user';
         }
     }
 
-    async function saveChanges() {
+    async function saveChanges()
+    {
         if (!id || selectedRole === '') return;
         setUpdating(true);
         setErrorMessage(null);
         setSuccessMessage(null);
-        
-        try {
+
+        try
+        {
             const token = localStorage.getItem('token');
             let updated = false;
 
             // Update name if changed
-            if (detailUser?.name !== editableName.trim()) {
+            if (detailUser?.name !== editableName.trim())
+            {
                 const res = await fetch(`/api/users/me`, {
                     method: 'PUT',
                     headers: {
@@ -125,7 +144,8 @@ export default function AdminUserDetail() {
             }
 
             // Update role if changed
-            if (detailUser?.role !== selectedRole) {
+            if (detailUser?.role !== selectedRole)
+            {
                 const roleStr = roleToString(selectedRole);
                 const res = await fetch(`/api/users/${id}/role?newRole=${roleStr}`, {
                     method: 'PATCH',
@@ -140,24 +160,29 @@ export default function AdminUserDetail() {
                 updated = true;
             }
 
-            if (updated) {
+            if (updated)
+            {
                 setSuccessMessage('Changes saved successfully!');
                 setHasChanges(false);
                 // Auto-dismiss success message after 3 seconds
                 setTimeout(() => setSuccessMessage(null), 3000);
-            } else {
+            } else
+            {
                 setSuccessMessage('No changes to save.');
                 setTimeout(() => setSuccessMessage(null), 3000);
             }
-        } catch (err) {
+        } catch (err)
+        {
             console.error(err);
             setErrorMessage('An error occurred while saving changes. Please try again.');
-        } finally {
+        } finally
+        {
             setUpdating(false);
         }
     }
 
-    if (loading) {
+    if (loading)
+    {
         return (
             <div className="admin-container">
                 <div className="loading-spinner">
@@ -167,8 +192,9 @@ export default function AdminUserDetail() {
             </div>
         );
     }
-    
-    if (!detailUser) {
+
+    if (!detailUser)
+    {
         return (
             <div className="admin-container">
                 <div className="error-message">
@@ -221,7 +247,7 @@ export default function AdminUserDetail() {
 
                 <div className="form-section">
                     <h3>User Information</h3>
-                    
+
                     <div className="form-group">
                         <label htmlFor="userName">Name:</label>
                         <input
@@ -236,11 +262,11 @@ export default function AdminUserDetail() {
 
                     <div className="form-group">
                         <label htmlFor="userEmail">Email:</label>
-                        <input 
+                        <input
                             id="userEmail"
-                            type="email" 
-                            value={detailUser.email} 
-                            disabled 
+                            type="email"
+                            value={detailUser.email}
+                            disabled
                             className="form-control disabled"
                         />
                         <small className="form-text">Email addresses cannot be changed</small>
@@ -268,17 +294,18 @@ export default function AdminUserDetail() {
                 </div>
 
                 <div className="form-actions">
-                    <button 
-                        className="btn btn-primary" 
-                        onClick={saveChanges} 
+                    <button
+                        className="btn btn-primary"
+                        onClick={saveChanges}
                         disabled={updating || !hasChanges}
                     >
                         {updating ? 'Saving...' : hasChanges ? 'Save Changes' : 'No Changes'}
                     </button>
-                    <button 
-                        className="btn btn-outline" 
+                    <button
+                        className="btn btn-outline"
                         onClick={() => {
-                            if (detailUser) {
+                            if (detailUser)
+                            {
                                 setEditableName(detailUser.name);
                                 setSelectedRole(detailUser.role);
                             }

@@ -311,60 +311,60 @@ body.dark .auth-form {
 body.dark input,
 body.dark textarea,
 body.dark select {
-  background-color: var(--card-bg);
-  color: var(--text);
-  border-color: var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text);
+    border-color: var(--border-color);
 }
 
 body.dark input::placeholder,
 body.dark textarea::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.5);
 }
 
 body.dark input:focus,
 body.dark textarea:focus,
 body.dark select:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(108, 43, 217, 0.3);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(108, 43, 217, 0.3);
 }
 
 body.dark label {
-  color: var(--text);
+    color: var(--text);
 }
 
 body.dark .form-label {
-  color: var(--text);
+    color: var(--text);
 }
 
 body.dark .form-hint {
-  color: var(--text-muted);
+    color: var(--text-muted);
 }
 
 body.dark .form-error {
-  color: var(--danger);
+    color: var(--danger);
 }
 
 body.dark .auth-form {
-  background-color: var(--card-bg);
-  border-color: var(--border-color);
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
 }
 
 body.dark .auth-form h2,
 body.dark .auth-form h3,
 body.dark .auth-form p {
-  color: var(--text);
+    color: var(--text);
 }
 
 body.dark .auth-form a {
-  color: var(--link-color);
+    color: var(--link-color);
 }
 
 body.dark .auth-form a:hover {
-  color: var(--link-hover);
+    color: var(--link-hover);
 }
 
 body.dark .checkbox-wrapper label {
-  color: var(--text);
+    color: var(--text);
 }
 
 /* Footer Styles */

@@ -1,10 +1,10 @@
-import { Link } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
-import { useState, useEffect, useRef } from 'react'
+import {Link} from 'react-router-dom'
+import {useAuth} from '../../context/AuthContext'
+import {useEffect, useRef, useState} from 'react'
 import ThemeToggle from '../common/ThemeToggle'
 
 export default function Navbar() {
-    const { user, logout, isAuthenticated } = useAuth()
+    const {user, logout, isAuthenticated} = useAuth()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [scrolled, setScrolled] = useState(false)
     const [profileMenuOpen, setProfileMenuOpen] = useState(false)
@@ -15,13 +15,15 @@ export default function Navbar() {
     useEffect(() => {
         const handleScroll = () => {
             const offset = window.scrollY
-            if (offset > 50) {
+            if (offset > 50)
+            {
                 setScrolled(true)
-            } else {
+            } else
+            {
                 setScrolled(false)
             }
         }
-        
+
         window.addEventListener('scroll', handleScroll)
         return () => {
             window.removeEventListener('scroll', handleScroll)
@@ -31,11 +33,13 @@ export default function Navbar() {
     // Close mobile menu when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (navbarRef.current && !navbarRef.current.contains(event.target as Node) && mobileMenuOpen) {
+            if (navbarRef.current && !navbarRef.current.contains(event.target as Node) && mobileMenuOpen)
+            {
                 setMobileMenuOpen(false)
             }
 
-            if (profileMenuRef.current && !profileMenuRef.current.contains(event.target as Node) && profileMenuOpen) {
+            if (profileMenuRef.current && !profileMenuRef.current.contains(event.target as Node) && profileMenuOpen)
+            {
                 setProfileMenuOpen(false)
             }
         }
@@ -49,7 +53,8 @@ export default function Navbar() {
     // Close mobile menu when screen size changes to desktop
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth > 768 && mobileMenuOpen) {
+            if (window.innerWidth > 768 && mobileMenuOpen)
+            {
                 setMobileMenuOpen(false)
             }
         }
@@ -97,20 +102,20 @@ export default function Navbar() {
 
                 <div className="navbar-right">
                     <div className="nav-theme-toggle">
-                        <ThemeToggle />
+                        <ThemeToggle/>
                     </div>
 
                     {isAuthenticated ? (
                         <div className="profile-section" ref={profileMenuRef}>
-                            <button 
-                                className="profile-button" 
+                            <button
+                                className="profile-button"
                                 onClick={toggleProfileMenu}
                                 aria-expanded={profileMenuOpen}
                                 aria-label="User profile menu"
                             >
                                 <div className="avatar-wrapper">
                                     {user?.avatarUrl ? (
-                                        <img src={user.avatarUrl} alt="" className="profile-avatar" />
+                                        <img src={user.avatarUrl} alt="" className="profile-avatar"/>
                                     ) : (
                                         <span className="profile-initial">
                                             {user?.name?.charAt(0) || 'U'}
@@ -118,7 +123,7 @@ export default function Navbar() {
                                     )}
                                 </div>
                             </button>
-                            
+
                             {profileMenuOpen && (
                                 <div className="profile-dropdown">
                                     <div className="profile-dropdown-header">
@@ -127,19 +132,23 @@ export default function Navbar() {
                                             <span className="dropdown-user-email">{user?.email}</span>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="profile-dropdown-links">
                                         <Link to="/profile" className="dropdown-link" onClick={closeMenu}>
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                                 strokeLinejoin="round">
                                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                                 <circle cx="12" cy="7" r="4"></circle>
                                             </svg>
                                             My Profile
                                         </Link>
-                                        
+
                                         {user && user?.role !== undefined && user.role >= 1 && (
                                             <Link to="/profile/orders" className="dropdown-link" onClick={closeMenu}>
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                                     stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                                     strokeLinejoin="round">
                                                     <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                                                     <path d="M2 17l10 5 10-5"></path>
                                                     <path d="M2 12l10 5 10-5"></path>
@@ -147,27 +156,32 @@ export default function Navbar() {
                                                 My Orders
                                             </Link>
                                         )}
-                                        
+
                                         {!user?.emailVerified && (
                                             <Link to="/verify/resend" className="dropdown-link" onClick={closeMenu}>
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                                     stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                                     strokeLinejoin="round">
                                                     <polyline points="9 11 12 14 22 4"></polyline>
-                                                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                                                    <path
+                                                        d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
                                                 </svg>
                                                 Verify Email
                                             </Link>
                                         )}
                                     </div>
-                                    
+
                                     <div className="profile-dropdown-footer">
-                                        <button 
-                                            className="logout-button" 
+                                        <button
+                                            className="logout-button"
                                             onClick={() => {
                                                 logout();
                                                 closeMenu();
                                             }}
                                         >
-                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                                 strokeLinejoin="round">
                                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                                 <polyline points="16 17 21 12 16 7"></polyline>
                                                 <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -185,8 +199,8 @@ export default function Navbar() {
                         </div>
                     )}
 
-                    <button 
-                        className="mobile-menu-btn" 
+                    <button
+                        className="mobile-menu-btn"
                         onClick={toggleMobileMenu}
                         aria-label="Toggle mobile menu"
                         aria-expanded={mobileMenuOpen}
@@ -220,7 +234,7 @@ export default function Navbar() {
                             <h3 className="mobile-section-title">Your Account</h3>
                             <div className="user-info">
                                 {user?.avatarUrl ? (
-                                    <img src={user.avatarUrl} alt="Profile" className="mobile-avatar" />
+                                    <img src={user.avatarUrl} alt="Profile" className="mobile-avatar"/>
                                 ) : (
                                     <div className="mobile-avatar-placeholder">
                                         {user?.name?.charAt(0) || 'U'}
@@ -231,19 +245,22 @@ export default function Navbar() {
                                     <span className="user-email">{user?.email}</span>
                                 </div>
                             </div>
-                            
+
                             <div className="mobile-nav-links">
                                 <Link to="/profile" className="mobile-nav-link" onClick={closeMenu}>
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                         strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                         <circle cx="12" cy="7" r="4"></circle>
                                     </svg>
                                     My Profile
                                 </Link>
-                                
+
                                 {user && user?.role !== undefined && user.role >= 1 && (
                                     <Link to="/profile/orders" className="mobile-nav-link" onClick={closeMenu}>
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                             strokeLinejoin="round">
                                             <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                                             <path d="M2 17l10 5 10-5"></path>
                                             <path d="M2 12l10 5 10-5"></path>
@@ -251,10 +268,12 @@ export default function Navbar() {
                                         My Orders
                                     </Link>
                                 )}
-                                
+
                                 {!user?.emailVerified && (
                                     <Link to="/verify/resend" className="mobile-nav-link" onClick={closeMenu}>
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                             strokeLinejoin="round">
                                             <polyline points="9 11 12 14 22 4"></polyline>
                                             <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
                                         </svg>
@@ -262,15 +281,16 @@ export default function Navbar() {
                                     </Link>
                                 )}
                             </div>
-                            
-                            <button 
-                                className="mobile-button mobile-logout-btn" 
+
+                            <button
+                                className="mobile-button mobile-logout-btn"
                                 onClick={() => {
                                     logout();
                                     closeMenu();
                                 }}
                             >
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                     <polyline points="16 17 21 12 16 7"></polyline>
                                     <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -291,11 +311,11 @@ export default function Navbar() {
                             </div>
                         </div>
                     )}
-                    
+
                     <div className="mobile-section">
                         <h3 className="mobile-section-title">Theme</h3>
                         <div className="mobile-theme-toggle">
-                            <ThemeToggle />
+                            <ThemeToggle/>
                             <span className="theme-label">Toggle dark mode</span>
                         </div>
                     </div>

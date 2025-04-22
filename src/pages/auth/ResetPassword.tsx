@@ -1,5 +1,5 @@
-import { FormEvent, useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import {FormEvent, useEffect, useState} from 'react'
+import {useLocation, useNavigate} from 'react-router-dom'
 
 export default function ResetPassword() {
     const navigate = useNavigate()
@@ -17,9 +17,11 @@ export default function ResetPassword() {
         // Extract token from URL query parameters
         const searchParams = new URLSearchParams(location.search)
         const tokenParam = searchParams.get('token')
-        if (tokenParam) {
+        if (tokenParam)
+        {
             setToken(tokenParam)
-        } else {
+        } else
+        {
             setError('Invalid or missing reset token')
         }
     }, [location])
@@ -30,7 +32,8 @@ export default function ResetPassword() {
         setSuccess(null)
 
         // Validate passwords match
-        if (password !== confirmPassword) {
+        if (password !== confirmPassword)
+        {
             setError('Passwords do not match')
             return
         }
@@ -38,32 +41,36 @@ export default function ResetPassword() {
         setIsSubmitting(true)
         console.log('Submitting password reset with token:', token)
 
-        try {
+        try
+        {
             const response = await fetch('/api/auth/reset-password', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token, password }),
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({token, password}),
             })
 
             console.log('Response status:', response.status)
-            
+
             // Read the response text regardless of success/failure for debugging
             const responseText = await response.text()
             console.log('Response text:', responseText)
-            
-            if (!response.ok) {
+
+            if (!response.ok)
+            {
                 throw new Error(responseText || 'Failed to reset password')
             }
 
             setSuccess('Your password has been reset successfully')
-            
+
             // Redirect to login page after successful reset
             setTimeout(() => {
                 navigate('/login')
             }, 3000)
-        } catch (err: any) {
+        } catch (err: any)
+        {
             setError(err.message)
-        } finally {
+        } finally
+        {
             setIsSubmitting(false)
         }
     }
@@ -74,7 +81,7 @@ export default function ResetPassword() {
                 <h2>Reset Password</h2>
                 {error && <p className="form-error">{error}</p>}
                 {success && <p className="form-success">{success}</p>}
-                
+
                 <div className="form-group">
                     <label>New Password:</label>
                     <div className="password-input-container">
@@ -86,8 +93,8 @@ export default function ResetPassword() {
                             minLength={8}
                             placeholder="At least 8 characters with uppercase & number"
                         />
-                        <button 
-                            type="button" 
+                        <button
+                            type="button"
                             className="password-toggle-btn"
                             onMouseDown={() => setShowPassword(true)}
                             onMouseUp={() => setShowPassword(false)}
@@ -100,7 +107,7 @@ export default function ResetPassword() {
                         </button>
                     </div>
                 </div>
-                
+
                 <div className="form-group">
                     <label>Confirm Password:</label>
                     <div className="password-input-container">
@@ -110,8 +117,8 @@ export default function ResetPassword() {
                             onChange={e => setConfirmPassword(e.target.value)}
                             required
                         />
-                        <button 
-                            type="button" 
+                        <button
+                            type="button"
                             className="password-toggle-btn"
                             onMouseDown={() => setShowConfirmPassword(true)}
                             onMouseUp={() => setShowConfirmPassword(false)}
@@ -124,15 +131,15 @@ export default function ResetPassword() {
                         </button>
                     </div>
                 </div>
-                
-                <button 
-                    className="btn" 
-                    type="submit" 
+
+                <button
+                    className="btn"
+                    type="submit"
                     disabled={isSubmitting || !token}
                 >
                     {isSubmitting ? 'Resetting...' : 'Reset Password'}
                 </button>
-                
+
                 <div className="extra-link">
                     <span>
                         Remember your password? <a href="/login">Login here</a>

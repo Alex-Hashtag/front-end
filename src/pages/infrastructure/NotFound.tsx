@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import '../../styles/infrastructure.css';
 
 export default function NotFound() {
@@ -13,7 +13,8 @@ export default function NotFound() {
                     <Link to="/store" className="btn btn-secondary">Visit Store</Link>
                 </div>
                 <div className="illustration">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
                         <path d="M8 15h8M9 9h.01M15 9h.01"></path>
                     </svg>

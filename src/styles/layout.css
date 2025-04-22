@@ -69,7 +69,7 @@
     font-weight: 500;
     padding: 0.5rem 0;
     position: relative;
-    transition: color var(--transition-fast);
+    transition: color var(--transition-medium), transform var(--transition-bounce);
 }
 
 .nav-link:after {
@@ -80,15 +80,23 @@
     bottom: 0;
     left: 0;
     background-color: var(--primary);
-    transition: width var(--transition-medium);
+    transition: width var(--transition-medium), opacity var(--transition-medium);
+    opacity: 0;
 }
 
 .nav-link:hover {
     color: var(--primary);
+    transform: translateY(-2px);
 }
 
 .nav-link:hover:after {
     width: 100%;
+    opacity: 1;
+}
+
+.nav-link.active:after {
+    width: 100%;
+    opacity: 1;
 }
 
 /* Right side of the navbar */
@@ -267,16 +275,34 @@ body.dark .dropdown-link:hover {
     font-weight: 500;
     padding: 0.5rem 0.75rem;
     border-radius: 6px;
-    transition: all 0.2s ease;
+    transition: all var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-button:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: var(--primary-ultra-light);
+    z-index: -1;
+    transition: height var(--transition-medium);
 }
 
 .login-button:hover {
     color: var(--primary);
-    background-color: rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+}
+
+.login-button:hover:after {
+    height: 100%;
 }
 
 body.dark .login-button:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: transparent;
 }
 
 .register-button {
@@ -286,11 +312,31 @@ body.dark .login-button:hover {
     border-radius: 6px;
     text-decoration: none;
     font-weight: 500;
-    transition: all 0.2s ease;
+    transition: all var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.register-button:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: var(--primary-gradient-hover);
+    transition: width var(--transition-medium);
+    z-index: -1;
 }
 
 .register-button:hover {
-    background-color: var(--primary-dark);
+    box-shadow: var(--hover-glow);
+    transform: translateY(-2px);
+}
+
+.register-button:hover:before {
+    width: 100%;
 }
 
 /* Mobile menu button */
@@ -317,19 +363,24 @@ body.dark .login-button:hover {
     height: 2px;
     background-color: var(--text);
     border-radius: 2px;
-    transition: all 0.3s ease;
+    transition: all var(--transition-spring);
 }
 
 .menu-icon.active .bar:nth-child(1) {
     transform: translateY(8px) rotate(45deg);
+    background-color: var(--primary);
+    width: 22px;
 }
 
 .menu-icon.active .bar:nth-child(2) {
     opacity: 0;
+    transform: translateX(-10px);
 }
 
 .menu-icon.active .bar:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
+    background-color: var(--primary);
+    width: 22px;
 }
 
 /* Mobile menu */
@@ -342,8 +393,9 @@ body.dark .login-button:hover {
     background-color: var(--card-bg);
     z-index: 999;
     transform: translateX(100%);
-    transition: transform 0.3s ease-in-out;
+    transition: transform var(--transition-smooth);
     overflow-y: auto;
+    box-shadow: -5px 0 15px var(--shadow-color);
 }
 
 .navbar-mobile.active {
@@ -355,6 +407,20 @@ body.dark .login-button:hover {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    animation: menuContentFadeIn 0.4s ease forwards;
+    animation-delay: 0.2s;
+    opacity: 0;
+}
+
+@keyframes menuContentFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .mobile-section {
@@ -377,20 +443,40 @@ body.dark .login-button:hover {
     text-decoration: none;
     font-weight: 500;
     padding: 0.75rem;
-    border-radius: 6px;
-    transition: all 0.2s ease;
+    border-radius: 8px;
+    transition: all var(--transition-smooth);
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    position: relative;
+    overflow: hidden;
 }
 
-.mobile-nav-link svg {
-    color: var(--text-muted);
+.mobile-nav-link:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background-color: var(--primary-ultra-light);
+    transition: width var(--transition-medium);
+    z-index: 0;
 }
 
 .mobile-nav-link:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    transform: translateX(5px);
     color: var(--primary);
+}
+
+.mobile-nav-link:hover:before {
+    width: 100%;
+}
+
+.mobile-nav-link svg,
+.mobile-nav-link span {
+    position: relative;
+    z-index: 1;
 }
 
 /* User info in mobile menu */
@@ -536,15 +622,15 @@ body.dark .login-button:hover {
     .navbar-center {
         display: none;
     }
-    
+
     .navbar-left {
         flex: 1;
     }
-    
+
     .navbar-right {
         flex: 1;
     }
-    
+
     .mobile-menu-btn {
         display: block;
     }
@@ -555,34 +641,34 @@ body.dark .login-button:hover {
         height: 60px;
         padding: 0 1rem;
     }
-    
+
     .logo {
         font-size: 1.25rem;
     }
-    
+
     .profile-name {
         display: none;
     }
-    
+
     .navbar-mobile {
         top: 60px;
     }
-    
+
     .profile-button {
         padding: 0.35rem;
     }
-    
+
     .avatar-wrapper {
         width: 34px;
         height: 34px;
     }
-    
+
     .mobile-avatar,
     .mobile-avatar-placeholder {
         width: 34px;
         height: 34px;
     }
-    
+
     .profile-initial,
     .mobile-avatar-placeholder {
         font-size: 0.9rem;
@@ -593,22 +679,22 @@ body.dark .login-button:hover {
     .auth-buttons {
         display: none;
     }
-    
+
     .mobile-menu-btn {
         margin-left: 0;
     }
-    
+
     .avatar-wrapper {
         width: 32px;
         height: 32px;
     }
-    
+
     .mobile-avatar,
     .mobile-avatar-placeholder {
         width: 32px;
         height: 32px;
     }
-    
+
     .profile-initial,
     .mobile-avatar-placeholder {
         font-size: 0.85rem;
@@ -655,6 +741,10 @@ body.dark .mobile-nav-link:hover {
     display: flex;
     align-items: center;
     margin-right: 5px;
+}
+
+body {
+    transition: background-color var(--transition-slow), color var(--transition-slow);
 }
 
 body.dark {
@@ -756,7 +846,7 @@ body.dark .dropdown-item:hover {
     .nav-theme-toggle {
         margin: 10px 0;
     }
-    
+
     body.dark .navbar-right {
         background-color: var(--nav-bg);
     }
@@ -767,16 +857,16 @@ body.dark .dropdown-item:hover {
     .mobile-menu-btn {
         display: none;
     }
-    
+
     /* Enhanced navbar for desktop */
     .navbar-right {
         gap: 0.5rem;
     }
-    
+
     .navbar-right .nav-link {
         position: relative;
     }
-    
+
     .navbar-right .nav-link::after {
         content: '';
         position: absolute;
@@ -788,25 +878,25 @@ body.dark .dropdown-item:hover {
         transition: all 0.3s ease;
         transform: translateX(-50%);
     }
-    
+
     .navbar-right .nav-link:hover::after {
         width: 70%;
     }
-    
+
     .navbar-right .nav-link:hover {
         transform: translateY(-2px);
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
-    
+
     .logout-btn {
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    
+
     .logout-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
-    
+
     .nav-user-group {
         border: none;
         margin: 0.5rem 1rem;
@@ -820,7 +910,7 @@ body.dark .dropdown-item:hover {
         justify-content: center;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
-    
+
     .nav-avatar {
         margin-bottom: 0.5rem;
         width: 40px;
@@ -834,11 +924,11 @@ body.dark .dropdown-item:hover {
     .navbar-left .logo {
         font-size: 1.2rem;
     }
-    
+
     .navbar {
         padding: 0.75rem;
     }
-    
+
     .navbar-right .nav-link,
     .logout-btn {
         margin: 0.4rem 0.75rem;
@@ -847,35 +937,64 @@ body.dark .dropdown-item:hover {
 }
 
 .hero {
-    background: linear-gradient(135deg, #6c2bd9, #9e43f3);
+    background: linear-gradient(120deg, #7f3cff 0%, #a259ff 50%, #ff6ec4 100%);
     color: white;
-    padding: 3rem 2rem;
+    padding: 3rem 2rem 4.5rem 2rem;
     text-align: center;
-    transition: background 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .hero-title {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     margin-bottom: 0.5rem;
+    font-weight: 800;
+    letter-spacing: -1px;
 }
 
 .hero-subtitle {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 400;
+    margin-bottom: 2.5rem;
 }
 
 body.dark .hero {
-    background: linear-gradient(135deg, #31175a, #532f87);
+    background: linear-gradient(120deg, #31175a 0%, #532f87 60%, #a259ff 100%);
 }
 
 .section {
     margin: 3rem 0;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+.section.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
 }
 
 .section-title {
     font-size: 1.7rem;
     font-weight: 600;
     margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title:after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background-color: var(--primary);
+    transition: width var(--transition-medium);
+}
+
+.section-title:hover:after {
+    width: 100%;
 }
 
 .section-cta {
@@ -887,8 +1006,343 @@ body.dark .hero {
 .section-cta a {
     color: var(--primary);
     text-decoration: none;
+    position: relative;
+    padding-right: 20px;
+    transition: color var(--transition-fast), padding var(--transition-medium);
+}
+
+.section-cta a:after {
+    content: '→';
+    position: absolute;
+    right: 0;
+    opacity: 0;
+    transition: opacity var(--transition-fast), transform var(--transition-medium);
+    transform: translateX(-10px);
 }
 
 .section-cta a:hover {
-    text-decoration: underline;
+    padding-right: 28px;
+    color: var(--primary-light);
 }
+
+.section-cta a:hover:after {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Card animations and hover effects */
+.card, 
+.news-card, 
+.product-card {
+    transition: transform var(--transition-medium), 
+                box-shadow var(--transition-medium),
+                background-color var(--transition-medium);
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover, 
+.news-card:hover, 
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--hover-lift-shadow);
+}
+
+.card:before,
+.news-card:before,
+.product-card:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background: linear-gradient(to bottom, var(--primary-ultra-light), transparent);
+    transition: height var(--transition-medium);
+    z-index: 0;
+    opacity: 0;
+}
+
+.card:hover:before,
+.news-card:hover:before,
+.product-card:hover:before {
+    height: 100%;
+    opacity: 0.3;
+}
+
+.card-content,
+.news-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* Button hover animations */
+.btn {
+    transition: all var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+    z-index: -1;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--hover-lift-shadow);
+}
+
+.btn:hover:before {
+    width: 300%;
+    height: 300%;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+/* Avatar animation */
+.avatar-wrapper {
+    transition: transform var(--transition-bounce), box-shadow var(--transition-medium);
+}
+
+.avatar-wrapper:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 3px var(--primary-ultra-light);
+}
+
+/* Profile dropdown enhancement */
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 280px;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    overflow: hidden;
+    animation: dropdownFadeIn var(--transition-bounce);
+    transform-origin: top right;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Enhanced dropdown links */
+.dropdown-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: var(--text);
+    text-decoration: none;
+    transition: all var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.dropdown-link:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background-color: var(--primary-ultra-light);
+    transition: width var(--transition-medium);
+    z-index: 0;
+}
+
+.dropdown-link:hover {
+    transform: translateX(5px);
+    color: var(--primary);
+    background-color: transparent;
+}
+
+.dropdown-link:hover:before {
+    width: 100%;
+}
+
+.dropdown-link svg,
+.dropdown-link span {
+    position: relative;
+    z-index: 1;
+}
+
+body.dark .dropdown-link:hover {
+    background-color: transparent;
+}
+
+/* Logout button enhancement */
+.logout-button {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    background-color: rgba(231, 76, 60, 0.1);
+    color: var(--danger);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all var(--transition-bounce);
+    position: relative;
+    overflow: hidden;
+}
+
+.logout-button:hover {
+    background-color: rgba(231, 76, 60, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.25);
+}
+
+/* Animation utility classes */
+.animate-fade-in {
+    animation: fadeIn var(--transition-medium) forwards;
+}
+
+.animate-fade-up {
+    animation: fadeUp var(--transition-smooth) forwards;
+}
+
+.animate-bounce {
+    animation: bounce var(--transition-bounce) forwards;
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+.animate-scale {
+    transition: transform var(--transition-bounce);
+}
+
+.animate-scale:hover {
+    transform: var(--hover-scale);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-15px); }
+    60% { transform: translateY(-7px); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Page transition effects */
+.page-transition-enter {
+    opacity: 0;
+    transform: translateY(15px);
+}
+
+.page-transition-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--transition-medium), transform var(--transition-medium);
+}
+
+.page-transition-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.page-transition-exit-active {
+    opacity: 0;
+    transform: translateY(-15px);
+    transition: opacity var(--transition-medium), transform var(--transition-medium);
+}
+
+/* Additional hover effects for interactive elements */
+input:focus, 
+textarea:focus, 
+select:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all var(--transition-medium);
+}
+
+body.dark input:focus, 
+body.dark textarea:focus, 
+body.dark select:focus {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Javascript to enable section fade-in animations when scrolled into view 
+Add this to your JS file:
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Add the fade-in class initially to all sections
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => {
+        section.classList.add('fade-in');
+    });
+    
+    // Create IntersectionObserver
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // When section is in view, remove fade-in class to trigger animation
+                entry.target.classList.remove('fade-in');
+                // Stop observing after animation
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        rootMargin: '0px 0px -100px 0px', // Trigger slightly before the section comes into view
+        threshold: 0.1
+    });
+    
+    // Observe all sections
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+});
+*/

@@ -156,11 +156,11 @@
 }
 
 @media (max-width: 768px) {
-  .news-feed {
-    gap: 1.5rem;
-  }
+    .news-feed {
+        gap: 1.5rem;
+    }
 
-  .news-banner {
-    max-height: 250px;
-  }
+    .news-banner {
+        max-height: 250px;
+    }
 }

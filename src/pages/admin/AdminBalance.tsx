@@ -26,9 +26,11 @@ export default function AdminBalance() {
         fetchReps();
     }, [user, navigate]);
 
-    async function fetchReps() {
+    async function fetchReps()
+    {
         setLoading(true);
-        try {
+        try
+        {
             // Updated URL with search parameters
             const res = await fetch(
                 '/api/users/search?balanceGt=0&page=0&size=50',
@@ -41,9 +43,11 @@ export default function AdminBalance() {
             if (!res.ok) throw new Error('Failed to load class reps');
             const data = await res.json();
             setReps(data.content);
-        } catch (err) {
+        } catch (err)
+        {
             console.error(err);
-        } finally {
+        } finally
+        {
             setLoading(false);
         }
     }

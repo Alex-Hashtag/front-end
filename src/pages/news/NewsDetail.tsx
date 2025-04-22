@@ -32,7 +32,8 @@ export default function NewsDetail() {
     }, [id])
 
     useEffect(() => {
-        if (post?.bannerPhotoUrl) {
+        if (post?.bannerPhotoUrl)
+        {
             getImageDimensions(post.bannerPhotoUrl)
                 .then(({width, height}) => {
                     setBannerLayout(getImageLayoutClass(width, height))

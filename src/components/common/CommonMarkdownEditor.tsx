@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import MarkdownIt from 'markdown-it';
 import MdEditor from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
@@ -12,15 +12,18 @@ const mdParser = new MarkdownIt({
     breaks: true,
     highlight: function (str, lang) {
         // Simple syntax highlighting for code blocks
-        if (lang) {
-            try {
+        if (lang)
+        {
+            try
+            {
                 // Add syntax classes based on language
                 return `<pre class="code-block language-${lang}"><code class="language-${lang}">${str}</code></pre>`;
-            } catch (error) {
+            } catch (error)
+            {
                 console.error("Error highlighting code:", error);
             }
         }
-        
+
         // Use default highlighting
         return `<pre class="code-block"><code>${str}</code></pre>`;
     }
@@ -68,7 +71,8 @@ mdParser.inline.ruler.after('emphasis', 'underline', (state, silent) => {
 // Enable tables by default
 mdParser.enable('table');
 
-interface MarkdownEditorProps {
+interface MarkdownEditorProps
+{
     value: string;
     onChange: (value: string) => void;
     height?: number;
@@ -76,11 +80,12 @@ interface MarkdownEditorProps {
 }
 
 export default function CommonMarkdownEditor({
-    value,
-    onChange,
-    height = 300,
-    placeholder = 'Write your content here...',
-}: MarkdownEditorProps) {
+                                                 value,
+                                                 onChange,
+                                                 height = 300,
+                                                 placeholder = 'Write your content here...',
+                                             }: MarkdownEditorProps)
+{
     const [theme, setTheme] = useState<'light' | 'dark'>('light');
     const [isMobile, setIsMobile] = useState(false);
     const [mobileView, setMobileView] = useState<'md' | 'html'>('md');
@@ -92,14 +97,15 @@ export default function CommonMarkdownEditor({
 
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
-                if (mutation.attributeName === 'class') {
+                if (mutation.attributeName === 'class')
+                {
                     const isDarkNow = document.body.classList.contains('dark');
                     setTheme(isDarkNow ? 'dark' : 'light');
                 }
             });
         });
 
-        observer.observe(document.body, { attributes: true });
+        observer.observe(document.body, {attributes: true});
 
         return () => observer.disconnect();
     }, []);
@@ -122,7 +128,7 @@ export default function CommonMarkdownEditor({
         };
     }, []);
 
-    const handleEditorChange = ({ text }: { text: string }) => {
+    const handleEditorChange = ({text}: { text: string }) => {
         onChange(text);
     };
 
@@ -132,14 +138,14 @@ export default function CommonMarkdownEditor({
 
         return (
             <div className="mobile-toggle-view">
-                <button 
-                    className={mobileView === 'md' ? 'active' : ''} 
+                <button
+                    className={mobileView === 'md' ? 'active' : ''}
                     onClick={() => setMobileView('md')}
                 >
                     Edit
                 </button>
-                <button 
-                    className={mobileView === 'html' ? 'active' : ''} 
+                <button
+                    className={mobileView === 'html' ? 'active' : ''}
                     onClick={() => setMobileView('html')}
                 >
                     Preview
@@ -150,7 +156,8 @@ export default function CommonMarkdownEditor({
 
     // Get view configuration based on device
     const getViewConfig = () => {
-        if (isMobile) {
+        if (isMobile)
+        {
             return {
                 md: mobileView === 'md',
                 html: mobileView === 'html',
@@ -167,7 +174,8 @@ export default function CommonMarkdownEditor({
 
     // Get editor height based on device
     const getEditorHeight = () => {
-        if (isMobile) {
+        if (isMobile)
+        {
             // Taller on mobile when stacked
             return height * 1.5;
         }
@@ -179,7 +187,7 @@ export default function CommonMarkdownEditor({
             {renderMobileToggle()}
             <MdEditor
                 value={value}
-                style={{ height: `${getEditorHeight()}px` }}
+                style={{height: `${getEditorHeight()}px`}}
                 renderHTML={(text) => mdParser.render(text)}
                 onChange={handleEditorChange}
                 placeholder={placeholder}

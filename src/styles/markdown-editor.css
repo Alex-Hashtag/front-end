@@ -395,7 +395,7 @@ body.dark .rc-md-editor .custom-html-style h6 {
         white-space: nowrap;
         -webkit-overflow-scrolling: touch;
     }
-    
+
     .rc-md-editor .rc-md-navigation .button-wrap {
         display: flex;
         flex-wrap: nowrap;
@@ -403,40 +403,40 @@ body.dark .rc-md-editor .custom-html-style h6 {
         -webkit-overflow-scrolling: touch;
         padding-bottom: 0.5rem;
     }
-    
+
     .rc-md-editor .rc-md-navigation .button-wrap .button {
         min-width: 28px;
         margin: 0 2px;
     }
-    
+
     .rc-md-editor .rc-md-navigation .navigation-nav {
         font-size: 12px;
     }
-    
+
     .rc-md-editor .editor-container .sec-html .html-wrap {
         padding: 0.5rem;
     }
-    
+
     .rc-md-editor .editor-container .sec-md .input,
     .rc-md-editor .editor-container .sec-html .html-wrap {
         font-size: 14px;
     }
-    
+
     /* Improve code blocks on mobile */
     .rc-md-editor .custom-html-style pre.code-block {
         padding: 0.75rem;
         font-size: 0.8125rem;
     }
-    
+
     /* Adjust heading sizes for mobile */
     .rc-md-editor .custom-html-style h1 {
         font-size: 1.5rem;
     }
-    
+
     .rc-md-editor .custom-html-style h2 {
         font-size: 1.25rem;
     }
-    
+
     .rc-md-editor .custom-html-style h3 {
         font-size: 1.125rem;
     }
@@ -448,34 +448,34 @@ body.dark .rc-md-editor .custom-html-style h6 {
     .rc-md-editor .editor-container {
         flex-direction: column;
     }
-    
+
     .rc-md-editor .editor-container > .section {
         flex: 1 1 auto;
-        min-height: 200px;  /* Set a minimum height */
+        min-height: 200px; /* Set a minimum height */
     }
-    
+
     /* Remove right border and add bottom border for editor section */
     .rc-md-editor .editor-container > .section {
         border-right: none;
         border-bottom: 1px solid var(--border-color);
     }
-    
+
     /* Make sure the last section doesn't have a border */
     .rc-md-editor .editor-container > .section:last-child {
         border-bottom: none;
     }
-    
+
     /* Reduce padding further */
     .rc-md-editor .editor-container .sec-html .html-wrap {
         padding: 0.5rem;
     }
-    
+
     /* Even smaller font size for very small screens */
     .rc-md-editor .editor-container .sec-md .input,
     .rc-md-editor .editor-container .sec-html .html-wrap {
         font-size: 13px;
     }
-    
+
     /* Condense the toolbar */
     .rc-md-editor .rc-md-navigation .button-wrap .button {
         min-width: 24px;
@@ -483,11 +483,11 @@ body.dark .rc-md-editor .custom-html-style h6 {
         line-height: 24px;
         margin: 0 1px;
     }
-    
+
     .rc-md-editor .rc-md-navigation .rmel-iconfont {
         font-size: 16px;
     }
-    
+
     /* Full-width dropdowns */
     .rc-md-editor .dropdown-wrap .dropdown {
         width: calc(100% - 20px);
@@ -495,19 +495,19 @@ body.dark .rc-md-editor .custom-html-style h6 {
         right: 10px;
         max-width: none;
     }
-    
+
     /* Simplify table display */
     .rc-md-editor .html-wrap table {
         display: block;
         overflow-x: auto;
         white-space: nowrap;
     }
-    
+
     /* Adjust code block padding */
     .rc-md-editor .custom-html-style pre.code-block {
         padding: 0.5rem;
     }
-    
+
     /* Add toggle buttons for preview/edit mode */
     .rc-md-editor .mobile-toggle-view {
         display: flex;
@@ -515,7 +515,7 @@ body.dark .rc-md-editor .custom-html-style h6 {
         padding: 0.25rem;
         border-bottom: 1px solid var(--border-color);
     }
-    
+
     .rc-md-editor .mobile-toggle-view button {
         padding: 0.25rem 0.5rem;
         margin: 0 0.25rem;
@@ -525,7 +525,7 @@ body.dark .rc-md-editor .custom-html-style h6 {
         border-radius: 4px;
         font-size: 12px;
     }
-    
+
     .rc-md-editor .mobile-toggle-view button.active {
         background-color: var(--primary);
         color: white;
@@ -544,7 +544,7 @@ body.dark .rc-md-editor .custom-html-style h6 {
     .rc-md-editor .rc-md-navigation .button-wrap .button {
         padding: 0.25rem;
     }
-    
+
     /* Larger touch targets */
     .rc-md-editor .dropdown-wrap .dropdown .dropdown-item {
         padding: 10px 12px;
@@ -556,7 +556,7 @@ body.dark .rc-md-editor .custom-html-style h6 {
     .rc-md-editor .rc-md-navigation .button-wrap::-webkit-scrollbar {
         height: 2px;
     }
-    
+
     .rc-md-editor .rc-md-navigation .button-wrap::-webkit-scrollbar-thumb {
         background-color: var(--border-color);
     }

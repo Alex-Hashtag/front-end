@@ -72,10 +72,11 @@ export default function MyOrders() {
             const instr = order.instructions && order.instructions.trim() !== ''
                 ? order.instructions.trim()
                 : 'No Instructions';
-            
+
             const groupKey = `${instr}_${order.assignedRep?.id || 'none'}`;
-            
-            if (!groups[groupKey]) {
+
+            if (!groups[groupKey])
+            {
                 groups[groupKey] = {
                     instructions: instr,
                     status: order.status,
@@ -84,7 +85,7 @@ export default function MyOrders() {
                     paidAt: order.paidAt
                 };
             }
-            
+
             groups[groupKey].items.push({
                 productName: order.productName,
                 productPrice: order.productPrice || 0,
@@ -149,7 +150,8 @@ export default function MyOrders() {
                         <ul>
                             {group.items.map((item, idx) => (
                                 <li key={idx}>
-                                    <strong>{item.productName}</strong> – Quantity: {item.quantity} - Price: ${item.productPrice}
+                                    <strong>{item.productName}</strong> – Quantity: {item.quantity} - Price:
+                                    ${item.productPrice}
                                 </li>
                             ))}
                         </ul>

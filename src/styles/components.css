@@ -130,8 +130,8 @@ body.dark .theme-toggle:hover {
     left: 0;
     opacity: 0;
     transform: scale(0.5) rotate(30deg);
-    transition: opacity var(--transition-medium), 
-                transform var(--transition-medium);
+    transition: opacity var(--transition-medium),
+    transform var(--transition-medium);
 }
 
 .moon-icon.active,

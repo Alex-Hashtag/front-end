@@ -63,8 +63,8 @@ export default function Login() {
                             onChange={e => setPassword(e.target.value)}
                             required
                         />
-                        <button 
-                            type="button" 
+                        <button
+                            type="button"
                             className="password-toggle-btn"
                             onMouseDown={() => setShowPassword(true)}
                             onMouseUp={() => setShowPassword(false)}

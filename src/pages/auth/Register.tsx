@@ -23,7 +23,8 @@ export default function Register() {
     }
 
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
+        if (e.target.files && e.target.files.length > 0)
+        {
             setAvatarFile(e.target.files[0])
         }
     }
@@ -33,12 +34,14 @@ export default function Register() {
         setError(null)
         setSuccess(null)
 
-        if (password !== confirmPassword) {
+        if (password !== confirmPassword)
+        {
             setError('Passwords do not match')
             return
         }
 
-        if (!validatePassword(password)) {
+        if (!validatePassword(password))
+        {
             setError('Password must be at least 8 characters long, contain an uppercase letter and a digit.')
             return
         }
@@ -50,28 +53,33 @@ export default function Register() {
             password,
         })
         const formData = new FormData()
-        formData.append('user', new Blob([userJson], { type: 'application/json' }))
-        if (avatarFile) {
+        formData.append('user', new Blob([userJson], {type: 'application/json'}))
+        if (avatarFile)
+        {
             formData.append('avatar', avatarFile)
         }
 
         setLoading(true) // disable the button
-        try {
+        try
+        {
             const response = await fetch('/api/auth/register', {
                 method: 'POST',
                 body: formData,
             })
 
-            if (!response.ok) {
+            if (!response.ok)
+            {
                 const msg = await response.text()
                 throw new Error(msg)
             }
 
             const msg = await response.text()
             setSuccess(msg)
-        } catch (err: unknown) {
+        } catch (err: unknown)
+        {
             setError(err instanceof Error ? err.message : 'An unknown error occurred')
-        } finally {
+        } finally
+        {
             setLoading(false) // re-enable the button regardless of outcome
         }
     }
@@ -118,8 +126,8 @@ export default function Register() {
                             onChange={e => setPassword(e.target.value)}
                             required
                         />
-                        <button 
-                            type="button" 
+                        <button
+                            type="button"
                             className="password-toggle-btn"
                             onMouseDown={() => setShowPassword(true)}
                             onMouseUp={() => setShowPassword(false)}
@@ -141,8 +149,8 @@ export default function Register() {
                             onChange={e => setConfirmPassword(e.target.value)}
                             required
                         />
-                        <button 
-                            type="button" 
+                        <button
+                            type="button"
                             className="password-toggle-btn"
                             onMouseDown={() => setShowConfirmPassword(true)}
                             onMouseUp={() => setShowConfirmPassword(false)}

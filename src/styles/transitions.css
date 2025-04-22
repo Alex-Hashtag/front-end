@@ -3,61 +3,57 @@
 .theme-transition *,
 .theme-transition *:before,
 .theme-transition *:after {
-    transition: 
-        background-color var(--transition-slow),
-        background var(--transition-slow),
-        border-color var(--transition-slow),
-        box-shadow var(--transition-slow),
-        color var(--transition-slow),
-        fill var(--transition-slow),
-        stroke var(--transition-slow),
-        opacity var(--transition-medium),
-        transform var(--transition-medium);
+    transition: background-color var(--transition-slow),
+    background var(--transition-slow),
+    border-color var(--transition-slow),
+    box-shadow var(--transition-slow),
+    color var(--transition-slow),
+    fill var(--transition-slow),
+    stroke var(--transition-slow),
+    opacity var(--transition-medium),
+    transform var(--transition-medium);
     transition-delay: 0;
 }
 
 /* Component-specific transitions */
 
 /* Buttons & Interactive Elements */
-button, 
-.btn, 
-a.btn, 
+button,
+.btn,
+a.btn,
 .nav-link,
 .dropdown-item,
 input[type="submit"] {
-    transition: 
-        background-color var(--transition-fast),
-        color var(--transition-fast),
-        border-color var(--transition-fast),
-        box-shadow var(--transition-fast),
-        transform var(--transition-fast);
+    transition: background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 /* Hover Effects */
-button:hover, 
-.btn:hover, 
-a.btn:hover, 
+button:hover,
+.btn:hover,
+a.btn:hover,
 .nav-link:hover,
 .dropdown-item:hover {
     transition-duration: 0.1s;
 }
 
 /* Inputs & Form Elements */
-input, 
-select, 
+input,
+select,
 textarea {
-    transition: 
-        border-color var(--transition-medium),
-        background-color var(--transition-medium),
-        box-shadow var(--transition-medium);
+    transition: border-color var(--transition-medium),
+    background-color var(--transition-medium),
+    box-shadow var(--transition-medium);
 }
 
 /* Navbar */
 .navbar {
-    transition: 
-        background-color var(--transition-medium),
-        box-shadow var(--transition-medium),
-        height var(--transition-medium);
+    transition: background-color var(--transition-medium),
+    box-shadow var(--transition-medium),
+    height var(--transition-medium);
 }
 
 /* Cards & Containers */
@@ -67,21 +63,28 @@ textarea {
 .modal,
 .dropdown-menu,
 .profile-dropdown {
-    transition: 
-        background-color var(--transition-medium),
-        border-color var(--transition-medium),
-        box-shadow var(--transition-medium);
+    transition: background-color var(--transition-medium),
+    border-color var(--transition-medium),
+    box-shadow var(--transition-medium);
 }
 
 /* Animations */
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
 }
 
 @keyframes slideInUp {
@@ -107,8 +110,12 @@ textarea {
 }
 
 @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* Animation Utilities */

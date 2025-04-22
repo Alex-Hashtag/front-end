@@ -1,5 +1,5 @@
 import {Link} from 'react-router-dom'
-import { markdownConverter } from '../../utils/markdown'
+import {markdownConverter} from '../../utils/markdown'
 
 interface NewsPost
 {
@@ -39,9 +39,9 @@ export default function NewsFeedItem({post}: Props) {
             </header>
 
             {post.bannerPhotoUrl && (
-                <img 
-                    src={post.bannerPhotoUrl} 
-                    alt={post.title} 
+                <img
+                    src={post.bannerPhotoUrl}
+                    alt={post.title}
                     className="news-banner"
                     onClick={() => window.open(post.bannerPhotoUrl, '_blank')}
                 />

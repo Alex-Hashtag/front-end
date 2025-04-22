@@ -1,8 +1,9 @@
-import {useEffect, useState, ChangeEvent, JSX, KeyboardEvent} from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import {ChangeEvent, JSX, KeyboardEvent, useEffect, useState} from 'react';
+import {useAuth} from '../../context/AuthContext';
+import {useNavigate} from 'react-router-dom';
 
-interface UserType {
+interface UserType
+{
     id: number;
     name: string;
     email: string;
@@ -10,7 +11,8 @@ interface UserType {
     collectedBalance?: number;
 }
 
-interface OrderType {
+interface OrderType
+{
     id: number;
     productName: string;
     productPrice: number;
@@ -38,7 +40,8 @@ interface OrderType {
     };
 }
 
-interface GroupedOrders {
+interface GroupedOrders
+{
     instructions: string;
     items: OrderType[];
 }
@@ -61,7 +64,7 @@ type SortConfig = {
 };
 
 export default function AdminUsers() {
-    const { user } = useAuth();
+    const {user} = useAuth();
     const navigate = useNavigate();
 
     // Full set of users loaded from the server
@@ -91,7 +94,8 @@ export default function AdminUsers() {
 
     // --------------------- EFFECT: AUTH CHECK + INITIAL LOAD ---------------------
     useEffect(() => {
-        if (!user || (user.role !== 1 && user.role !== 2 && user.role !== 3)) {
+        if (!user || (user.role !== 1 && user.role !== 2 && user.role !== 3))
+        {
             navigate('/');
             return;
         }
@@ -100,11 +104,14 @@ export default function AdminUsers() {
     }, [user, navigate]);
 
     // --------------------- FETCH ALL USERS ---------------------
-    async function fetchAllUsers(filterParams?: URLSearchParams) {
+    async function fetchAllUsers(filterParams?: URLSearchParams)
+    {
         setLoading(true);
-        try {
+        try
+        {
             let endpoint = `/api/users?page=0&size=9999`;
-            if (filterParams) {
+            if (filterParams)
+            {
                 endpoint = `/api/users/search?${filterParams.toString()}`;
             }
 
@@ -119,18 +126,22 @@ export default function AdminUsers() {
             const usersFetched = data.content || [];
             setAllUsers(usersFetched);
             setFilteredUsers(usersFetched);
-        } catch (err) {
+        } catch (err)
+        {
             console.error(err);
-        } finally {
+        } finally
+        {
             setLoading(false);
         }
     }
 
     // --------------------- USER ORDERS ---------------------
-    async function fetchUserOrders(u: UserType) {
+    async function fetchUserOrders(u: UserType)
+    {
         setSelectedUser(u);
         setLoading(true);
-        try {
+        try
+        {
             const res = await fetch(`/api/orders/admin?page=0&size=9999`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -141,43 +152,52 @@ export default function AdminUsers() {
 
             const filtered = data.content.filter((o: OrderType) => o.buyer.id === u.id);
             setUserOrders(filtered);
-        } catch (err) {
+        } catch (err)
+        {
             console.error(err);
-        } finally {
+        } finally
+        {
             setLoading(false);
         }
     }
 
-    async function updateOrderStatus(orderId: number, newStatus: 'PENDING' | 'PAID' | 'DELIVERED' | 'CANCELLED') {
-        try {
+    async function updateOrderStatus(orderId: number, newStatus: 'PENDING' | 'PAID' | 'DELIVERED' | 'CANCELLED')
+    {
+        try
+        {
             const res = await fetch(`/api/orders/${orderId}/status?status=${newStatus}`, {
                 method: 'PATCH',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-            if (!res.ok) {
+            if (!res.ok)
+            {
                 const errorData = await res.json();
                 throw new Error(errorData.message || 'Failed to update order status');
             }
-            if (selectedUser) {
+            if (selectedUser)
+            {
                 fetchUserOrders(selectedUser);
             }
-        } catch (err) {
+        } catch (err)
+        {
             console.error(err);
             alert(err instanceof Error ? err.message : 'Failed to update order status');
         }
     }
 
     // --------------------- ORDER GROUPING ---------------------
-    function groupOrdersByInstructions(orders: OrderType[]): GroupedOrders[] {
+    function groupOrdersByInstructions(orders: OrderType[]): GroupedOrders[]
+    {
         const map = new Map<string, OrderType[]>();
         orders.forEach((order) => {
             const instr =
                 order.instructions && order.instructions.trim() !== ''
                     ? order.instructions.trim()
                     : 'No Instructions';
-            if (!map.has(instr)) {
+            if (!map.has(instr))
+            {
                 map.set(instr, []);
             }
             map.get(instr)!.push(order);
@@ -191,74 +211,84 @@ export default function AdminUsers() {
     const groupedUserOrders = groupOrdersByInstructions(userOrders);
 
     // --------------------- SORTING FUNCTIONALITY ---------------------
-    function sortUsers(users: UserType[], sortKey: keyof UserType | '', sortDirection: 'asc' | 'desc'): UserType[] {
+    function sortUsers(users: UserType[], sortKey: keyof UserType | '', sortDirection: 'asc' | 'desc'): UserType[]
+    {
         if (!sortKey) return users;
-        
+
         return [...users].sort((a, b) => {
             const aValue = a[sortKey];
             const bValue = b[sortKey];
-            
+
             // Handle null/undefined values
             if (aValue === undefined && bValue === undefined) return 0;
             if (aValue === undefined) return sortDirection === 'asc' ? 1 : -1;
             if (bValue === undefined) return sortDirection === 'asc' ? -1 : 1;
-            
+
             // Compare values based on their types
-            if (typeof aValue === 'string' && typeof bValue === 'string') {
-                return sortDirection === 'asc' 
+            if (typeof aValue === 'string' && typeof bValue === 'string')
+            {
+                return sortDirection === 'asc'
                     ? aValue.localeCompare(bValue)
                     : bValue.localeCompare(aValue);
             }
-            
-            if (typeof aValue === 'number' && typeof bValue === 'number') {
-                return sortDirection === 'asc' 
-                    ? aValue - bValue 
+
+            if (typeof aValue === 'number' && typeof bValue === 'number')
+            {
+                return sortDirection === 'asc'
+                    ? aValue - bValue
                     : bValue - aValue;
             }
-            
+
             // Default comparison for other types as strings
             return sortDirection === 'asc'
                 ? String(aValue).localeCompare(String(bValue))
                 : String(bValue).localeCompare(String(aValue));
         });
     }
-    
-    function requestSort(key: keyof UserType) {
+
+    function requestSort(key: keyof UserType)
+    {
         let direction: 'asc' | 'desc' = 'asc';
-        
+
         // If already sorting by this key, toggle direction
-        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+        if (sortConfig.key === key && sortConfig.direction === 'asc')
+        {
             direction = 'desc';
         }
-        
-        setSortConfig({ key, direction });
-        
+
+        setSortConfig({key, direction});
+
         // Apply sorting to filtered users
         const sortedUsers = sortUsers(filteredUsers, key, direction);
         setFilteredUsers(sortedUsers);
     }
-    
+
     // Get sort indicator JSX element for column header
-    function getSortIndicator(key: keyof UserType): JSX.Element {
+    function getSortIndicator(key: keyof UserType): JSX.Element
+    {
         const isActive = sortConfig.key === key;
         const direction = sortConfig.direction;
-        
+
         return (
             <span className={`sort-indicator ${isActive ? 'active' : ''} ${isActive ? direction : ''}`}>
                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none">
-                    <path d="M7 9l5-5 5 5"></path>  {/* Up arrow */}
-                    <path d="M7 15l5 5 5-5"></path> {/* Down arrow */}
+                    <path d="M7 9l5-5 5 5"></path>
+                    {/* Up arrow */}
+                    <path d="M7 15l5 5 5-5"></path>
+                    {/* Down arrow */}
                 </svg>
             </span>
         );
     }
 
     // --------------------- LOCAL FILTERING LOGIC ---------------------
-    function applyLocalFilters(all: UserType[], fs: FilterSettings): UserType[] {
+    function applyLocalFilters(all: UserType[], fs: FilterSettings): UserType[]
+    {
         let result = [...all];
 
         // searchTerm
-        if (fs.searchTerm.trim() !== '') {
+        if (fs.searchTerm.trim() !== '')
+        {
             const term = fs.searchTerm.toLowerCase();
             result = result.filter(
                 (u) => u.name.toLowerCase().includes(term) || u.email.toLowerCase().includes(term)
@@ -266,18 +296,21 @@ export default function AdminUsers() {
         }
 
         // roles
-        if (fs.selectedRoles.length > 0) {
+        if (fs.selectedRoles.length > 0)
+        {
             result = result.filter((u) => fs.selectedRoles.includes(u.role));
         }
 
         // graduationYear
-        if (fs.graduationYear != null) {
+        if (fs.graduationYear != null)
+        {
             const formatted = String(fs.graduationYear).padStart(2, '0');
             result = result.filter((u) => u.email.includes(`.${formatted}@acsbg.org`));
         }
 
         // balanceEqCSV (comma‐separated)
-        if (fs.balanceEqCSV && fs.balanceEqCSV.trim() !== '') {
+        if (fs.balanceEqCSV && fs.balanceEqCSV.trim() !== '')
+        {
             const eqValues = fs.balanceEqCSV
                 .split(',')
                 .map((val) => val.trim())
@@ -290,7 +323,8 @@ export default function AdminUsers() {
         }
 
         // balanceGt
-        if (fs.balanceGt != null) {
+        if (fs.balanceGt != null)
+        {
             result = result.filter((u) => {
                 if (u.collectedBalance == null) return false;
                 return u.collectedBalance > fs.balanceGt!;
@@ -298,7 +332,8 @@ export default function AdminUsers() {
         }
 
         // balanceLt
-        if (fs.balanceLt != null) {
+        if (fs.balanceLt != null)
+        {
             result = result.filter((u) => {
                 if (u.collectedBalance == null) return false;
                 return u.collectedBalance < fs.balanceLt!;
@@ -309,16 +344,18 @@ export default function AdminUsers() {
         // We skip local filtering here and rely on server side if activeOrders is set.
 
         // Apply current sort if one exists
-        if (sortConfig.key) {
+        if (sortConfig.key)
+        {
             return sortUsers(result, sortConfig.key, sortConfig.direction);
         }
-        
+
         return result;
     }
 
     // Apply sortConfig to filtered results whenever we update filteredUsers
     useEffect(() => {
-        if (sortConfig.key) {
+        if (sortConfig.key)
+        {
             const sortedUsers = sortUsers(filteredUsers, sortConfig.key, sortConfig.direction);
             setFilteredUsers(sortedUsers);
         }
@@ -326,7 +363,8 @@ export default function AdminUsers() {
 
     // --------------------- HANDLERS FOR FILTER INPUTS ---------------------
 
-    function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>, field: keyof FilterSettings) {
+    function handleChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>, field: keyof FilterSettings)
+    {
         const value = e.target.type === 'checkbox'
             ? (e.target as HTMLInputElement).checked
             : e.target.value;
@@ -338,29 +376,35 @@ export default function AdminUsers() {
     }
 
     // Roles as checkboxes
-    function handleRoleCheckboxChange(e: ChangeEvent<HTMLInputElement>) {
-        const { value, checked } = e.target;
+    function handleRoleCheckboxChange(e: ChangeEvent<HTMLInputElement>)
+    {
+        const {value, checked} = e.target;
         setFilters((prev) => {
             const current = new Set(prev.selectedRoles);
-            if (checked) {
+            if (checked)
+            {
                 current.add(value);
-            } else {
+            } else
+            {
                 current.delete(value);
             }
-            return { ...prev, selectedRoles: Array.from(current) };
+            return {...prev, selectedRoles: Array.from(current)};
         });
     }
 
     // Handle key down events for search input
-    function handleSearchKeyDown(e: KeyboardEvent<HTMLInputElement>) {
-        if (e.key === 'Enter') {
+    function handleSearchKeyDown(e: KeyboardEvent<HTMLInputElement>)
+    {
+        if (e.key === 'Enter')
+        {
             e.preventDefault();
             onApplyFilter();
         }
     }
 
     // --------------------- APPLY FILTERS BUTTON ---------------------
-    function onApplyFilter() {
+    function onApplyFilter()
+    {
         // Apply local filters
         const localResult = applyLocalFilters(allUsers, filters);
         setFilteredUsers(localResult);
@@ -369,22 +413,26 @@ export default function AdminUsers() {
         const params = new URLSearchParams();
 
         // roles
-        if (filters.selectedRoles.length > 0) {
+        if (filters.selectedRoles.length > 0)
+        {
             filters.selectedRoles.forEach((r) => params.append('roles', r));
         }
 
         // searchTerm
-        if (filters.searchTerm) {
+        if (filters.searchTerm)
+        {
             params.append('searchTerm', filters.searchTerm);
         }
 
         // graduationYear
-        if (filters.graduationYear) {
+        if (filters.graduationYear)
+        {
             params.append('graduationYear', String(filters.graduationYear));
         }
 
         // “balanceEqCSV” => multiple “balanceEq” params
-        if (filters.balanceEqCSV) {
+        if (filters.balanceEqCSV)
+        {
             const eqValues = filters.balanceEqCSV
                 .split(',')
                 .map((val) => val.trim())
@@ -394,15 +442,18 @@ export default function AdminUsers() {
         }
 
         // balanceGt, balanceLt
-        if (filters.balanceGt) {
+        if (filters.balanceGt)
+        {
             params.append('balanceGt', String(filters.balanceGt));
         }
-        if (filters.balanceLt) {
+        if (filters.balanceLt)
+        {
             params.append('balanceLt', String(filters.balanceLt));
         }
 
         // 🆕 activeOrders
-        if (filters.activeOrders) {
+        if (filters.activeOrders)
+        {
             params.append('activeOrders', 'true');
         }
 
@@ -453,7 +504,7 @@ export default function AdminUsers() {
             {showAdvancedFilter && (
                 <div className="advanced-filters">
                     <h3 className="filters-heading">Advanced Filters</h3>
-                    
+
                     <div className="filter-section">
                         <h4 className="filter-section-title">User Criteria</h4>
                         <div className="filter-row">
@@ -476,7 +527,8 @@ export default function AdminUsers() {
                             </div>
 
                             <div className="filter-field">
-                                <label title="The last 2 digits in the user's email, e.g. someone.smith25@acsbg.org => 25">
+                                <label
+                                    title="The last 2 digits in the user's email, e.g. someone.smith25@acsbg.org => 25">
                                     Graduation Year:
                                 </label>
                                 <input
@@ -489,7 +541,7 @@ export default function AdminUsers() {
                             </div>
                         </div>
                     </div>
-                    
+
                     <div className="filter-section">
                         <h4 className="filter-section-title">Balance Filters</h4>
                         <div className="filter-row">
@@ -537,7 +589,8 @@ export default function AdminUsers() {
                         <div className="filter-row">
                             <div className="filter-field checkbox-group">
                                 <div className="checkbox-row">
-                                    <label className="checkbox-label" title="Only fetch users who have at least one active/pending order">
+                                    <label className="checkbox-label"
+                                           title="Only fetch users who have at least one active/pending order">
                                         <input
                                             type="checkbox"
                                             checked={!!filters.activeOrders}
@@ -554,15 +607,15 @@ export default function AdminUsers() {
                         <button className="btn btn-primary" onClick={onApplyFilter} title="Apply all filters">
                             Apply Filters
                         </button>
-                        <button 
-                            className="btn btn-secondary" 
+                        <button
+                            className="btn btn-secondary"
                             onClick={() => {
                                 setFilters({
                                     searchTerm: '',
                                     selectedRoles: [],
                                 });
                                 setFilteredUsers(allUsers);
-                            }} 
+                            }}
                             title="Clear all filters"
                         >
                             Clear Filters
@@ -575,53 +628,53 @@ export default function AdminUsers() {
             <div className="users-table-container">
                 <table className="admin-table users-table">
                     <thead>
-                        <tr>
-                            <th className="sortable-header" onClick={() => requestSort('name')}>
-                                Name {getSortIndicator('name')}
-                            </th>
-                            <th className="sortable-header" onClick={() => requestSort('email')}>
-                                Email {getSortIndicator('email')}
-                            </th>
-                            <th className="sortable-header" onClick={() => requestSort('role')}>
-                                Role {getSortIndicator('role')}
-                            </th>
-                            <th className="sortable-header" onClick={() => requestSort('collectedBalance')}>
-                                Balance {getSortIndicator('collectedBalance')}
-                            </th>
-                            <th>Actions</th>
-                        </tr>
+                    <tr>
+                        <th className="sortable-header" onClick={() => requestSort('name')}>
+                            Name {getSortIndicator('name')}
+                        </th>
+                        <th className="sortable-header" onClick={() => requestSort('email')}>
+                            Email {getSortIndicator('email')}
+                        </th>
+                        <th className="sortable-header" onClick={() => requestSort('role')}>
+                            Role {getSortIndicator('role')}
+                        </th>
+                        <th className="sortable-header" onClick={() => requestSort('collectedBalance')}>
+                            Balance {getSortIndicator('collectedBalance')}
+                        </th>
+                        <th>Actions</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {filteredUsers.map((u) => (
-                            <tr key={u.id} className="user-row">
-                                <td>{u.name}</td>
-                                <td>{u.email}</td>
-                                <td><span className={`role-badge ${u.role.toLowerCase()}`}>{u.role}</span></td>
-                                <td>
-                                    {u.collectedBalance !== undefined ? (
-                                        <span className="balance-amount">{u.collectedBalance.toFixed(2)}</span>
-                                    ) : (
-                                        <span className="no-balance">N/A</span>
-                                    )}
-                                </td>
-                                <td>
-                                    <div className="row-actions">
-                                        <button className="btn btn-sm" onClick={() => fetchUserOrders(u)}>
-                                            View Orders
+                    {filteredUsers.map((u) => (
+                        <tr key={u.id} className="user-row">
+                            <td>{u.name}</td>
+                            <td>{u.email}</td>
+                            <td><span className={`role-badge ${u.role.toLowerCase()}`}>{u.role}</span></td>
+                            <td>
+                                {u.collectedBalance !== undefined ? (
+                                    <span className="balance-amount">{u.collectedBalance.toFixed(2)}</span>
+                                ) : (
+                                    <span className="no-balance">N/A</span>
+                                )}
+                            </td>
+                            <td>
+                                <div className="row-actions">
+                                    <button className="btn btn-sm" onClick={() => fetchUserOrders(u)}>
+                                        View Orders
+                                    </button>
+                                    {/* if user has role 1=REP or 2=STUCO, show an Edit button */}
+                                    {user && (user.role === 1 || user.role === 2 || user.role === 3) && (
+                                        <button
+                                            className="btn btn-sm btn-primary"
+                                            onClick={() => navigate(`/admin/users/${u.id}`)}
+                                        >
+                                            Edit
                                         </button>
-                                        {/* if user has role 1=REP or 2=STUCO, show an Edit button */}
-                                        {user && (user.role === 1 || user.role === 2 || user.role === 3) && (
-                                            <button
-                                                className="btn btn-sm btn-primary"
-                                                onClick={() => navigate(`/admin/users/${u.id}`)}
-                                            >
-                                                Edit
-                                            </button>
-                                        )}
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
+                                    )}
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
                     </tbody>
                 </table>
                 {filteredUsers.length === 0 && !loading && (
@@ -665,8 +718,8 @@ export default function AdminUsers() {
                                                     <td className="text-center">{totalPrice.toFixed(2)}</td>
                                                     <td className="text-center">{order.status}</td>
                                                     <td className="text-center">
-                                                        {order.assignedRep ? 
-                                                            (order.assignedRep.fullName || order.assignedRep.username) : 
+                                                        {order.assignedRep ?
+                                                            (order.assignedRep.fullName || order.assignedRep.username) :
                                                             'Not assigned'}
                                                     </td>
                                                     <td className="text-center">

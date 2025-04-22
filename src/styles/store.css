@@ -647,29 +647,29 @@
         margin: 1rem;
         width: calc(100% - 2rem);
     }
-    
+
     .checkout-container h2 {
         font-size: 1.5rem;
     }
-    
+
     .cart-summary {
         padding: 1rem;
     }
-    
+
     .cart-summary h3 {
         font-size: 1.2rem;
     }
-    
+
     .checkout-container textarea {
         padding: 0.75rem;
         min-height: 100px;
     }
-    
+
     .place-order-btn {
         padding: 0.75rem;
         font-size: 1rem;
     }
-    
+
     .cart-prompt {
         bottom: 10px;
         right: 10px;
@@ -679,18 +679,18 @@
         align-items: stretch;
         gap: 8px;
     }
-    
+
     .cart-item {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.5rem;
     }
-    
+
     .cart-item input {
         width: 100%;
         margin: 0.5rem 0;
     }
-    
+
     .cart-total {
         text-align: center;
         font-size: 1.2rem;
@@ -701,11 +701,11 @@
     .checkout-container {
         padding: 1rem;
     }
-    
+
     .checkout-container h2 {
         font-size: 1.3rem;
     }
-    
+
     .place-order-btn {
         font-size: 0.9rem;
     }
@@ -788,17 +788,17 @@
         width: 95%;
         padding: 1.25rem;
     }
-    
+
     .AddToCartDialog-title {
         font-size: 1.1rem;
         margin-bottom: 1rem;
     }
-    
+
     .AddToCartDialog-actions {
         flex-direction: column;
         gap: 0.75rem;
     }
-    
+
     .AddToCartDialog-actions button {
         width: 100%;
     }
@@ -809,7 +809,7 @@
     .product-grid {
         gap: 1.5rem;
     }
-    
+
     .product-card {
         min-height: 380px;
     }
@@ -819,11 +819,11 @@
     .product-card {
         min-height: 350px;
     }
-    
+
     .product-actions {
         gap: 0.5rem;
     }
-    
+
     .product-actions .btn,
     .product-actions a.btn {
         padding: 0.5rem;

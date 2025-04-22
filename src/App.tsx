@@ -34,7 +34,7 @@ import ErrorBoundary from "./components/common/ErrorBoundary.tsx";
 import './styles/markdown.css'
 import './styles/infrastructure.css'
 import './styles/transitions.css'
-import { ThemeProvider } from './context/ThemeContext.tsx'
+import {ThemeProvider} from './context/ThemeContext.tsx'
 
 export function App()
 {
@@ -93,14 +93,14 @@ export function App()
                                 <AdminBalance/>
                             </ProtectedRoute>
                         }/>
-                        
+
                         {/* Infrastructure Pages */}
-                        <Route path="/error" element={<ErrorPage />} />
-                        <Route path="/forbidden" element={<Forbidden />} />
-                        <Route path="/maintenance" element={<Maintenance />} />
-                        
+                        <Route path="/error" element={<ErrorPage/>}/>
+                        <Route path="/forbidden" element={<Forbidden/>}/>
+                        <Route path="/maintenance" element={<Maintenance/>}/>
+
                         {/* 404 - This must be the last route */}
-                        <Route path="*" element={<NotFound />} />
+                        <Route path="*" element={<NotFound/>}/>
                     </Routes>
                 </CartProvider>
                 <Footer/>

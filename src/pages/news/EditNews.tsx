@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import {useEffect, useState} from 'react'
+import {useLocation, useNavigate, useParams} from 'react-router-dom'
 import NewsForm from '../../components/news/NewsForm'
 
-interface NewsData {
+interface NewsData
+{
     title: string
     content: string
     bannerPhotoUrl?: string
@@ -12,7 +13,7 @@ interface NewsData {
 export default function EditNews() {
     const location = useLocation()
     const postData = location.state?.post
-    const { id } = useParams()
+    const {id} = useParams()
     const navigate = useNavigate()
 
     const [title, setTitle] = useState('')
@@ -24,34 +25,41 @@ export default function EditNews() {
     const [isReady, setIsReady] = useState(false)
 
     useEffect(() => {
-        async function fetchPost() {
-            if (postData) {
+        async function fetchPost()
+        {
+            if (postData)
+            {
                 setTitle(postData.title)
                 setContent(postData.content)
                 setBannerUrl(postData.bannerPhotoUrl || '')
-                if (postData.extraPhotos) {
+                if (postData.extraPhotos)
+                {
                     setExtraUrls(postData.extraPhotos.split(',').map((s: string) => s.trim()))
                 }
                 setIsReady(true)
                 return
             }
-            try {
+            try
+            {
                 const res = await fetch(`/api/news/${id}`)
                 if (!res.ok) throw new Error('Failed to load news post')
                 const data: NewsData = await res.json()
                 setTitle(data.title)
                 setContent(data.content)
                 setBannerUrl(data.bannerPhotoUrl || '')
-                if (data.extraPhotos) {
+                if (data.extraPhotos)
+                {
                     setExtraUrls(data.extraPhotos.split(',').map(s => s.trim()))
                 }
                 setIsReady(true)
-            } catch (err: any) {
+            } catch (err: any)
+            {
                 setError(err.message)
             }
         }
 
-        if (id) {
+        if (id)
+        {
             fetchPost()
         }
     }, [id, postData])
@@ -68,10 +76,12 @@ export default function EditNews() {
         bannerFile: File | null
         extraFiles: File[] | null
         keptExtraUrls: string[]
-    }) {
+    })
+    {
         setLoading(true)
         setError(null)
-        try {
+        try
+        {
             const formData = new FormData()
             const postJson = {
                 title,
@@ -79,12 +89,14 @@ export default function EditNews() {
                 // Send the kept extra URLs as a comma-separated string
                 extraPhotos: keptExtraUrls.join(','),
             }
-            formData.append('post', new Blob([JSON.stringify(postJson)], { type: 'application/json' }))
+            formData.append('post', new Blob([JSON.stringify(postJson)], {type: 'application/json'}))
 
-            if (bannerFile) {
+            if (bannerFile)
+            {
                 formData.append('banner', bannerFile)
             }
-            if (extraFiles) {
+            if (extraFiles)
+            {
                 extraFiles.forEach(f => {
                     formData.append('extraPhotos', f)
                 })
@@ -98,15 +110,18 @@ export default function EditNews() {
                 body: formData,
             })
 
-            if (!res.ok) {
+            if (!res.ok)
+            {
                 const msg = await res.text()
                 throw new Error(msg)
             }
 
             navigate(`/news/${id}`)
-        } catch (err: any) {
+        } catch (err: any)
+        {
             setError(err.message)
-        } finally {
+        } finally
+        {
             setLoading(false)
         }
     }
@@ -114,7 +129,7 @@ export default function EditNews() {
     return (
         <div className="container">
             {error ? (
-                <p style={{ color: 'red' }}>{error}</p>
+                <p style={{color: 'red'}}>{error}</p>
             ) : isReady ? (
                 <NewsForm
                     mode="edit"

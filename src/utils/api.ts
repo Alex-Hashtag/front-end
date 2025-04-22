@@ -15,55 +15,60 @@ const apiBaseUrl = __API_BASE_URL__ || '';
  * @param options - Fetch options
  * @returns Promise with the fetch response
  */
-export async function apiRequest(endpoint: string, options: RequestInit = {}) {
-  // If endpoint already starts with http/https, use it directly
-  const url = endpoint.startsWith('http') 
-    ? endpoint 
-    : `${apiBaseUrl}${endpoint}`;
-    
-  return fetch(url, options);
+export async function apiRequest(endpoint: string, options: RequestInit = {})
+{
+    // If endpoint already starts with http/https, use it directly
+    const url = endpoint.startsWith('http')
+        ? endpoint
+        : `${apiBaseUrl}${endpoint}`;
+
+    return fetch(url, options);
 }
 
 /**
  * GET request helper
  */
-export async function apiGet(endpoint: string, options: RequestInit = {}) {
-  return apiRequest(endpoint, { ...options, method: 'GET' });
+export async function apiGet(endpoint: string, options: RequestInit = {})
+{
+    return apiRequest(endpoint, {...options, method: 'GET'});
 }
 
 /**
  * POST request helper
  */
-export async function apiPost(endpoint: string, data: any, options: RequestInit = {}) {
-  return apiRequest(endpoint, {
-    ...options,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-    body: JSON.stringify(data),
-  });
+export async function apiPost(endpoint: string, data: any, options: RequestInit = {})
+{
+    return apiRequest(endpoint, {
+        ...options,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            ...options.headers,
+        },
+        body: JSON.stringify(data),
+    });
 }
 
 /**
  * PUT request helper
  */
-export async function apiPut(endpoint: string, data: any, options: RequestInit = {}) {
-  return apiRequest(endpoint, {
-    ...options,
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-    body: JSON.stringify(data),
-  });
+export async function apiPut(endpoint: string, data: any, options: RequestInit = {})
+{
+    return apiRequest(endpoint, {
+        ...options,
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            ...options.headers,
+        },
+        body: JSON.stringify(data),
+    });
 }
 
 /**
  * DELETE request helper
  */
-export async function apiDelete(endpoint: string, options: RequestInit = {}) {
-  return apiRequest(endpoint, { ...options, method: 'DELETE' });
+export async function apiDelete(endpoint: string, options: RequestInit = {})
+{
+    return apiRequest(endpoint, {...options, method: 'DELETE'});
 }

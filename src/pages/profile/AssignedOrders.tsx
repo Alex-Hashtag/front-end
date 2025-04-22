@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { Order } from '../../types/Order';
+import {useEffect, useState} from 'react';
+import {useAuth} from '../../context/AuthContext';
+import {useNavigate} from 'react-router-dom';
+import {Order} from '../../types/Order';
 
-interface GroupedOrderItem {
+interface GroupedOrderItem
+{
     id: number;
     productName: string;
     productPrice: number;
@@ -12,7 +13,8 @@ interface GroupedOrderItem {
     buyerName?: string;
 }
 
-interface GroupedOrder {
+interface GroupedOrder
+{
     instructions: string;
     status: 'PENDING' | 'PAID' | 'DELIVERED' | 'CANCELLED';
     items: GroupedOrderItem[];
@@ -23,18 +25,20 @@ export default function AssignedOrders() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const { user } = useAuth();
+    const {user} = useAuth();
     const navigate = useNavigate();
     const [selectedTab, setSelectedTab] = useState<'PENDING' | 'PAID' | 'DELIVERED' | 'CANCELLED'>('PENDING');
 
     useEffect(() => {
         const fetchAssignedOrders = async () => {
-            if (!user) {
+            if (!user)
+            {
                 setLoading(false);
                 return;
             }
-            
-            try {
+
+            try
+            {
                 const res = await fetch(
                     '/api/orders/assigned?page=0&size=50&sort=createdAt,desc',
                     {
@@ -43,17 +47,20 @@ export default function AssignedOrders() {
                         }
                     }
                 );
-                
-                if (!res.ok) {
+
+                if (!res.ok)
+                {
                     throw new Error('Failed to load assigned orders');
                 }
-                
+
                 const data = await res.json();
                 setOrders(data.content);
-            } catch (error) {
+            } catch (error)
+            {
                 console.error('Error fetching assigned orders:', error);
                 setError('Failed to load assigned orders. Please try again later.');
-            } finally {
+            } finally
+            {
                 setLoading(false);
             }
         };
@@ -69,10 +76,11 @@ export default function AssignedOrders() {
             const instr = order.instructions && order.instructions.trim() !== ''
                 ? order.instructions.trim()
                 : 'No Instructions';
-            
+
             const groupKey = `${instr}`;
-            
-            if (!groups[groupKey]) {
+
+            if (!groups[groupKey])
+            {
                 groups[groupKey] = {
                     instructions: instr,
                     status: order.status,
@@ -80,7 +88,7 @@ export default function AssignedOrders() {
                     paidAt: order.paidAt
                 };
             }
-            
+
             groups[groupKey].items.push({
                 id: order.id,
                 productName: order.productName,
@@ -103,29 +111,34 @@ export default function AssignedOrders() {
     };
 
     const updateOrderStatus = async (orderId: number, newStatus: 'PENDING' | 'PAID' | 'DELIVERED' | 'CANCELLED') => {
-        try {
+        try
+        {
             const res = await fetch(`/api/orders/${orderId}/status?status=${newStatus}`, {
                 method: 'PATCH',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 }
             });
-            
-            if (!res.ok) {
+
+            if (!res.ok)
+            {
                 const errorData = await res.json();
                 throw new Error(errorData.message || 'Failed to update order status');
             }
-            
+
             // Refresh the orders after updating
-            setOrders(prevOrders => 
-                prevOrders.map(order => 
-                    order.id === orderId 
-                        ? { ...order, status: newStatus, 
-                            paidAt: newStatus === 'PAID' ? new Date().toISOString() : order.paidAt } 
+            setOrders(prevOrders =>
+                prevOrders.map(order =>
+                    order.id === orderId
+                        ? {
+                            ...order, status: newStatus,
+                            paidAt: newStatus === 'PAID' ? new Date().toISOString() : order.paidAt
+                        }
                         : order
                 )
             );
-        } catch (err) {
+        } catch (err)
+        {
             console.error(err);
             alert(err instanceof Error ? err.message : 'Failed to update order status');
         }
@@ -176,56 +189,56 @@ export default function AssignedOrders() {
                             )}
                             <table className="orders-table">
                                 <thead>
-                                    <tr>
-                                        <th>Order ID</th>
-                                        <th>Product</th>
-                                        <th>Quantity</th>
-                                        <th>Price</th>
-                                        <th>Customer</th>
-                                        <th>Actions</th>
-                                    </tr>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Customer</th>
+                                    <th>Actions</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    {group.items.map((item) => {
-                                        const totalPrice = item.productPrice * item.quantity;
-                                        return (
-                                            <tr key={item.id}>
-                                                <td>{item.id}</td>
-                                                <td>{item.productName}</td>
-                                                <td>{item.quantity}</td>
-                                                <td>{totalPrice.toFixed(2)} BGN</td>
-                                                <td>{item.buyerName || 'Unknown'}</td>
-                                                <td>
-                                                    {item.status === 'PENDING' && (
-                                                        <button
-                                                            className="btn btn-success"
-                                                            onClick={() => updateOrderStatus(item.id, 'PAID')}
-                                                        >
-                                                            Mark Paid
-                                                        </button>
-                                                    )}
-                                                    {' '}
-                                                    {item.status === 'PAID' && (
-                                                        <button
-                                                            className="btn btn-secondary"
-                                                            onClick={() => updateOrderStatus(item.id, 'DELIVERED')}
-                                                        >
-                                                            Mark Delivered
-                                                        </button>
-                                                    )}
-                                                    {' '}
-                                                    {item.status !== 'CANCELLED' && item.status !== 'DELIVERED' && (
-                                                        <button
-                                                            className="btn btn-danger"
-                                                            onClick={() => updateOrderStatus(item.id, 'CANCELLED')}
-                                                        >
-                                                            Cancel
-                                                        </button>
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
+                                {group.items.map((item) => {
+                                    const totalPrice = item.productPrice * item.quantity;
+                                    return (
+                                        <tr key={item.id}>
+                                            <td>{item.id}</td>
+                                            <td>{item.productName}</td>
+                                            <td>{item.quantity}</td>
+                                            <td>{totalPrice.toFixed(2)} BGN</td>
+                                            <td>{item.buyerName || 'Unknown'}</td>
+                                            <td>
+                                                {item.status === 'PENDING' && (
+                                                    <button
+                                                        className="btn btn-success"
+                                                        onClick={() => updateOrderStatus(item.id, 'PAID')}
+                                                    >
+                                                        Mark Paid
+                                                    </button>
+                                                )}
+                                                {' '}
+                                                {item.status === 'PAID' && (
+                                                    <button
+                                                        className="btn btn-secondary"
+                                                        onClick={() => updateOrderStatus(item.id, 'DELIVERED')}
+                                                    >
+                                                        Mark Delivered
+                                                    </button>
+                                                )}
+                                                {' '}
+                                                {item.status !== 'CANCELLED' && item.status !== 'DELIVERED' && (
+                                                    <button
+                                                        className="btn btn-danger"
+                                                        onClick={() => updateOrderStatus(item.id, 'CANCELLED')}
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                                 </tbody>
                             </table>
                             <hr/>

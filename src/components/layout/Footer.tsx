@@ -3,7 +3,7 @@ export default function Footer() {
         <footer className="site-footer">
             <p className="footer-text">
                 © {new Date().getFullYear()} Alexander Mihaylov, American College of Sofia
-                <br />
+                <br/>
                 Official property of the ACS Student Council
             </p>
         </footer>

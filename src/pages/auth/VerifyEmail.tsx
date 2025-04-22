@@ -1,7 +1,8 @@
-import { useEffect, useState, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import {useEffect, useRef, useState} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
 
-function useQuery() {
+function useQuery()
+{
     return new URLSearchParams(useLocation().search);
 }
 
@@ -15,21 +16,26 @@ export default function VerifyEmail() {
     const hasVerified = useRef(false);
 
     useEffect(() => {
-        async function verify() {
+        async function verify()
+        {
             if (!token || hasVerified.current) return;
             hasVerified.current = true;
-            try {
+            try
+            {
                 const res = await fetch(`/api/auth/verify/${token}`);
-                if (!res.ok) {
+                if (!res.ok)
+                {
                     const txt = await res.text();
                     throw new Error(txt);
                 }
                 const successMsg = await res.text();
                 setMessage(successMsg);
-            } catch (err: any) {
+            } catch (err: any)
+            {
                 setError(err.message);
             }
         }
+
         verify();
     }, [token]);
 
@@ -37,7 +43,7 @@ export default function VerifyEmail() {
         <div className="container">
             <h2>Email Verification</h2>
             {error ? (
-                <p style={{ color: "crimson" }}>{error}</p>
+                <p style={{color: "crimson"}}>{error}</p>
             ) : (
                 <p>{message}</p>
             )}

@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import {ChangeEvent, FormEvent, useEffect, useState} from 'react'
 import CommonMarkdownEditor from '../common/CommonMarkdownEditor'
 
 type NewsFormProps = {
@@ -27,7 +27,8 @@ export default function NewsForm({
                                      error,
                                      mode = 'create',
                                      onSubmit,
-                                 }: NewsFormProps) {
+                                 }: NewsFormProps)
+{
     const [title, setTitle] = useState(initialTitle)
     const [content, setContent] = useState(initialContent)
 
@@ -40,7 +41,8 @@ export default function NewsForm({
     const [extraPreviews, setExtraPreviews] = useState<string[]>([])
 
     useEffect(() => {
-        if (bannerFile) {
+        if (bannerFile)
+        {
             const url = URL.createObjectURL(bannerFile)
             setBannerPreview(url)
             return () => URL.revokeObjectURL(url)
@@ -48,13 +50,15 @@ export default function NewsForm({
     }, [bannerFile])
 
     const handleBannerChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files?.[0]) {
+        if (e.target.files?.[0])
+        {
             setBannerFile(e.target.files[0])
         }
     }
 
     const handleExtraChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files?.length) {
+        if (e.target.files?.length)
+        {
             const files = Array.from(e.target.files)
             setExtraFiles(files)
             const previews = files.map(file => URL.createObjectURL(file))
@@ -97,7 +101,7 @@ export default function NewsForm({
                     <h3>Basic Information</h3>
                     <div className="form-group">
                         <label>Title</label>
-                        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
                     </div>
                 </div>
 
@@ -108,13 +112,13 @@ export default function NewsForm({
                         <div className="file-input-container">
                             <label className="file-input-label">
                                 Choose File
-                                <input type="file" accept="image/*" onChange={handleBannerChange} hidden />
+                                <input type="file" accept="image/*" onChange={handleBannerChange} hidden/>
                             </label>
                             {bannerFile && <span className="file-name">{bannerFile.name}</span>}
                         </div>
                         {bannerPreview && (
                             <div className="banner-preview">
-                                <img src={bannerPreview} alt="Banner" />
+                                <img src={bannerPreview} alt="Banner"/>
                                 <button
                                     type="button"
                                     className="preview-remove-btn"
@@ -134,10 +138,11 @@ export default function NewsForm({
                         <div className="file-input-container">
                             <label className="file-input-label">
                                 Choose Files
-                                <input type="file" accept="image/*" multiple onChange={handleExtraChange} hidden />
+                                <input type="file" accept="image/*" multiple onChange={handleExtraChange} hidden/>
                             </label>
                             {(extraFiles.length > 0 || initialExtra.length > 0) && (
-                                <span className="file-name">{extraFiles.length + initialExtra.length} file(s) selected</span>
+                                <span
+                                    className="file-name">{extraFiles.length + initialExtra.length} file(s) selected</span>
                             )}
                         </div>
 
@@ -145,8 +150,9 @@ export default function NewsForm({
                             {/* Render images that were already stored on the server */}
                             {initialExtra.map((url, idx) => (
                                 <div key={`initial-${idx}`} className="extra-preview-item">
-                                    <img src={url} alt={`Extra ${idx + 1}`} />
-                                    <button type="button" className="preview-remove-btn" onClick={() => removeInitialExtra(idx)}>
+                                    <img src={url} alt={`Extra ${idx + 1}`}/>
+                                    <button type="button" className="preview-remove-btn"
+                                            onClick={() => removeInitialExtra(idx)}>
                                         &times;
                                     </button>
                                 </div>
@@ -155,8 +161,9 @@ export default function NewsForm({
                             {/* Render new extra images added by the user */}
                             {extraPreviews.map((url, idx) => (
                                 <div key={`extra-${idx}`} className="extra-preview-item">
-                                    <img src={url} alt={`Extra ${initialExtra.length + idx + 1}`} />
-                                    <button type="button" className="preview-remove-btn" onClick={() => removeExtraPreview(idx)}>
+                                    <img src={url} alt={`Extra ${initialExtra.length + idx + 1}`}/>
+                                    <button type="button" className="preview-remove-btn"
+                                            onClick={() => removeExtraPreview(idx)}>
                                         &times;
                                     </button>
                                 </div>
@@ -169,11 +176,11 @@ export default function NewsForm({
                     <h3>Content</h3>
                     <div className="form-group">
                         <label>Markdown Content</label>
-                        <CommonMarkdownEditor value={content} onChange={(val) => setContent(val || '')} height={400} />
+                        <CommonMarkdownEditor value={content} onChange={(val) => setContent(val || '')} height={400}/>
                     </div>
                 </div>
 
-                <button type="submit" className="btn" disabled={loading} style={{ marginTop: '1.5rem' }}>
+                <button type="submit" className="btn" disabled={loading} style={{marginTop: '1.5rem'}}>
                     {loading ? 'Saving...' : mode === 'edit' ? 'Update Post' : 'Create Post'}
                 </button>
             </form>

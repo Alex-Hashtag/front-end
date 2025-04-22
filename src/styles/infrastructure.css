@@ -138,20 +138,20 @@ body.dark .infrastructure-actions .btn-secondary:hover {
     .infrastructure-content {
         padding: 2rem 1.5rem;
     }
-    
+
     .infrastructure-content h1 {
         font-size: 4rem;
     }
-    
+
     .infrastructure-content h2 {
         font-size: 1.5rem;
     }
-    
+
     .infrastructure-actions {
         flex-direction: column;
         gap: 0.75rem;
     }
-    
+
     .illustration svg {
         width: 120px;
         height: 120px;
