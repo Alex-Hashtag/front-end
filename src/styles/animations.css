@@ -1,0 +1,120 @@
+/* Core Animation Variables */
+:root {
+    --animation-duration-fast: 150ms;
+    --animation-duration-medium: 300ms;
+    --animation-duration-slow: 500ms;
+    --animation-easing-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --animation-easing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --animation-easing-spring: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Mouse State Animations */
+.interactive-element {
+    transition: transform var(--animation-duration-fast) var(--animation-easing-smooth),
+                box-shadow var(--animation-duration-fast) var(--animation-easing-smooth);
+}
+
+.interactive-element:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.interactive-element:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Button Specific Animations */
+.btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width var(--animation-duration-medium) var(--animation-easing-smooth),
+                height var(--animation-duration-medium) var(--animation-easing-smooth);
+}
+
+.btn:hover::after {
+    width: 300%;
+    height: 300%;
+}
+
+/* Card Hover Effects */
+.card {
+    transition: transform var(--animation-duration-medium) var(--animation-easing-smooth),
+                box-shadow var(--animation-duration-medium) var(--animation-easing-smooth);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Page Transition Animations - Slide */
+.page-enter {
+    opacity: 0;
+    transform: translateX(100vw);
+}
+
+.page-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity var(--animation-duration-slow) var(--animation-easing-smooth),
+                transform var(--animation-duration-slow) var(--animation-easing-smooth);
+}
+
+.page-exit {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.page-exit-active {
+    opacity: 0;
+    transform: translateX(-100vw);
+    transition: opacity var(--animation-duration-slow) var(--animation-easing-smooth),
+                transform var(--animation-duration-slow) var(--animation-easing-smooth);
+}
+
+/* Mobile-Specific Animations */
+@media (max-width: 768px) {
+    .interactive-element:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .interactive-element:active {
+        transform: scale(0.98);
+        opacity: 0.8;
+    }
+    
+    .card:hover {
+        transform: none;
+        box-shadow: var(--shadow);
+    }
+    
+    .card:active {
+        transform: scale(0.98);
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
