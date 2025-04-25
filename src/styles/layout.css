@@ -72,31 +72,36 @@
     transition: color var(--transition-medium), transform var(--transition-bounce);
 }
 
-.nav-link:after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: var(--primary);
-    transition: width var(--transition-medium), opacity var(--transition-medium);
-    opacity: 0;
-}
-
 .nav-link:hover {
     color: var(--primary);
     transform: translateY(-2px);
 }
 
-.nav-link:hover:after {
+.nav-link:active {
+    transform: translateY(0);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
     width: 100%;
-    opacity: 1;
+    height: 2px;
+    background-color: var(--primary);
+    transform: scaleX(0);
+    transition: transform var(--animation-duration-medium) var(--animation-easing-spring);
+    transform-origin: right;
+}
+
+.nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
 }
 
 .nav-link.active:after {
-    width: 100%;
-    opacity: 1;
+    transform: scaleX(1);
+    transform-origin: left;
 }
 
 /* Right side of the navbar */
@@ -171,17 +176,18 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     overflow: hidden;
-    animation: dropdownFadeIn 0.2s ease-out;
+    animation: dropdownFadeIn var(--animation-duration-medium) var(--animation-easing-bounce);
+    transform-origin: top right;
 }
 
 @keyframes dropdownFadeIn {
     from {
         opacity: 0;
-        transform: translateY(8px);
+        transform: translateY(-10px) scale(0.95);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
 }
 
@@ -218,19 +224,41 @@
     padding: 0.75rem 1rem;
     color: var(--text);
     text-decoration: none;
-    transition: background-color 0.2s ease;
+    transition: all var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
 }
 
 .dropdown-link:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    transform: translateX(5px);
+    color: var(--primary);
 }
 
-body.dark .dropdown-link:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+.dropdown-link:hover:before {
+    width: 100%;
 }
 
-.dropdown-link svg {
-    color: var(--text-muted);
+.dropdown-link svg,
+.dropdown-link span {
+    position: relative;
+    z-index: 1;
+}
+
+.dropdown-link:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background-color: var(--primary-ultra-light);
+    transition: width var(--transition-medium);
+    z-index: 0;
+}
+
+.dropdown-link.active:after {
+    transform: scaleX(1);
+    transform-origin: left;
 }
 
 .profile-dropdown-footer {
@@ -251,15 +279,15 @@ body.dark .dropdown-link:hover {
     cursor: pointer;
     font-size: 0.95rem;
     font-weight: 500;
-    transition: background-color 0.2s ease;
+    transition: all var(--transition-bounce);
+    position: relative;
+    overflow: hidden;
 }
 
 .logout-button:hover {
     background-color: rgba(231, 76, 60, 0.2);
-}
-
-.logout-button svg {
-    color: var(--danger);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.25);
 }
 
 /* Authentication buttons */
@@ -393,9 +421,7 @@ body.dark .login-button:hover {
     background-color: var(--card-bg);
     z-index: 999;
     transform: translateX(100%);
-    transition: transform var(--transition-smooth);
-    overflow-y: auto;
-    box-shadow: -5px 0 15px var(--shadow-color);
+    transition: transform var(--animation-duration-medium) var(--animation-easing-smooth);
 }
 
 .navbar-mobile.active {
@@ -407,8 +433,8 @@ body.dark .login-button:hover {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    animation: menuContentFadeIn 0.4s ease forwards;
-    animation-delay: 0.2s;
+    animation: menuContentFadeIn var(--animation-duration-medium) var(--animation-easing-smooth) forwards;
+    animation-delay: 100ms;
     opacity: 0;
 }
 
@@ -936,101 +962,6 @@ body.dark .dropdown-item:hover {
     }
 }
 
-.hero {
-    background: linear-gradient(120deg, #7f3cff 0%, #a259ff 50%, #ff6ec4 100%);
-    color: white;
-    padding: 3rem 2rem 4.5rem 2rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero-title {
-    font-size: 2.8rem;
-    margin-bottom: 0.5rem;
-    font-weight: 800;
-    letter-spacing: -1px;
-}
-
-.hero-subtitle {
-    font-size: 1.2rem;
-    font-weight: 400;
-    margin-bottom: 2.5rem;
-}
-
-body.dark .hero {
-    background: linear-gradient(120deg, #31175a 0%, #532f87 60%, #a259ff 100%);
-}
-
-.section {
-    margin: 3rem 0;
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity var(--transition-slow), transform var(--transition-slow);
-}
-
-.section.fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-}
-
-.section-title {
-    font-size: 1.7rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    position: relative;
-    display: inline-block;
-}
-
-.section-title:after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 40px;
-    height: 3px;
-    background-color: var(--primary);
-    transition: width var(--transition-medium);
-}
-
-.section-title:hover:after {
-    width: 100%;
-}
-
-.section-cta {
-    margin-top: 1rem;
-    text-align: right;
-    font-weight: 500;
-}
-
-.section-cta a {
-    color: var(--primary);
-    text-decoration: none;
-    position: relative;
-    padding-right: 20px;
-    transition: color var(--transition-fast), padding var(--transition-medium);
-}
-
-.section-cta a:after {
-    content: '→';
-    position: absolute;
-    right: 0;
-    opacity: 0;
-    transition: opacity var(--transition-fast), transform var(--transition-medium);
-    transform: translateX(-10px);
-}
-
-.section-cta a:hover {
-    padding-right: 28px;
-    color: var(--primary-light);
-}
-
-.section-cta a:hover:after {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-/* Card animations and hover effects */
 .card, 
 .news-card, 
 .product-card {
@@ -1044,8 +975,14 @@ body.dark .hero {
 .card:hover, 
 .news-card:hover, 
 .product-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
     box-shadow: var(--hover-lift-shadow);
+}
+
+.card:active, 
+.news-card:active, 
+.product-card:active {
+    transform: translateY(-2px);
 }
 
 .card:before,
@@ -1139,14 +1076,14 @@ body.dark .hero {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     overflow: hidden;
-    animation: dropdownFadeIn var(--transition-bounce);
+    animation: dropdownFadeIn var(--animation-duration-medium) var(--animation-easing-bounce);
     transform-origin: top right;
 }
 
 @keyframes dropdownFadeIn {
     from {
         opacity: 0;
-        transform: translateY(8px) scale(0.95);
+        transform: translateY(-10px) scale(0.95);
     }
     to {
         opacity: 1;
@@ -1315,34 +1252,141 @@ body.dark select:focus {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Javascript to enable section fade-in animations when scrolled into view 
-Add this to your JS file:
+.hero {
+    background: linear-gradient(120deg, #7f3cff 0%, #a259ff 50%, #ff6ec4 100%);
+    color: white;
+    padding: 3rem 2rem 4.5rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Add the fade-in class initially to all sections
-    const sections = document.querySelectorAll('.section');
-    sections.forEach(section => {
-        section.classList.add('fade-in');
-    });
+.hero-title {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 2.5rem;
+}
+
+body.dark .hero {
+    background: linear-gradient(120deg, #31175a 0%, #532f87 60%, #a259ff 100%);
+}
+
+.section {
+    margin: 3rem 0;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+.section.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.section-title {
+    font-size: 1.7rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title:after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background-color: var(--primary);
+    transition: width var(--transition-medium);
+}
+
+.section-title:hover:after {
+    width: 100%;
+}
+
+.section-cta {
+    margin-top: 1rem;
+    text-align: right;
+    font-weight: 500;
+}
+
+.section-cta a {
+    color: var(--primary);
+    text-decoration: none;
+    position: relative;
+    padding-right: 20px;
+    transition: color var(--transition-fast), padding var(--transition-medium);
+}
+
+.section-cta a:after {
+    content: '→';
+    position: absolute;
+    right: 0;
+    opacity: 0;
+    transition: opacity var(--transition-fast), transform var(--transition-medium);
+    transform: translateX(-10px);
+}
+
+.section-cta a:hover {
+    padding-right: 28px;
+    color: var(--primary-light);
+}
+
+.section-cta a:hover:after {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Mobile-specific animations */
+@media (max-width: 768px) {
+    .nav-link:hover {
+        transform: none;
+    }
     
-    // Create IntersectionObserver
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // When section is in view, remove fade-in class to trigger animation
-                entry.target.classList.remove('fade-in');
-                // Stop observing after animation
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        rootMargin: '0px 0px -100px 0px', // Trigger slightly before the section comes into view
-        threshold: 0.1
-    });
+    .nav-link:active {
+        opacity: 0.7;
+        transform: scale(0.98);
+    }
     
-    // Observe all sections
-    sections.forEach(section => {
-        observer.observe(section);
-    });
-});
-*/
+    .card:hover,
+    .news-card:hover,
+    .product-card:hover {
+        transform: none;
+        box-shadow: var(--shadow);
+    }
+    
+    .card:active,
+    .news-card:active,
+    .product-card:active {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+    
+    .btn:hover {
+        transform: none;
+    }
+    
+    .btn:active {
+        transform: scale(0.95);
+        opacity: 0.8;
+    }
+    
+    .mobile-nav-link {
+        transition: transform var(--animation-duration-fast) var(--animation-easing-smooth),
+                    background-color var(--animation-duration-fast) var(--animation-easing-smooth);
+    }
+    
+    .mobile-nav-link:active {
+        transform: scale(0.98);
+        background-color: var(--primary-ultra-light);
+    }
+}

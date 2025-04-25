@@ -46,6 +46,7 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     height: auto;
     min-height: 400px;
+    cursor: pointer;
 }
 
 .product-image {
@@ -477,7 +478,6 @@
 .tooltip {
     position: relative;
     display: inline-block;
-    cursor: help;
 }
 
 .tooltip::after {

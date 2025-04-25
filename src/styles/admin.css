@@ -27,7 +27,6 @@ body.dark .filter-section {
 /* Tooltip styling - improved for dark mode */
 [title] {
     position: relative;
-    cursor: help;
 }
 
 [title]:hover::before {
@@ -145,7 +144,6 @@ body.dark .filter-section {
 /* Tooltip styling - improved for dark mode */
 [title] {
     position: relative;
-    cursor: help;
 }
 
 [title]:hover::before {

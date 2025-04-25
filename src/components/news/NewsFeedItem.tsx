@@ -1,17 +1,8 @@
 import {Link} from 'react-router-dom'
 import {markdownConverter} from '../../utils/markdown'
+import {NewsPost} from '../../types/NewsPost'
 
-interface NewsPost
-{
-    id: number
-    title: string
-    content: string
-    bannerPhotoUrl?: string
-    createdAt: string
-}
-
-interface Props
-{
+interface Props {
     post: NewsPost
 }
 
@@ -32,30 +23,28 @@ export default function NewsFeedItem({post}: Props) {
     })
 
     return (
-        <article className="news-feed-item card">
-            <header className="news-item-header">
-                <h3 className="news-title">{post.title}</h3>
-                <time className="news-date">{formattedDate}</time>
-            </header>
+        <Link to={`/news/${post.id}`} className="news-item-link">
+            <article className="news-feed-item card">
+                <header className="news-item-header">
+                    <h3 className="news-title">{post.title}</h3>
+                    <time className="news-date">{formattedDate}</time>
+                </header>
 
-            {post.bannerPhotoUrl && (
-                <img
-                    src={post.bannerPhotoUrl}
-                    alt={post.title}
-                    className="news-banner"
-                    onClick={() => window.open(post.bannerPhotoUrl, '_blank')}
-                />
-            )}
+                {post.bannerPhotoUrl && (
+                    <img
+                        src={post.bannerPhotoUrl}
+                        alt={post.title}
+                        className="news-banner"
+                    />
+                )}
 
-            <section className="news-content">
-                <div
-                    className="news-snippet"
-                    dangerouslySetInnerHTML={{__html: snippetHtml}}
-                />
-                <Link to={`/news/${post.id}`} className="news-readmore">
-                    Read More
-                </Link>
-            </section>
-        </article>
+                <section className="news-content">
+                    <div
+                        className="news-snippet"
+                        dangerouslySetInnerHTML={{__html: snippetHtml}}
+                    />
+                </section>
+            </article>
+        </Link>
     )
 }
